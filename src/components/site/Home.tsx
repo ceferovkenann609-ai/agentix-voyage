@@ -531,20 +531,7 @@ function ServiceCard({
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           style={{
-            background: `radial-gradient(240px circle at ${mx.get()}px ${my.get()}px, oklch(0.65 0.26 295 / 0.18), transparent 70%)`,
-          }}
-        />
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background: `radial-gradient(circle at var(--x) var(--y), oklch(0.65 0.26 295 / 0.2), transparent 60%)`,
-          }}
-          onUpdate={() => {
-            if (ref.current) {
-              ref.current.style.setProperty("--x", `${mx.get()}px`);
-              ref.current.style.setProperty("--y", `${my.get()}px`);
-            }
+            background: useMotionTemplate`radial-gradient(240px circle at ${mx}px ${my}px, oklch(0.65 0.26 295 / 0.22), transparent 70%)`,
           }}
         />
         <div className="absolute inset-0 rounded-2xl bg-brand-gradient opacity-0 group-hover:opacity-10 blur-xl transition duration-500" />
