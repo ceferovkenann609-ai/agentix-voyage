@@ -521,8 +521,7 @@ function ServiceCard({
     >
       <Link
         ref={ref}
-        to="/services/$slug"
-        params={{ slug: s.slug }}
+        to="/services"
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         className="group relative block gradient-border rounded-2xl p-6 h-full transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-glow"
