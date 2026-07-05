@@ -490,14 +490,87 @@ function DashboardPreview() {
 }
 
 /* ---------------- Services ---------------- */
+function ServiceCard({
+  s,
+  i,
+}: {
+  s: { i: typeof MessageSquare; t: string; d: string; slug: string };
+  i: number;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const mx = useMotionValue(-200);
+  const my = useMotionValue(-200);
+
+  const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    mx.set(e.clientX - rect.left);
+    my.set(e.clientY - rect.top);
+  };
+  const handleLeave = () => {
+    mx.set(-200);
+    my.set(-200);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: i * 0.05 }}
+    >
+      <Link
+        ref={ref}
+        to="/services/$slug"
+        params={{ slug: s.slug }}
+        onMouseMove={handleMove}
+        onMouseLeave={handleLeave}
+        className="group relative block gradient-border rounded-2xl p-6 h-full transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-glow"
+      >
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(240px circle at ${mx.get()}px ${my.get()}px, oklch(0.65 0.26 295 / 0.18), transparent 70%)`,
+          }}
+        />
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(circle at var(--x) var(--y), oklch(0.65 0.26 295 / 0.2), transparent 60%)`,
+          }}
+          onUpdate={() => {
+            if (ref.current) {
+              ref.current.style.setProperty("--x", `${mx.get()}px`);
+              ref.current.style.setProperty("--y", `${my.get()}px`);
+            }
+          }}
+        />
+        <div className="absolute inset-0 rounded-2xl bg-brand-gradient opacity-0 group-hover:opacity-10 blur-xl transition duration-500" />
+        <div className="relative">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient shadow-[0_0_30px_oklch(0.65_0.26_295/0.4)] mb-5 group-hover:scale-110 transition-transform duration-300">
+            <s.i className="h-5 w-5 text-white" />
+          </div>
+          <h3 className="text-lg font-semibold mb-2">{s.t}</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-1">{s.d}</p>
+          <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium text-purple-300 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition">
+            Learn more <ArrowRight className="h-3 w-3" />
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
+
 function Services() {
   const services = [
-    { i: MessageSquare, t: "AI Chatbots", d: "Human-like conversations across web, mobile, and messaging platforms." },
-    { i: Phone, t: "Voice AI Agents", d: "Natural-sounding voice agents that handle calls in real time." },
-    { i: Target, t: "Lead Generation", d: "Qualify, score, and route leads to your sales team 24/7." },
-    { i: Headphones, t: "Customer Support", d: "Resolve 80% of tickets instantly with tier-1 AI support." },
-    { i: Workflow, t: "Workflow Automation", d: "Chain multi-step business processes with intelligent agents." },
-    { i: Database, t: "CRM Integration", d: "Sync with Salesforce, HubSpot, Zoho, and 50+ platforms." },
+    { i: MessageSquare, t: "AI Chatbots", d: "Human-like conversations across every channel.", slug: "ai-chatbots" },
+    { i: Phone, t: "Voice AI Agents", d: "Natural voice agents that handle calls in real time.", slug: "voice-ai" },
+    { i: Target, t: "Lead Generation", d: "Qualify and route leads to your sales team 24/7.", slug: "lead-generation" },
+    { i: Headphones, t: "Customer Support", d: "Resolve 80% of tickets instantly with tier-1 AI.", slug: "customer-support" },
+    { i: Workflow, t: "Workflow Automation", d: "Chain multi-step processes with intelligent agents.", slug: "workflow-automation" },
+    { i: Database, t: "CRM Integration", d: "Sync with Salesforce, HubSpot, Zoho, and 50+ tools.", slug: "crm-integration" },
   ];
 
   return (
@@ -509,38 +582,20 @@ function Services() {
             <span className="text-xs font-medium">Services</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
-            Purpose-built AI for every workflow
+            Our AI Services
           </h2>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {services.map((s, i) => (
-            <motion.div
-              key={s.t}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="group relative gradient-border rounded-2xl p-6 hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="absolute inset-0 rounded-2xl bg-brand-gradient opacity-0 group-hover:opacity-10 blur-xl transition duration-500" />
-              <div className="relative">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient shadow-[0_0_30px_oklch(0.65_0.26_295/0.4)] mb-5">
-                  <s.i className="h-5 w-5 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{s.t}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
-                <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium text-purple-300 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition">
-                  Learn more <ArrowRight className="h-3 w-3" />
-                </div>
-              </div>
-            </motion.div>
+            <ServiceCard key={s.slug} s={s} i={i} />
           ))}
         </div>
       </div>
     </section>
   );
 }
+
 
 /* ---------------- How It Works ---------------- */
 function HowItWorks() {
