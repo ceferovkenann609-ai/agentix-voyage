@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useMotionTemplate, useSpring } from "framer-motion";
 import {
   MessageSquare,
   Phone,
