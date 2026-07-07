@@ -18,6 +18,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as ServicesAiChatbotsRouteImport } from './routes/services.ai-chatbots'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 
 const SolutionsRoute = SolutionsRouteImport.update({
@@ -65,6 +66,11 @@ const ServicesIndexRoute = ServicesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ServicesRoute,
 } as any)
+const ServicesAiChatbotsRoute = ServicesAiChatbotsRouteImport.update({
+  id: '/ai-chatbots',
+  path: '/ai-chatbots',
+  getParentRoute: () => ServicesRoute,
+} as any)
 const ServicesSlugRoute = ServicesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRouteWithChildren
   '/solutions': typeof SolutionsRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/solutions': typeof SolutionsRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRouteWithChildren
   '/solutions': typeof SolutionsRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/solutions'
     | '/services/$slug'
+    | '/services/ai-chatbots'
     | '/services/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/solutions'
     | '/services/$slug'
+    | '/services/ai-chatbots'
     | '/services'
   id:
     | '__root__'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/solutions'
     | '/services/$slug'
+    | '/services/ai-chatbots'
     | '/services/'
   fileRoutesById: FileRoutesById
 }
@@ -221,6 +233,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesIndexRouteImport
       parentRoute: typeof ServicesRoute
     }
+    '/services/ai-chatbots': {
+      id: '/services/ai-chatbots'
+      path: '/ai-chatbots'
+      fullPath: '/services/ai-chatbots'
+      preLoaderRoute: typeof ServicesAiChatbotsRouteImport
+      parentRoute: typeof ServicesRoute
+    }
     '/services/$slug': {
       id: '/services/$slug'
       path: '/$slug'
@@ -233,11 +252,13 @@ declare module '@tanstack/react-router' {
 
 interface ServicesRouteChildren {
   ServicesSlugRoute: typeof ServicesSlugRoute
+  ServicesAiChatbotsRoute: typeof ServicesAiChatbotsRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 const ServicesRouteChildren: ServicesRouteChildren = {
   ServicesSlugRoute: ServicesSlugRoute,
+  ServicesAiChatbotsRoute: ServicesAiChatbotsRoute,
   ServicesIndexRoute: ServicesIndexRoute,
 }
 
