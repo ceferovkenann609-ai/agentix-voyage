@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Mail, Phone, DollarSign, Activity, FileText, Database, RefreshCw, Zap, ShieldCheck, Layers } from "lucide-react";
+import { User, Mail, Phone, DollarSign, Activity as ActivityIcon, FileText, Database, RefreshCw, Zap, ShieldCheck, Layers } from "lucide-react";
 import { ServiceHero, ServiceFeatureGrid, ServiceCTA } from "./ServicePageShell";
 
-type Activity = { id: number; type: "call" | "email" | "note" | "deal"; text: string; time: string };
+type ActivityItem = { id: number; type: "call" | "email" | "note" | "deal"; text: string; time: string };
 
 const ACTIVITIES: Omit<Activity, "id" | "time">[] = [
   { type: "email", text: "Sent proposal follow-up" },

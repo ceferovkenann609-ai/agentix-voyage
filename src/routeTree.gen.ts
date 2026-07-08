@@ -18,6 +18,11 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as ServicesWorkflowAutomationRouteImport } from './routes/services.workflow-automation'
+import { Route as ServicesVoiceAiRouteImport } from './routes/services.voice-ai'
+import { Route as ServicesLeadGenerationRouteImport } from './routes/services.lead-generation'
+import { Route as ServicesCustomerSupportRouteImport } from './routes/services.customer-support'
+import { Route as ServicesCrmIntegrationRouteImport } from './routes/services.crm-integration'
 import { Route as ServicesAiChatbotsRouteImport } from './routes/services.ai-chatbots'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 
@@ -66,6 +71,32 @@ const ServicesIndexRoute = ServicesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ServicesRoute,
 } as any)
+const ServicesWorkflowAutomationRoute =
+  ServicesWorkflowAutomationRouteImport.update({
+    id: '/workflow-automation',
+    path: '/workflow-automation',
+    getParentRoute: () => ServicesRoute,
+  } as any)
+const ServicesVoiceAiRoute = ServicesVoiceAiRouteImport.update({
+  id: '/voice-ai',
+  path: '/voice-ai',
+  getParentRoute: () => ServicesRoute,
+} as any)
+const ServicesLeadGenerationRoute = ServicesLeadGenerationRouteImport.update({
+  id: '/lead-generation',
+  path: '/lead-generation',
+  getParentRoute: () => ServicesRoute,
+} as any)
+const ServicesCustomerSupportRoute = ServicesCustomerSupportRouteImport.update({
+  id: '/customer-support',
+  path: '/customer-support',
+  getParentRoute: () => ServicesRoute,
+} as any)
+const ServicesCrmIntegrationRoute = ServicesCrmIntegrationRouteImport.update({
+  id: '/crm-integration',
+  path: '/crm-integration',
+  getParentRoute: () => ServicesRoute,
+} as any)
 const ServicesAiChatbotsRoute = ServicesAiChatbotsRouteImport.update({
   id: '/ai-chatbots',
   path: '/ai-chatbots',
@@ -88,6 +119,11 @@ export interface FileRoutesByFullPath {
   '/solutions': typeof SolutionsRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
+  '/services/crm-integration': typeof ServicesCrmIntegrationRoute
+  '/services/customer-support': typeof ServicesCustomerSupportRoute
+  '/services/lead-generation': typeof ServicesLeadGenerationRoute
+  '/services/voice-ai': typeof ServicesVoiceAiRoute
+  '/services/workflow-automation': typeof ServicesWorkflowAutomationRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -100,6 +136,11 @@ export interface FileRoutesByTo {
   '/solutions': typeof SolutionsRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
+  '/services/crm-integration': typeof ServicesCrmIntegrationRoute
+  '/services/customer-support': typeof ServicesCustomerSupportRoute
+  '/services/lead-generation': typeof ServicesLeadGenerationRoute
+  '/services/voice-ai': typeof ServicesVoiceAiRoute
+  '/services/workflow-automation': typeof ServicesWorkflowAutomationRoute
   '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
@@ -114,6 +155,11 @@ export interface FileRoutesById {
   '/solutions': typeof SolutionsRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
+  '/services/crm-integration': typeof ServicesCrmIntegrationRoute
+  '/services/customer-support': typeof ServicesCustomerSupportRoute
+  '/services/lead-generation': typeof ServicesLeadGenerationRoute
+  '/services/voice-ai': typeof ServicesVoiceAiRoute
+  '/services/workflow-automation': typeof ServicesWorkflowAutomationRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
@@ -129,6 +175,11 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/services/$slug'
     | '/services/ai-chatbots'
+    | '/services/crm-integration'
+    | '/services/customer-support'
+    | '/services/lead-generation'
+    | '/services/voice-ai'
+    | '/services/workflow-automation'
     | '/services/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -141,6 +192,11 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/services/$slug'
     | '/services/ai-chatbots'
+    | '/services/crm-integration'
+    | '/services/customer-support'
+    | '/services/lead-generation'
+    | '/services/voice-ai'
+    | '/services/workflow-automation'
     | '/services'
   id:
     | '__root__'
@@ -154,6 +210,11 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/services/$slug'
     | '/services/ai-chatbots'
+    | '/services/crm-integration'
+    | '/services/customer-support'
+    | '/services/lead-generation'
+    | '/services/voice-ai'
+    | '/services/workflow-automation'
     | '/services/'
   fileRoutesById: FileRoutesById
 }
@@ -233,6 +294,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesIndexRouteImport
       parentRoute: typeof ServicesRoute
     }
+    '/services/workflow-automation': {
+      id: '/services/workflow-automation'
+      path: '/workflow-automation'
+      fullPath: '/services/workflow-automation'
+      preLoaderRoute: typeof ServicesWorkflowAutomationRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/voice-ai': {
+      id: '/services/voice-ai'
+      path: '/voice-ai'
+      fullPath: '/services/voice-ai'
+      preLoaderRoute: typeof ServicesVoiceAiRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/lead-generation': {
+      id: '/services/lead-generation'
+      path: '/lead-generation'
+      fullPath: '/services/lead-generation'
+      preLoaderRoute: typeof ServicesLeadGenerationRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/customer-support': {
+      id: '/services/customer-support'
+      path: '/customer-support'
+      fullPath: '/services/customer-support'
+      preLoaderRoute: typeof ServicesCustomerSupportRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/crm-integration': {
+      id: '/services/crm-integration'
+      path: '/crm-integration'
+      fullPath: '/services/crm-integration'
+      preLoaderRoute: typeof ServicesCrmIntegrationRouteImport
+      parentRoute: typeof ServicesRoute
+    }
     '/services/ai-chatbots': {
       id: '/services/ai-chatbots'
       path: '/ai-chatbots'
@@ -253,12 +349,22 @@ declare module '@tanstack/react-router' {
 interface ServicesRouteChildren {
   ServicesSlugRoute: typeof ServicesSlugRoute
   ServicesAiChatbotsRoute: typeof ServicesAiChatbotsRoute
+  ServicesCrmIntegrationRoute: typeof ServicesCrmIntegrationRoute
+  ServicesCustomerSupportRoute: typeof ServicesCustomerSupportRoute
+  ServicesLeadGenerationRoute: typeof ServicesLeadGenerationRoute
+  ServicesVoiceAiRoute: typeof ServicesVoiceAiRoute
+  ServicesWorkflowAutomationRoute: typeof ServicesWorkflowAutomationRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 const ServicesRouteChildren: ServicesRouteChildren = {
   ServicesSlugRoute: ServicesSlugRoute,
   ServicesAiChatbotsRoute: ServicesAiChatbotsRoute,
+  ServicesCrmIntegrationRoute: ServicesCrmIntegrationRoute,
+  ServicesCustomerSupportRoute: ServicesCustomerSupportRoute,
+  ServicesLeadGenerationRoute: ServicesLeadGenerationRoute,
+  ServicesVoiceAiRoute: ServicesVoiceAiRoute,
+  ServicesWorkflowAutomationRoute: ServicesWorkflowAutomationRoute,
   ServicesIndexRoute: ServicesIndexRoute,
 }
 
