@@ -5,7 +5,7 @@ import { ServiceHero, ServiceFeatureGrid, ServiceCTA } from "./ServicePageShell"
 
 type ActivityItem = { id: number; type: "call" | "email" | "note" | "deal"; text: string; time: string };
 
-const ACTIVITIES: Omit<Activity, "id" | "time">[] = [
+const ACTIVITIES: Omit<ActivityItem, "id" | "time">[] = [
   { type: "email", text: "Sent proposal follow-up" },
   { type: "call", text: "Discovery call · 32 min" },
   { type: "note", text: "Champion identified: VP Ops" },
@@ -15,7 +15,7 @@ const ACTIVITIES: Omit<Activity, "id" | "time">[] = [
 ];
 
 function CRMDashboard() {
-  const [activities, setActivities] = useState<Activity[]>([]);
+  const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [dealStage, setDealStage] = useState(2);
   const [syncing, setSyncing] = useState(false);
 
@@ -40,7 +40,7 @@ function CRMDashboard() {
   }, []);
 
   const stages = ["Lead", "Qualified", "Proposal", "Negotiation", "Closed Won"];
-  const iconFor = (t: Activity["type"]) =>
+  const iconFor = (t: ActivityItem["type"]) =>
     t === "email" ? Mail : t === "call" ? Phone : t === "deal" ? DollarSign : FileText;
 
   return (
@@ -105,7 +105,7 @@ function CRMDashboard() {
             </div>
 
             <div className="col-span-3">
-              <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-2">Activity Timeline</p>
+              <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-2">ActivityItem Timeline</p>
               <div className="space-y-1.5 min-h-[160px]">
                 <AnimatePresence initial={false}>
                   {activities.map((a) => {
@@ -159,7 +159,7 @@ export default function CRMIntegrationPage() {
           { icon: Database, title: "Native Connectors", desc: "Salesforce, HubSpot, Zoho, Pipedrive, Close, and more." },
           { icon: RefreshCw, title: "Bi-directional Sync", desc: "Changes flow both ways — instantly, without conflicts." },
           { icon: Zap, title: "Auto-enrichment", desc: "Firmographic and social data added on every new contact." },
-          { icon: Activity, title: "Activity Logging", desc: "Every AI interaction becomes a call, note, or task." },
+          { icon: ActivityIcon, title: "ActivityItem Logging", desc: "Every AI interaction becomes a call, note, or task." },
           { icon: Layers, title: "Custom Fields", desc: "Map any AI output to your existing CRM schema." },
           { icon: ShieldCheck, title: "SOC 2 & GDPR", desc: "Enterprise-grade encryption and audit trails." },
         ]}
