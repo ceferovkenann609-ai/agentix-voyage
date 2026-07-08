@@ -83,61 +83,57 @@ function Particles({ count = 24 }: { count?: number }) {
 /* ---------- Animated Chatbot Preview (Hero visual) ---------- */
 type Msg = { from: "user" | "bot"; text: string };
 
-function ChatbotHeroPreview() {
-  const script: Msg[] = [
-    { from: "user", text: "Hi, I'd like to schedule an appointment." },
-    { from: "bot", text: "Of course! Which day works best for you?" },
-    { from: "user", text: "Tomorrow afternoon." },
-    { from: "bot", text: "I've found availability at 3:00 PM. Would you like me to confirm your booking?" },
-  ];
+const DEMO_REPLIES: { match: RegExp; reply: string }[] = [
+  { match: /appointment|book|schedul/i, reply: "Absolutely! I can check availability and confirm bookings directly in your calendar. What day works best?" },
+  { match: /whatsapp|instagram|messenger|channel/i, reply: "Yes — I work across WhatsApp, Instagram, Messenger, SMS, and your website out of the box." },
+  { match: /language|multi.?lingual|spanish|french/i, reply: "I speak 50+ languages fluently and auto-detect the visitor's language in real time." },
+  { match: /deploy|how (fast|quick|long)|setup|launch/i, reply: "Most chatbots are trained and live within 3–5 business days, fully branded to your business." },
+  { match: /price|cost|pricing/i, reply: "Plans start at $299/month and scale with usage. I'll route you to sales for a tailored quote." },
+  { match: /customer|question|answer|support|faq/i, reply: "I resolve up to 80% of tier-1 questions instantly and hand off complex cases to a human." },
+  { match: /lead|qualif|crm/i, reply: "I qualify visitors, capture contact details, score intent, and sync leads straight into your CRM." },
+];
 
-  const [messages, setMessages] = useState<Msg[]>([]);
+function generateReply(input: string): string {
+  for (const rule of DEMO_REPLIES) if (rule.match.test(input)) return rule.reply;
+  return "Great question! In production I'd be trained on your business data to answer that precisely. Ask me about bookings, channels, languages, or deployment time.";
+}
+
+function ChatbotHeroPreview() {
+  const [messages, setMessages] = useState<Msg[]>([
+    { from: "bot", text: "Hi! I'm the Agentix AI assistant. Try asking me anything — bookings, channels, languages, deployment…" },
+  ]);
+  const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let i = 0;
-    let cancelled = false;
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, typing]);
 
-    const tick = () => {
-      if (cancelled) return;
-      if (i >= script.length) {
-        setTimeout(() => {
-          if (cancelled) return;
-          setMessages([]);
-          i = 0;
-          tick();
-        }, 2600);
-        return;
-      }
-      const next = script[i];
-      if (next.from === "bot") {
-        setTyping(true);
-        setTimeout(() => {
-          if (cancelled) return;
-          setTyping(false);
-          setMessages((m) => [...m, next]);
-          i += 1;
-          setTimeout(tick, 1200);
-        }, 1200);
-      } else {
-        setMessages((m) => [...m, next]);
-        i += 1;
-        setTimeout(tick, 1400);
-      }
-    };
-    tick();
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const send = (text: string) => {
+    const clean = text.trim();
+    if (!clean) return;
+    setMessages((m) => [...m, { from: "user", text: clean }]);
+    setInput("");
+    setTyping(true);
+    const delay = 700 + Math.min(clean.length * 20, 1200);
+    setTimeout(() => {
+      setTyping(false);
+      setMessages((m) => [...m, { from: "bot", text: generateReply(clean) }]);
+    }, delay);
+  };
+
+  const suggestions = [
+    "Can you book an appointment?",
+    "Do you support WhatsApp?",
+    "Do you speak multiple languages?",
+    "How quickly can you be deployed?",
+  ];
 
   return (
     <div className="relative w-full max-w-[520px] mx-auto">
-      {/* Glow */}
       <div className="pointer-events-none absolute -inset-8 rounded-[2.5rem] bg-brand-gradient opacity-25 blur-3xl" />
 
-      {/* Floating cards */}
       <motion.div
         aria-hidden
         animate={{ y: [0, -10, 0] }}
@@ -169,10 +165,8 @@ function ChatbotHeroPreview() {
         </div>
       </motion.div>
 
-      {/* Chat window */}
       <div className="relative gradient-border rounded-3xl overflow-hidden">
         <div className="relative bg-[oklch(0.14_0.03_280/0.85)] backdrop-blur-xl">
-          {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
             <div className="flex items-center gap-3">
               <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient">
@@ -194,16 +188,15 @@ function ChatbotHeroPreview() {
             </div>
           </div>
 
-          {/* Messages */}
-          <div className="h-[340px] px-5 py-5 space-y-3 overflow-hidden flex flex-col justify-end">
+          <div ref={scrollRef} className="h-[340px] px-5 py-5 space-y-3 overflow-y-auto flex flex-col">
             <AnimatePresence initial={false}>
               {messages.map((m, i) => (
                 <motion.div
-                  key={`${i}-${m.text}`}
+                  key={`${i}-${m.from}`}
                   initial={{ opacity: 0, y: 10, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35 }}
+                  transition={{ duration: 0.3 }}
                   className={`flex items-end gap-2 ${m.from === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {m.from === "bot" && (
@@ -253,18 +246,41 @@ function ChatbotHeroPreview() {
             </AnimatePresence>
           </div>
 
-          {/* Composer */}
-          <div className="px-5 py-4 border-t border-white/5 flex items-center gap-3">
-            <div className="flex-1 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-sm text-muted-foreground">
-              Ask anything…
+          {messages.length <= 1 && (
+            <div className="px-5 pb-3 flex flex-wrap gap-2">
+              {suggestions.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => send(s)}
+                  className="text-[11px] rounded-full glass-strong px-3 py-1.5 hover:bg-white/10 transition"
+                >
+                  {s}
+                </button>
+              ))}
             </div>
+          )}
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              send(input);
+            }}
+            className="px-5 py-4 border-t border-white/5 flex items-center gap-3"
+          >
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask anything…"
+              className="flex-1 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-purple-400/50 transition"
+            />
             <button
+              type="submit"
               aria-label="Send"
-              className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient shadow-glow"
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient shadow-glow hover:scale-105 transition"
             >
               <Send className="h-4 w-4 text-white" />
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
