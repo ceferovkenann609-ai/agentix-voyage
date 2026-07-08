@@ -105,7 +105,7 @@ function CRMDashboard() {
             </div>
 
             <div className="col-span-3">
-              <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-2">ActivityItem Timeline</p>
+              <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-2">Activity Timeline</p>
               <div className="space-y-1.5 min-h-[160px]">
                 <AnimatePresence initial={false}>
                   {activities.map((a) => {
@@ -159,7 +159,7 @@ export default function CRMIntegrationPage() {
           { icon: Database, title: "Native Connectors", desc: "Salesforce, HubSpot, Zoho, Pipedrive, Close, and more." },
           { icon: RefreshCw, title: "Bi-directional Sync", desc: "Changes flow both ways — instantly, without conflicts." },
           { icon: Zap, title: "Auto-enrichment", desc: "Firmographic and social data added on every new contact." },
-          { icon: ActivityIcon, title: "ActivityItem Logging", desc: "Every AI interaction becomes a call, note, or task." },
+          { icon: ActivityIcon, title: "Activity Logging", desc: "Every AI interaction becomes a call, note, or task." },
           { icon: Layers, title: "Custom Fields", desc: "Map any AI output to your existing CRM schema." },
           { icon: ShieldCheck, title: "SOC 2 & GDPR", desc: "Enterprise-grade encryption and audit trails." },
         ]}
