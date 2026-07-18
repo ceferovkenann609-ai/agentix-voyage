@@ -123,7 +123,6 @@ export function ServiceHero({
     </section>
   );
 }
-
 export function ServiceFeatureGrid({
   eyebrow,
   title,
@@ -133,38 +132,142 @@ export function ServiceFeatureGrid({
   eyebrow: string;
   title: string;
   subtitle: string;
-  items: { icon: React.ComponentType<{ className?: string }>; title: string; desc: string }[];
+  items: {
+    icon: React.ComponentType<{ className?: string }>;
+    title: string;
+    desc: string;
+  }[];
 }) {
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
+
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-4">
             <Sparkles className="h-3 w-3 text-purple-400" />
-            <span className="text-xs font-medium">{eyebrow}</span>
+            <span className="text-xs font-medium">
+              {eyebrow}
+            </span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">{title}</h2>
-          <p className="mt-4 text-muted-foreground">{subtitle}</p>
+
+          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
+            {title}
+          </h2>
+
+          <p className="mt-4 text-muted-foreground">
+            {subtitle}
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((it, i) => (
+
+          {items.map((item, index) => (
+
             <motion.div
-              key={it.title}
-              initial={{ opacity: 0, y: 24 }}
+              key={item.title}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
-              className="group relative gradient-border rounded-2xl p-7 h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-glow"
+              transition={{
+                duration: 0.5,
+                delay: index * 0.08,
+              }}
+              className="gradient-border rounded-2xl p-7 hover:shadow-glow transition"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient shadow-[0_0_30px_oklch(0.65_0.26_295/0.4)] mb-5 group-hover:scale-110 transition-transform duration-300">
-                <it.icon className="h-5 w-5 text-white" />
+
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient">
+                <item.icon className="h-5 w-5 text-white" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">{it.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{it.desc}</p>
+
+              <h3 className="text-xl font-semibold mb-3">
+                {item.title}
+              </h3>
+
+              <p className="text-muted-foreground">
+                {item.desc}
+              </p>
+
             </motion.div>
+
           ))}
+
         </div>
+
+      </div>
+    </section>
+  );
+}
+export function ServiceSolution({
+  title,
+  subtitle,
+}: {
+  title: string;
+  subtitle: string;
+}) {
+  const steps = [
+    {
+      number: "01",
+      title: "Business Analysis",
+      text: "We understand your business, goals, and customer journey.",
+    },
+    {
+      number: "02",
+      title: "AI Configuration",
+      text: "We train and customize your AI agent using your business data.",
+    },
+    {
+      number: "03",
+      title: "Deployment",
+      text: "Your AI goes live across your website, WhatsApp, social media, and more.",
+    },
+    {
+      number: "04",
+      title: "Optimization",
+      text: "We continuously improve performance based on real customer interactions.",
+    },
+  ];
+
+  return (
+    <section className="py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <h2 className="text-5xl font-bold text-gradient">
+            {title}
+          </h2>
+
+          <p className="mt-5 text-muted-foreground">
+            {subtitle}
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+          {steps.map((step) => (
+
+            <div
+              key={step.number}
+              className="gradient-border rounded-3xl p-8 text-center hover:shadow-glow transition-all duration-300"
+            >
+
+              <div className="text-5xl font-bold text-brand-gradient mb-6">
+                {step.number}
+              </div>
+
+              <h3 className="text-2xl font-semibold mb-4">
+                {step.title}
+              </h3>
+
+              <p className="text-muted-foreground leading-7">
+                {step.text}
+              </p>
+
+            </div>
+
+          ))}
+
+        </div>
+
       </div>
     </section>
   );

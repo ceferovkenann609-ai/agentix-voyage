@@ -31,7 +31,6 @@ function CursorGlow() {
   const y = useMotionValue(-500);
   const sx = useSpring(x, { damping: 25, stiffness: 200 });
   const sy = useSpring(y, { damping: 25, stiffness: 200 });
-
   useEffect(() => {
     const move = (e: MouseEvent) => {
       x.set(e.clientX);
@@ -201,7 +200,9 @@ function AIVisualization() {
         className="absolute top-6 -left-6 glass-strong rounded-xl px-3 py-2 shadow-lg hidden sm:block"
       >
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className
+          
+          ="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-[10px] font-mono text-muted-foreground">98.4% uptime</span>
         </div>
       </motion.div>
@@ -274,7 +275,7 @@ function Hero() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              to="/demo"
+              to="/book-demo"
               className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.65_0.26_295/0.5)] hover:shadow-[0_0_50px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
             >
               Book a Demo
@@ -931,7 +932,7 @@ function FinalCTA() {
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link
-                to="/demo"
+                to="/book-demo"
                 className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-7 py-4 text-sm font-semibold text-white shadow-glow hover:shadow-[0_0_60px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
               >
                 Book a Demo

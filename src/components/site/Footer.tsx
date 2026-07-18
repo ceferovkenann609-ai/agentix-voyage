@@ -15,14 +15,17 @@ export function Footer() {
               <span className="text-xl font-bold text-gradient font-display">Agentix</span>
             </Link>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              AI agents that work around the clock — automating support, sales, scheduling,
-              and every workflow that keeps your business moving.
+            Agentix biznesiniz üçün 24/7 çalışan AI agentləri hazırlayır. Müştəri dəstəyi,
+            satış, marketinq və gündəlik iş proseslərini avtomatlaşdıraraq vaxtınıza və
+            xərclərinizə qənaət edir.
             </p>
             <div className="mt-6 flex gap-3">
               {[Twitter, Linkedin, Github, Youtube].map((Icon, i) => (
                 <a
                   key={i}
-                  href="#"
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex h-10 w-10 items-center justify-center rounded-lg glass hover:bg-white/10 transition"
                 >
                   <Icon className="h-4 w-4" />
@@ -34,38 +37,42 @@ export function Footer() {
           <FooterCol
             title="Company"
             links={[
-              { to: "/about", label: "About" },
-              { to: "/services", label: "Careers" },
-              { to: "/about", label: "Press" },
-              { to: "/contact", label: "Contact" },
+              { to: "/about", label: "Haqqımızda" },
+              { to: "/services", label: "Xidmətlər" },
+              { to: "/pricing", label: "Qiymətlər" },
+              { to: "/contact", label: "Əlaqə" },
             ]}
           />
           <FooterCol
-            title="Product"
+            title="Services"
             links={[
-              { to: "/services", label: "Services" },
-              { to: "/solutions", label: "Solutions" },
-              { to: "/pricing", label: "Pricing" },
-              { to: "/demo", label: "Book a Demo" },
+              { to: "/services", label: "AI Çatbotlar" },                                                    
+
+              { to: "/services", label: "Səsli AI" },
+              { to: "/services", label: "AI Avtomatlaşdırma" },
+              { to: "/services", label: "AI Veb Saytlar" },
+
+              { to: "/services", label: "AI Marketinq" },
+              { to: "/services", label: "Fərdi AI Həlləri" },
             ]}
           />
           <FooterCol
             title="Resources"
             links={[
-              { to: "/about", label: "Documentation" },
-              { to: "/about", label: "Blog" },
-              { to: "/about", label: "Case Studies" },
-              { to: "/contact", label: "Support" },
+              { to: "/about", label: "Tez-tez verilən suallar" },
+              { to: "/about", label: "Bloq" },
+              { to: "/about", label: "Məxfilik siyasəti" },
+              { to: "/contact", label: "İstifadə şərtləri" },
             ]}
           />
         </div>
 
         <div className="mt-16 flex flex-col md:flex-row justify-between gap-4 pt-8 border-t border-white/5 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Agentix Inc. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Agentix. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#">Privacy</a>
             <a href="#">Terms</a>
-            <a href="#">Security</a>
+            <a href="#">Cookies</a>
             <span>hello@agentix.ai</span>
           </div>
         </div>

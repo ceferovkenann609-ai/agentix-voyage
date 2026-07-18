@@ -461,7 +461,7 @@ function Industries() {
     { icon: Home, title: "Real Estate", desc: "Qualify buyers and book property viewings 24/7." },
     { icon: ShoppingBag, title: "E-commerce", desc: "Recommend products and recover abandoned carts." },
     { icon: GraduationCap, title: "Education", desc: "Guide students through admissions and coursework." },
-    { icon: Scissors, title: "Beauty Salons", desc: "Book appointments and upsell services automatically." },
+    { icon: Scissors, title: "Beauty Salons", desc: "Book appointments and upsell serviceautomatically." },
     { icon: Scale, title: "Law Firms", desc: "Intake new clients and pre-qualify legal cases." },
   ];
   return (

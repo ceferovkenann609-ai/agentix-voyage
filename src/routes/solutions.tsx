@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PagePlaceholder } from "../components/site/PagePlaceholder";
+import Solutions from "../components/site/Solutions";
 
 export const Route = createFileRoute("/solutions")({
   head: () => ({
@@ -10,11 +10,5 @@ export const Route = createFileRoute("/solutions")({
       { property: "og:description", content: "Industry-specific AI solutions built on Agentix." },
     ],
   }),
-  component: () => (
-    <PagePlaceholder
-      eyebrow="Solutions"
-      title="AI solutions tailored to your industry"
-      description="E-commerce, SaaS, healthcare, finance, real estate — Agentix ships pre-configured agents for the workflows that matter most."
-    />
-  ),
+  component: Solutions,
 });

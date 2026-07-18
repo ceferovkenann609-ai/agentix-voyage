@@ -7,7 +7,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-
+import AIChatWidget from "../components/site/AIChatWidget";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "../components/site/Navbar";
@@ -119,6 +119,9 @@ function RootComponent() {
         <main>
           <Outlet />
         </main>
+        <AIChatWidget />
+      </div>
+      <div className="bg-[#050505]">
         <Footer />
       </div>
     </QueryClientProvider>

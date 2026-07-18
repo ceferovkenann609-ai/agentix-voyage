@@ -15,9 +15,11 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BookDemoRouteImport } from './routes/book-demo'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as SolutionsIndustryRouteImport } from './routes/solutions.$industry'
 import { Route as ServicesWorkflowAutomationRouteImport } from './routes/services.workflow-automation'
 import { Route as ServicesVoiceAiRouteImport } from './routes/services.voice-ai'
 import { Route as ServicesLeadGenerationRouteImport } from './routes/services.lead-generation'
@@ -56,6 +58,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BookDemoRoute = BookDemoRouteImport.update({
+  id: '/book-demo',
+  path: '/book-demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -70,6 +77,11 @@ const ServicesIndexRoute = ServicesIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ServicesRoute,
+} as any)
+const SolutionsIndustryRoute = SolutionsIndustryRouteImport.update({
+  id: '/$industry',
+  path: '/$industry',
+  getParentRoute: () => SolutionsRoute,
 } as any)
 const ServicesWorkflowAutomationRoute =
   ServicesWorkflowAutomationRouteImport.update({
@@ -111,12 +123,13 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/book-demo': typeof BookDemoRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/services': typeof ServicesRouteWithChildren
-  '/solutions': typeof SolutionsRoute
+  '/solutions': typeof SolutionsRouteWithChildren
   '/services/$slug': typeof ServicesSlugRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
@@ -124,16 +137,18 @@ export interface FileRoutesByFullPath {
   '/services/lead-generation': typeof ServicesLeadGenerationRoute
   '/services/voice-ai': typeof ServicesVoiceAiRoute
   '/services/workflow-automation': typeof ServicesWorkflowAutomationRoute
+  '/solutions/$industry': typeof SolutionsIndustryRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/book-demo': typeof BookDemoRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
-  '/solutions': typeof SolutionsRoute
+  '/solutions': typeof SolutionsRouteWithChildren
   '/services/$slug': typeof ServicesSlugRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
@@ -141,18 +156,20 @@ export interface FileRoutesByTo {
   '/services/lead-generation': typeof ServicesLeadGenerationRoute
   '/services/voice-ai': typeof ServicesVoiceAiRoute
   '/services/workflow-automation': typeof ServicesWorkflowAutomationRoute
+  '/solutions/$industry': typeof SolutionsIndustryRoute
   '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/book-demo': typeof BookDemoRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/services': typeof ServicesRouteWithChildren
-  '/solutions': typeof SolutionsRoute
+  '/solutions': typeof SolutionsRouteWithChildren
   '/services/$slug': typeof ServicesSlugRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
@@ -160,6 +177,7 @@ export interface FileRoutesById {
   '/services/lead-generation': typeof ServicesLeadGenerationRoute
   '/services/voice-ai': typeof ServicesVoiceAiRoute
   '/services/workflow-automation': typeof ServicesWorkflowAutomationRoute
+  '/solutions/$industry': typeof SolutionsIndustryRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
@@ -167,6 +185,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/book-demo'
     | '/contact'
     | '/demo'
     | '/login'
@@ -180,11 +199,13 @@ export interface FileRouteTypes {
     | '/services/lead-generation'
     | '/services/voice-ai'
     | '/services/workflow-automation'
+    | '/solutions/$industry'
     | '/services/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/book-demo'
     | '/contact'
     | '/demo'
     | '/login'
@@ -197,11 +218,13 @@ export interface FileRouteTypes {
     | '/services/lead-generation'
     | '/services/voice-ai'
     | '/services/workflow-automation'
+    | '/solutions/$industry'
     | '/services'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/book-demo'
     | '/contact'
     | '/demo'
     | '/login'
@@ -215,18 +238,20 @@ export interface FileRouteTypes {
     | '/services/lead-generation'
     | '/services/voice-ai'
     | '/services/workflow-automation'
+    | '/solutions/$industry'
     | '/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BookDemoRoute: typeof BookDemoRoute
   ContactRoute: typeof ContactRoute
   DemoRoute: typeof DemoRoute
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   ServicesRoute: typeof ServicesRouteWithChildren
-  SolutionsRoute: typeof SolutionsRoute
+  SolutionsRoute: typeof SolutionsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -273,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/book-demo': {
+      id: '/book-demo'
+      path: '/book-demo'
+      fullPath: '/book-demo'
+      preLoaderRoute: typeof BookDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -293,6 +325,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/services/'
       preLoaderRoute: typeof ServicesIndexRouteImport
       parentRoute: typeof ServicesRoute
+    }
+    '/solutions/$industry': {
+      id: '/solutions/$industry'
+      path: '/$industry'
+      fullPath: '/solutions/$industry'
+      preLoaderRoute: typeof SolutionsIndustryRouteImport
+      parentRoute: typeof SolutionsRoute
     }
     '/services/workflow-automation': {
       id: '/services/workflow-automation'
@@ -372,16 +411,39 @@ const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
   ServicesRouteChildren,
 )
 
+interface SolutionsRouteChildren {
+  SolutionsIndustryRoute: typeof SolutionsIndustryRoute
+}
+
+const SolutionsRouteChildren: SolutionsRouteChildren = {
+  SolutionsIndustryRoute: SolutionsIndustryRoute,
+}
+
+const SolutionsRouteWithChildren = SolutionsRoute._addFileChildren(
+  SolutionsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BookDemoRoute: BookDemoRoute,
   ContactRoute: ContactRoute,
   DemoRoute: DemoRoute,
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   ServicesRoute: ServicesRouteWithChildren,
-  SolutionsRoute: SolutionsRoute,
+  SolutionsRoute: SolutionsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
