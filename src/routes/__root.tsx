@@ -115,14 +115,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-[#050505]">
+      <div className="min-h-screen bg-[#07090C]">
         <Navbar />
         <main>
           <Outlet />
         </main>
         <AIChatWidget />
       </div>
-      <div className="bg-[#050505]">
+      <div className="bg-[#07090C]">
         <Footer />
       </div>
     </QueryClientProvider>
