@@ -1,19 +1,22 @@
 import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Menu, X, Sparkles } from "lucide-react";
-
-const nav = [
-  { to: "/", label: "Ana səhifə" },
-  { to: "/services", label: "Xidmətlər" },
-  { to: "/solutions", label: "Həllər" },
-  { to: "/pricing", label: "Qiymətlər" },
-  { to: "/about", label: "Haqqında" },
-  { to: "/contact", label: "Əlaqə" },
-] as const;
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Navbar() {
+  const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const nav = [
+    { to: "/", label: t("nav.home") },
+    { to: "/services", label: t("nav.services") },
+    { to: "/solutions", label: t("nav.solutions") },
+    { to: "/pricing", label: t("nav.pricing") },
+    { to: "/about", label: t("nav.about") },
+    { to: "/contact", label: t("nav.contact") },
+  ] as const;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -31,7 +34,7 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div
           className={`glass-strong flex items-center justify-between rounded-2xl px-4 py-3 transition-all duration-500 ${
-            scrolled ? "shadow-[0_8px_40px_rgba(139,92,246,0.15)]" : ""
+            scrolled ? "shadow-[0_8px_40px_oklch(0.82_0.15_210/0.15)]" : ""
           }`}
         >
           <Link to="/" className="flex items-center gap-2 group">
@@ -58,18 +61,19 @@ export function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-2">
-      
-
-              
-            
-              Login
-            
+          <div className="hidden lg:flex items-center gap-3">
+            <LanguageSwitcher />
+            <Link
+              to="/login"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-3"
+            >
+              {t("nav.login")}
+            </Link>
             <Link
               to="/book-demo"
-              className="relative inline-flex items-center rounded-xl bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.65_0.26_295/0.4)] hover:shadow-[0_0_40px_oklch(0.65_0.26_295/0.6)] transition-all hover:-translate-y-0.5"
+              className="relative inline-flex items-center rounded-xl bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.82_0.15_210/0.4)] hover:shadow-[0_0_45px_oklch(0.82_0.15_210/0.6)] transition-all hover:-translate-y-0.5"
             >
-              Book a Demo
+              {t("nav.bookDemo")}
             </Link>
           </div>
 
@@ -96,19 +100,20 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="mt-2 flex flex-col gap-2 pt-2 border-t border-white/10">
+                <div className="px-2 py-2"><LanguageSwitcher /></div>
                 <Link
-                  to="/"
+                  to="/login"
                   onClick={() => setOpen(false)}
                   className="px-4 py-3 text-sm font-medium rounded-lg hover:bg-white/5"
                 >
-                  Login
+                  {t("nav.login")}
                 </Link>
                 <Link
-                  to="/demo"
+                  to="/book-demo"
                   onClick={() => setOpen(false)}
                   className="px-4 py-3 text-sm font-semibold text-center rounded-lg bg-brand-gradient text-white"
                 >
-                  Book a Demo
+                  {t("nav.bookDemo")}
                 </Link>
               </div>
             </nav>

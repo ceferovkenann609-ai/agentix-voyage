@@ -1,10 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Sparkles, Twitter, Linkedin, Github, Youtube } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Footer() {
+  const { t } = useTranslation();
   return (
-    <footer className="relative border-t border-white/5 bg-[#050505] pt-20 pb-8">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
+    <footer className="relative border-t border-white/5 bg-[#07090C] pt-20 pb-8">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid gap-10 lg:grid-cols-5">
           <div className="lg:col-span-2">
@@ -15,64 +18,61 @@ export function Footer() {
               <span className="text-xl font-bold text-gradient font-display">Agentix</span>
             </Link>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
-            Agentix biznesiniz üçün 24/7 çalışan AI agentləri hazırlayır. Müştəri dəstəyi,
-            satış, marketinq və gündəlik iş proseslərini avtomatlaşdıraraq vaxtınıza və
-            xərclərinizə qənaət edir.
+              {t("footer.tagline")}
             </p>
-            <div className="mt-6 flex gap-3">
+            <div className="mt-6 flex items-center gap-3">
               {[Twitter, Linkedin, Github, Youtube].map((Icon, i) => (
                 <a
                   key={i}
                   href="https://linkedin.com"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Social link"
                   className="flex h-10 w-10 items-center justify-center rounded-lg glass hover:bg-white/10 transition"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
+            <div className="mt-6"><LanguageSwitcher /></div>
           </div>
 
           <FooterCol
-            title="Company"
+            title={t("footer.company")}
             links={[
-              { to: "/about", label: "Haqqımızda" },
-              { to: "/services", label: "Xidmətlər" },
-              { to: "/pricing", label: "Qiymətlər" },
-              { to: "/contact", label: "Əlaqə" },
+              { to: "/about", label: t("nav.about") },
+              { to: "/services", label: t("nav.services") },
+              { to: "/pricing", label: t("nav.pricing") },
+              { to: "/contact", label: t("nav.contact") },
             ]}
           />
           <FooterCol
-            title="Services"
+            title={t("footer.servicesCol")}
             links={[
-              { to: "/services", label: "AI Çatbotlar" },                                                    
-
-              { to: "/services", label: "Səsli AI" },
-              { to: "/services", label: "AI Avtomatlaşdırma" },
-              { to: "/services", label: "AI Veb Saytlar" },
-
-              { to: "/services", label: "AI Marketinq" },
-              { to: "/services", label: "Fərdi AI Həlləri" },
+              { to: "/services", label: t("footer.chatbots") },
+              { to: "/services", label: t("footer.voice") },
+              { to: "/services", label: t("footer.automation") },
+              { to: "/services", label: t("footer.websites") },
+              { to: "/services", label: t("footer.marketing") },
+              { to: "/services", label: t("footer.custom") },
             ]}
           />
           <FooterCol
-            title="Resources"
+            title={t("footer.resources")}
             links={[
-              { to: "/about", label: "Tez-tez verilən suallar" },
-              { to: "/about", label: "Bloq" },
-              { to: "/about", label: "Məxfilik siyasəti" },
-              { to: "/contact", label: "İstifadə şərtləri" },
+              { to: "/about", label: t("footer.faq") },
+              { to: "/about", label: t("footer.blog") },
+              { to: "/about", label: t("footer.privacy") },
+              { to: "/contact", label: t("footer.terms") },
             ]}
           />
         </div>
 
         <div className="mt-16 flex flex-col md:flex-row justify-between gap-4 pt-8 border-t border-white/5 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Agentix. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Agentix. {t("footer.rights")}</p>
           <div className="flex gap-6">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Cookies</a>
+            <a href="#">{t("footer.privacy")}</a>
+            <a href="#">{t("footer.terms")}</a>
             <span>hello@agentix.ai</span>
           </div>
         </div>
