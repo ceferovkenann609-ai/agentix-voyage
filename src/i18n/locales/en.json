@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "solutions": "Solutions",
+    "pricing": "Pricing",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "bookDemo": "Book a Demo"
+  },
+  "common": {
+    "getStarted": "Get started",
+    "learnMore": "Learn more",
+    "contactUs": "Contact us",
+    "language": "Language"
+  },
+  "footer": {
+    "tagline": "Agentix builds AI agents that work 24/7 for your business — automating support, sales, marketing, and operations to save time and cost.",
+    "company": "Company",
+    "servicesCol": "Services",
+    "resources": "Resources",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "rights": "All rights reserved.",
+    "chatbots": "AI Chatbots",
+    "voice": "Voice AI",
+    "automation": "AI Automation",
+    "websites": "AI Websites",
+    "marketing": "AI Marketing",
+    "custom": "Custom AI Solutions"
+  }
+}
