@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Ana səhifə",
+    "services": "Xidmətlər",
+    "solutions": "Həllər",
+    "pricing": "Qiymətlər",
+    "about": "Haqqımızda",
+    "contact": "Əlaqə",
+    "login": "Daxil ol",
+    "bookDemo": "Demo sifariş et"
+  },
+  "common": {
+    "getStarted": "Başlayın",
+    "learnMore": "Ətraflı",
+    "contactUs": "Bizimlə əlaqə",
+    "language": "Dil"
+  },
+  "footer": {
+    "tagline": "Agentix biznesiniz üçün 24/7 çalışan AI agentləri qurur — müştəri dəstəyi, satış, marketinq və əməliyyatlarda vaxta və xərcə qənaət.",
+    "company": "Şirkət",
+    "servicesCol": "Xidmətlər",
+    "resources": "Resurslar",
+    "faq": "Tez-tez verilən suallar",
+    "blog": "Bloq",
+    "privacy": "Məxfilik siyasəti",
+    "terms": "İstifadə şərtləri",
+    "rights": "Bütün hüquqlar qorunur.",
+    "chatbots": "AI Çatbotlar",
+    "voice": "Səsli AI",
+    "automation": "AI Avtomatlaşdırma",
+    "websites": "AI Veb saytlar",
+    "marketing": "AI Marketinq",
+    "custom": "Fərdi AI Həllər"
+  }
+}
