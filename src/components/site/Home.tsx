@@ -24,6 +24,8 @@ import {
   Activity,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+
 
 /* ---------------- Cursor Glow ---------------- */
 function CursorGlow() {
@@ -231,6 +233,7 @@ function AIVisualization() {
 
 /* ---------------- Hero ---------------- */
 function Hero() {
+  const { t } = useTranslation();
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
@@ -257,20 +260,18 @@ function Hero() {
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-6">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-xs font-medium text-muted-foreground">
-              Now with GPT-5 & Claude 4 support
+              {t("home.hero.badge")}
             </span>
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
-            <span className="text-gradient">Your Business Never Sleeps.</span>
+            <span className="text-gradient">{t("home.hero.titleTop")}</span>
             <br />
-            <span className="text-brand-gradient">Neither Do Our AI Agents.</span>
+            <span className="text-brand-gradient">{t("home.hero.titleBottom")}</span>
           </h1>
 
           <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
-            Agentix builds production-grade AI agents for customer support, sales,
-            scheduling, lead generation, and workflow automation — trained on your data,
-            deployed in days.
+            {t("home.hero.subtitle")}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -278,24 +279,31 @@ function Hero() {
               to="/book-demo"
               className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.65_0.26_295/0.5)] hover:shadow-[0_0_50px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
             >
-              Book a Demo
+              {t("common.bookDemo")}
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
             </Link>
-            <button className="group inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition">
+            <Link
+              to="/demo"
+              className="group inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
+            >
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-gradient">
                 <Play className="h-3 w-3 text-white fill-white" />
               </div>
-              Watch Demo
-            </button>
+              {t("common.watchDemo")}
+            </Link>
           </div>
 
           <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
-            {["24/7 AI Support", "No Coding Required", "Easy Integration"].map((t) => (
-              <div key={t} className="flex items-center gap-2">
+            {[
+              t("home.hero.chips.support"),
+              t("home.hero.chips.noCode"),
+              t("home.hero.chips.integration"),
+            ].map((c) => (
+              <div key={c} className="flex items-center gap-2">
                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-gradient">
                   <Check className="h-3 w-3 text-white" />
                 </div>
-                <span className="text-sm text-muted-foreground">{t}</span>
+                <span className="text-sm text-muted-foreground">{c}</span>
               </div>
             ))}
           </div>
@@ -313,14 +321,16 @@ function Hero() {
   );
 }
 
+
 /* ---------------- Trusted By ---------------- */
 function TrustedBy() {
+  const { t } = useTranslation();
   const companies = ["Nebula", "Orbit", "Quantum", "Vertex", "Lumen", "Pulse", "Axiom", "Zenith"];
   return (
     <section className="relative py-20 border-y border-white/5">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <p className="text-center text-xs font-mono uppercase tracking-[0.3em] text-muted-foreground mb-10">
-          Trusted by innovative companies
+          {t("home.trusted")}
         </p>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
           {companies.map((c) => (
@@ -339,8 +349,10 @@ function TrustedBy() {
   );
 }
 
+
 /* ---------------- Dashboard Preview ---------------- */
 function DashboardPreview() {
+  const { t } = useTranslation();
   const messages = [
     { user: "Sarah K.", msg: "What's your return policy?", time: "2s ago" },
     { user: "Marcus D.", msg: "Can I upgrade my plan?", time: "5s ago" },
@@ -358,14 +370,15 @@ function DashboardPreview() {
         >
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-4">
             <Activity className="h-3 w-3 text-purple-400" />
-            <span className="text-xs font-medium">Live Dashboard</span>
+            <span className="text-xs font-medium">{t("home.dashboard.badge")}</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
-            One command center for every AI agent
+            {t("home.dashboard.title")}
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Monitor conversations, automation rate, and business impact in real time.
+            {t("home.dashboard.subtitle")}
           </p>
+
         </motion.div>
 
         <motion.div
@@ -387,7 +400,7 @@ function DashboardPreview() {
               <div className="text-xs font-mono text-muted-foreground">agentix.ai/dashboard</div>
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs text-muted-foreground">Live</span>
+                <span className="text-xs text-muted-foreground">{t("home.dashboard.live")}</span>
               </div>
             </div>
 
@@ -396,10 +409,11 @@ function DashboardPreview() {
               <div className="lg:col-span-2 space-y-4">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[
-                    { l: "Active Chats", v: "1,248", d: "+12%", i: Users },
-                    { l: "Response", v: "0.8s", d: "-24%", i: Clock },
-                    { l: "Automation", v: "94%", d: "+8%", i: Bot },
-                    { l: "CSAT", v: "4.9", d: "+0.2", i: Star },
+                    { l: t("home.dashboard.stats.activeChats"), v: "1,248", d: "+12%", i: Users },
+                    { l: t("home.dashboard.stats.response"), v: "0.8s", d: "-24%", i: Clock },
+                    { l: t("home.dashboard.stats.automation"), v: "94%", d: "+8%", i: Bot },
+                    { l: t("home.dashboard.stats.csat"), v: "4.9", d: "+0.2", i: Star },
+
                   ].map((s) => (
                     <div key={s.l} className="gradient-border rounded-xl p-3">
                       <div className="flex items-center justify-between mb-2">
@@ -416,8 +430,9 @@ function DashboardPreview() {
                 <div className="gradient-border rounded-xl p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <div className="text-sm font-semibold">Conversations</div>
-                      <div className="text-xs text-muted-foreground">Last 24 hours</div>
+                      <div className="text-sm font-semibold">{t("home.dashboard.conversations")}</div>
+                      <div className="text-xs text-muted-foreground">{t("home.dashboard.last24")}</div>
+
                     </div>
                     <BarChart3 className="h-4 w-4 text-muted-foreground" />
                   </div>
@@ -439,7 +454,7 @@ function DashboardPreview() {
               {/* Messages */}
               <div className="gradient-border rounded-xl p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="text-sm font-semibold">Live Messages</div>
+                  <div className="text-sm font-semibold">{t("home.dashboard.liveMessages")}</div>
                   <MessageSquare className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div className="space-y-3">
@@ -498,6 +513,7 @@ function ServiceCard({
   s: { i: typeof MessageSquare; t: string; d: string; slug: string };
   i: number;
 }) {
+  const { t: tr } = useTranslation();
   const ref = useRef<HTMLAnchorElement>(null);
   const mx = useMotionValue(-200);
   const my = useMotionValue(-200);
@@ -513,6 +529,8 @@ function ServiceCard({
     my.set(-200);
   };
 
+  const bg = useMotionTemplate`radial-gradient(240px circle at ${mx}px ${my}px, oklch(0.65 0.26 295 / 0.22), transparent 70%)`;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -522,7 +540,7 @@ function ServiceCard({
     >
       <Link
         ref={ref}
-        to="/services"
+        to={`/services/${s.slug}` as string}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         className="group relative block gradient-border rounded-2xl p-6 h-full transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-glow"
@@ -530,9 +548,7 @@ function ServiceCard({
         <motion.div
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background: useMotionTemplate`radial-gradient(240px circle at ${mx}px ${my}px, oklch(0.65 0.26 295 / 0.22), transparent 70%)`,
-          }}
+          style={{ background: bg }}
         />
         <div className="absolute inset-0 rounded-2xl bg-brand-gradient opacity-0 group-hover:opacity-10 blur-xl transition duration-500" />
         <div className="relative">
@@ -542,7 +558,7 @@ function ServiceCard({
           <h3 className="text-lg font-semibold mb-2">{s.t}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed line-clamp-1">{s.d}</p>
           <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium text-purple-300 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition">
-            Learn more <ArrowRight className="h-3 w-3" />
+            {tr("common.learnMore")} <ArrowRight className="h-3 w-3" />
           </div>
         </div>
       </Link>
@@ -551,13 +567,14 @@ function ServiceCard({
 }
 
 function Services() {
+  const { t } = useTranslation();
   const services = [
-    { i: MessageSquare, t: "AI Chatbots", d: "Human-like conversations across every channel.", slug: "ai-chatbots" },
-    { i: Phone, t: "Voice AI Agents", d: "Natural voice agents that handle calls in real time.", slug: "voice-ai" },
-    { i: Target, t: "Lead Generation", d: "Qualify and route leads to your sales team 24/7.", slug: "lead-generation" },
-    { i: Headphones, t: "Customer Support", d: "Resolve 80% of tickets instantly with tier-1 AI.", slug: "customer-support" },
-    { i: Workflow, t: "Workflow Automation", d: "Chain multi-step processes with intelligent agents.", slug: "workflow-automation" },
-    { i: Database, t: "CRM Integration", d: "Sync with Salesforce, HubSpot, Zoho, and 50+ tools.", slug: "crm-integration" },
+    { i: MessageSquare, t: t("home.services.items.chatbots.t"), d: t("home.services.items.chatbots.d"), slug: "ai-chatbots" },
+    { i: Phone, t: t("home.services.items.voice.t"), d: t("home.services.items.voice.d"), slug: "voice-ai" },
+    { i: Target, t: t("home.services.items.leads.t"), d: t("home.services.items.leads.d"), slug: "lead-generation" },
+    { i: Headphones, t: t("home.services.items.support.t"), d: t("home.services.items.support.d"), slug: "customer-support" },
+    { i: Workflow, t: t("home.services.items.workflow.t"), d: t("home.services.items.workflow.d"), slug: "workflow-automation" },
+    { i: Database, t: t("home.services.items.crm.t"), d: t("home.services.items.crm.d"), slug: "crm-integration" },
   ];
 
   return (
@@ -566,10 +583,10 @@ function Services() {
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-4">
             <Sparkles className="h-3 w-3 text-purple-400" />
-            <span className="text-xs font-medium">Services</span>
+            <span className="text-xs font-medium">{t("home.services.badge")}</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
-            Our AI Services
+            {t("home.services.title")}
           </h2>
         </div>
 
@@ -584,21 +601,23 @@ function Services() {
 }
 
 
+
 /* ---------------- How It Works ---------------- */
 function HowItWorks() {
+  const { t } = useTranslation();
   const steps = [
-    { n: "01", t: "Discover", d: "We audit your workflows and identify high-ROI automation opportunities." },
-    { n: "02", t: "Build", d: "Our team trains custom agents on your data, tone, and business logic." },
-    { n: "03", t: "Deploy", d: "Launch across your existing stack — no code changes, no downtime." },
-    { n: "04", t: "Scale", d: "Continuously optimize with analytics and expand to new use cases." },
+    { n: "01", t: t("home.how.steps.1.t"), d: t("home.how.steps.1.d") },
+    { n: "02", t: t("home.how.steps.2.t"), d: t("home.how.steps.2.d") },
+    { n: "03", t: t("home.how.steps.3.t"), d: t("home.how.steps.3.d") },
+    { n: "04", t: t("home.how.steps.4.t"), d: t("home.how.steps.4.d") },
   ];
 
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">How it works</h2>
-          <p className="mt-4 text-muted-foreground">From discovery to scale in weeks, not quarters.</p>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">{t("home.how.title")}</h2>
+          <p className="mt-4 text-muted-foreground">{t("home.how.subtitle")}</p>
         </div>
 
         <div className="relative">
@@ -631,17 +650,19 @@ function HowItWorks() {
   );
 }
 
+
 /* ---------------- Features ---------------- */
 function Features() {
+  const { t } = useTranslation();
   const features = [
-    { i: MessageSquare, t: "Human-like conversations" },
-    { i: Workflow, t: "50+ integrations" },
-    { i: Shield, t: "Secure infrastructure" },
-    { i: Globe, t: "Multi-language support" },
-    { i: BarChart3, t: "Analytics dashboard" },
-    { i: Clock, t: "24/7 availability" },
-    { i: Zap, t: "Smart automation" },
-    { i: Bot, t: "Custom AI agents" },
+    { i: MessageSquare, t: t("home.features.items.conversations") },
+    { i: Workflow, t: t("home.features.items.integrations") },
+    { i: Shield, t: t("home.features.items.security") },
+    { i: Globe, t: t("home.features.items.multilang") },
+    { i: BarChart3, t: t("home.features.items.analytics") },
+    { i: Clock, t: t("home.features.items.availability") },
+    { i: Zap, t: t("home.features.items.automation") },
+    { i: Bot, t: t("home.features.items.custom") },
   ];
 
   return (
@@ -649,10 +670,10 @@ function Features() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-16 items-center">
         <div>
           <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
-            Everything you need to run an AI-first business
+            {t("home.features.title")}
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Enterprise-grade features in a platform that ships in days.
+            {t("home.features.subtitle")}
           </p>
           <div className="mt-8 grid sm:grid-cols-2 gap-3">
             {features.map((f) => (
@@ -675,43 +696,46 @@ function Features() {
                 <Bot className="h-4 w-4 text-white" />
               </div>
               <div>
-                <div className="text-sm font-semibold">Agentix Assistant</div>
+                <div className="text-sm font-semibold">{t("home.features.chat.assistant")}</div>
                 <div className="text-xs text-emerald-400 flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Online
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> {t("home.features.chat.online")}
                 </div>
               </div>
             </div>
             <div className="space-y-3 mt-4">
               <div className="flex justify-end">
                 <div className="bg-white/5 rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-[80%] text-sm">
-                  I need to reschedule my appointment for next Tuesday.
+                  {t("home.features.chat.u1")}
                 </div>
               </div>
               <div className="flex justify-start">
                 <div className="bg-brand-gradient/20 border border-purple-500/20 rounded-2xl rounded-tl-sm px-4 py-2.5 max-w-[80%] text-sm">
-                  Of course. I see your 3pm slot on Tuesday. Would 2pm or 4pm work better?
+                  {t("home.features.chat.a1")}
                 </div>
               </div>
               <div className="flex justify-end">
                 <div className="bg-white/5 rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-[80%] text-sm">
-                  4pm is perfect.
+                  {t("home.features.chat.u2")}
                 </div>
               </div>
               <div className="flex justify-start">
                 <div className="bg-brand-gradient/20 border border-purple-500/20 rounded-2xl rounded-tl-sm px-4 py-2.5 max-w-[80%] text-sm">
-                  Done ✓ Confirmation sent to your email. Anything else?
+                  {t("home.features.chat.a2")}
                 </div>
               </div>
             </div>
+
             <div className="mt-5 flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-4 py-3">
               <input
                 className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                placeholder="Type a message…"
+                placeholder={t("home.features.chat.placeholder")}
+                aria-label={t("home.features.chat.placeholder")}
               />
-              <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient">
+              <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient" aria-label="Send">
                 <ArrowRight className="h-4 w-4 text-white" />
               </button>
             </div>
+
           </div>
         </div>
       </div>
@@ -755,12 +779,14 @@ function Counter({ end, suffix = "", prefix = "" }: { end: number; suffix?: stri
 }
 
 function Stats() {
+  const { t } = useTranslation();
   const stats = [
-    { n: 100, s: "+", l: "Businesses Automated" },
-    { n: 500, s: "K+", l: "Messages Processed" },
-    { n: 98, s: "%", l: "Customer Satisfaction" },
-    { n: 24, s: "/7", l: "Availability" },
+    { n: 100, s: "+", l: t("home.stats.businesses") },
+    { n: 500, s: "K+", l: t("home.stats.messages") },
+    { n: 98, s: "%", l: t("home.stats.csat") },
+    { n: 24, s: "/7", l: t("home.stats.availability") },
   ];
+
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -783,23 +809,24 @@ function Stats() {
 
 /* ---------------- Testimonials ---------------- */
 function Testimonials() {
-  const t = [
+  const { t } = useTranslation();
+  const items = [
     {
-      n: "Elena Marchetti",
-      r: "COO, Nebula Retail",
-      q: "Agentix cut our support response time by 82%. Our team now focuses on complex cases while AI handles the rest — flawlessly.",
+      n: t("home.testimonials.items.1.n"),
+      r: t("home.testimonials.items.1.r"),
+      q: t("home.testimonials.items.1.q"),
       avatar: "linear-gradient(135deg,#a855f7,#3b82f6)",
     },
     {
-      n: "David Okafor",
-      r: "Head of Sales, Vertex Labs",
-      q: "We booked 3x more qualified meetings the month we deployed Agentix. The voice agent sounds indistinguishable from our best reps.",
+      n: t("home.testimonials.items.2.n"),
+      r: t("home.testimonials.items.2.r"),
+      q: t("home.testimonials.items.2.q"),
       avatar: "linear-gradient(135deg,#3b82f6,#06b6d4)",
     },
     {
-      n: "Aiko Tanaka",
-      r: "Founder, Lumen Studio",
-      q: "The setup was seamless. Within two weeks we had AI agents running our entire scheduling and follow-up pipeline.",
+      n: t("home.testimonials.items.3.n"),
+      r: t("home.testimonials.items.3.r"),
+      q: t("home.testimonials.items.3.q"),
       avatar: "linear-gradient(135deg,#ec4899,#a855f7)",
     },
   ];
@@ -807,13 +834,13 @@ function Testimonials() {
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">Loved by operators</h2>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">{t("home.testimonials.title")}</h2>
           <p className="mt-4 text-muted-foreground">
-            Teams across industries trust Agentix to run their AI workforce.
+            {t("home.testimonials.subtitle")}
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-5">
-          {t.map((x, i) => (
+          {items.map((x, i) => (
             <motion.div
               key={x.n}
               initial={{ opacity: 0, y: 20 }}
@@ -846,33 +873,17 @@ function Testimonials() {
   );
 }
 
+
 /* ---------------- FAQ ---------------- */
 function FAQ() {
+  const { t } = useTranslation();
   const faqs = [
-    {
-      q: "How long does it take to deploy an AI agent?",
-      a: "Most agents go live within 2-4 weeks. We handle discovery, training on your data, and integration with your existing stack.",
-    },
-    {
-      q: "Do I need engineering resources?",
-      a: "No. Agentix is fully managed. Our team builds, deploys, and maintains your agents — you review and approve.",
-    },
-    {
-      q: "Which platforms do you integrate with?",
-      a: "50+ platforms including Salesforce, HubSpot, Zendesk, Intercom, Slack, Shopify, WhatsApp, Twilio, and custom APIs.",
-    },
-    {
-      q: "How do you ensure data security?",
-      a: "SOC 2 Type II certified, GDPR compliant, and end-to-end encryption. Your data is never used to train foundation models.",
-    },
-    {
-      q: "Can agents handle multiple languages?",
-      a: "Yes. Agents support 95+ languages natively and switch context seamlessly within a single conversation.",
-    },
-    {
-      q: "What if the AI can't answer a question?",
-      a: "Configurable escalation. Agents hand off to human teammates with full conversation context and suggested next steps.",
-    },
+    { q: t("home.faq.items.1.q"), a: t("home.faq.items.1.a") },
+    { q: t("home.faq.items.2.q"), a: t("home.faq.items.2.a") },
+    { q: t("home.faq.items.3.q"), a: t("home.faq.items.3.a") },
+    { q: t("home.faq.items.4.q"), a: t("home.faq.items.4.a") },
+    { q: t("home.faq.items.5.q"), a: t("home.faq.items.5.a") },
+    { q: t("home.faq.items.6.q"), a: t("home.faq.items.6.a") },
   ];
   const [open, setOpen] = useState<number | null>(0);
 
@@ -880,8 +891,9 @@ function FAQ() {
     <section className="relative py-24">
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">Frequently asked</h2>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">{t("home.faq.title")}</h2>
         </div>
+
         <div className="space-y-3">
           {faqs.map((f, i) => (
             <div key={i} className="gradient-border rounded-2xl overflow-hidden">
@@ -914,6 +926,7 @@ function FAQ() {
 
 /* ---------------- Final CTA ---------------- */
 function FinalCTA() {
+  const { t } = useTranslation();
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -925,26 +938,27 @@ function FinalCTA() {
 
           <div className="relative">
             <h2 className="text-4xl sm:text-6xl font-bold text-gradient max-w-3xl mx-auto leading-[1.1]">
-              Ready to Build Your AI Workforce?
+              {t("home.cta.title")}
             </h2>
             <p className="mt-6 text-muted-foreground max-w-xl mx-auto">
-              Join hundreds of teams shipping intelligent automation with Agentix.
+              {t("home.cta.subtitle")}
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link
                 to="/book-demo"
                 className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-7 py-4 text-sm font-semibold text-white shadow-glow hover:shadow-[0_0_60px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
               >
-                Book a Demo
+                {t("common.bookDemo")}
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
               </Link>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 rounded-xl glass-strong px-7 py-4 text-sm font-semibold hover:bg-white/10 transition"
               >
-                Contact Sales
+                {t("common.contactSales")}
               </Link>
             </div>
+
           </div>
         </div>
       </div>

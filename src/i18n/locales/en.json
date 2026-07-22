@@ -13,7 +13,11 @@
     "getStarted": "Get started",
     "learnMore": "Learn more",
     "contactUs": "Contact us",
-    "language": "Language"
+    "language": "Language",
+    "bookDemo": "Book a Demo",
+    "watchDemo": "Watch Demo",
+    "contactSales": "Contact Sales",
+    "learnMoreArrow": "Learn more"
   },
   "footer": {
     "tagline": "Agentix builds AI agents that work 24/7 for your business — automating support, sales, marketing, and operations to save time and cost.",
@@ -31,5 +35,109 @@
     "websites": "AI Websites",
     "marketing": "AI Marketing",
     "custom": "Custom AI Solutions"
+  },
+  "home": {
+    "hero": {
+      "badge": "Now with GPT-5 & Claude 4 support",
+      "titleTop": "Your Business Never Sleeps.",
+      "titleBottom": "Neither Do Our AI Agents.",
+      "subtitle": "Agentix builds production-grade AI agents for customer support, sales, scheduling, lead generation, and workflow automation — trained on your data, deployed in days.",
+      "chips": {
+        "support": "24/7 AI Support",
+        "noCode": "No Coding Required",
+        "integration": "Easy Integration"
+      }
+    },
+    "trusted": "Trusted by innovative companies",
+    "dashboard": {
+      "badge": "Live Dashboard",
+      "title": "One command center for every AI agent",
+      "subtitle": "Monitor conversations, automation rate, and business impact in real time.",
+      "live": "Live",
+      "stats": {
+        "activeChats": "Active Chats",
+        "response": "Response",
+        "automation": "Automation",
+        "csat": "CSAT"
+      },
+      "conversations": "Conversations",
+      "last24": "Last 24 hours",
+      "liveMessages": "Live Messages"
+    },
+    "services": {
+      "badge": "Services",
+      "title": "Our AI Services",
+      "items": {
+        "chatbots": { "t": "AI Chatbots", "d": "Human-like conversations across every channel." },
+        "voice": { "t": "Voice AI Agents", "d": "Natural voice agents that handle calls in real time." },
+        "leads": { "t": "Lead Generation", "d": "Qualify and route leads to your sales team 24/7." },
+        "support": { "t": "Customer Support", "d": "Resolve 80% of tickets instantly with tier-1 AI." },
+        "workflow": { "t": "Workflow Automation", "d": "Chain multi-step processes with intelligent agents." },
+        "crm": { "t": "CRM Integration", "d": "Sync with Salesforce, HubSpot, Zoho, and 50+ tools." }
+      }
+    },
+    "how": {
+      "title": "How it works",
+      "subtitle": "From discovery to scale in weeks, not quarters.",
+      "steps": {
+        "1": { "t": "Discover", "d": "We audit your workflows and identify high-ROI automation opportunities." },
+        "2": { "t": "Build", "d": "Our team trains custom agents on your data, tone, and business logic." },
+        "3": { "t": "Deploy", "d": "Launch across your existing stack — no code changes, no downtime." },
+        "4": { "t": "Scale", "d": "Continuously optimize with analytics and expand to new use cases." }
+      }
+    },
+    "features": {
+      "title": "Everything you need to run an AI-first business",
+      "subtitle": "Enterprise-grade features in a platform that ships in days.",
+      "items": {
+        "conversations": "Human-like conversations",
+        "integrations": "50+ integrations",
+        "security": "Secure infrastructure",
+        "multilang": "Multi-language support",
+        "analytics": "Analytics dashboard",
+        "availability": "24/7 availability",
+        "automation": "Smart automation",
+        "custom": "Custom AI agents"
+      },
+      "chat": {
+        "assistant": "Agentix Assistant",
+        "online": "Online",
+        "u1": "I need to reschedule my appointment for next Tuesday.",
+        "a1": "Of course. I see your 3pm slot on Tuesday. Would 2pm or 4pm work better?",
+        "u2": "4pm is perfect.",
+        "a2": "Done ✓ Confirmation sent to your email. Anything else?",
+        "placeholder": "Type a message…"
+      }
+    },
+    "stats": {
+      "businesses": "Businesses Automated",
+      "messages": "Messages Processed",
+      "csat": "Customer Satisfaction",
+      "availability": "Availability"
+    },
+    "testimonials": {
+      "title": "Loved by operators",
+      "subtitle": "Teams across industries trust Agentix to run their AI workforce.",
+      "items": {
+        "1": { "n": "Elena Marchetti", "r": "COO, Nebula Retail", "q": "Agentix cut our support response time by 82%. Our team now focuses on complex cases while AI handles the rest — flawlessly." },
+        "2": { "n": "David Okafor", "r": "Head of Sales, Vertex Labs", "q": "We booked 3x more qualified meetings the month we deployed Agentix. The voice agent sounds indistinguishable from our best reps." },
+        "3": { "n": "Aiko Tanaka", "r": "Founder, Lumen Studio", "q": "The setup was seamless. Within two weeks we had AI agents running our entire scheduling and follow-up pipeline." }
+      }
+    },
+    "faq": {
+      "title": "Frequently asked",
+      "items": {
+        "1": { "q": "How long does it take to deploy an AI agent?", "a": "Most agents go live within 2-4 weeks. We handle discovery, training on your data, and integration with your existing stack." },
+        "2": { "q": "Do I need engineering resources?", "a": "No. Agentix is fully managed. Our team builds, deploys, and maintains your agents — you review and approve." },
+        "3": { "q": "Which platforms do you integrate with?", "a": "50+ platforms including Salesforce, HubSpot, Zendesk, Intercom, Slack, Shopify, WhatsApp, Twilio, and custom APIs." },
+        "4": { "q": "How do you ensure data security?", "a": "SOC 2 Type II certified, GDPR compliant, and end-to-end encryption. Your data is never used to train foundation models." },
+        "5": { "q": "Can agents handle multiple languages?", "a": "Yes. Agents support 95+ languages natively and switch context seamlessly within a single conversation." },
+        "6": { "q": "What if the AI can't answer a question?", "a": "Configurable escalation. Agents hand off to human teammates with full conversation context and suggested next steps." }
+      }
+    },
+    "cta": {
+      "title": "Ready to Build Your AI Workforce?",
+      "subtitle": "Join hundreds of teams shipping intelligent automation with Agentix."
+    }
   }
 }

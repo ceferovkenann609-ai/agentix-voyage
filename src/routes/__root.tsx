@@ -97,8 +97,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const initialLang =
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("agentix-lang") || "az"
+      : "az";
   return (
-    <html lang="en">
+    <html lang={initialLang}>
       <head>
         <HeadContent />
       </head>
@@ -109,6 +113,7 @@ function RootShell({ children }: { children: ReactNode }) {
     </html>
   );
 }
+
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();

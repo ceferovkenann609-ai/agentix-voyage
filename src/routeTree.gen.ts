@@ -26,7 +26,6 @@ import { Route as ServicesLeadGenerationRouteImport } from './routes/services.le
 import { Route as ServicesCustomerSupportRouteImport } from './routes/services.customer-support'
 import { Route as ServicesCrmIntegrationRouteImport } from './routes/services.crm-integration'
 import { Route as ServicesAiChatbotsRouteImport } from './routes/services.ai-chatbots'
-import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 
 const SolutionsRoute = SolutionsRouteImport.update({
   id: '/solutions',
@@ -114,11 +113,6 @@ const ServicesAiChatbotsRoute = ServicesAiChatbotsRouteImport.update({
   path: '/ai-chatbots',
   getParentRoute: () => ServicesRoute,
 } as any)
-const ServicesSlugRoute = ServicesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ServicesRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -130,7 +124,6 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/services': typeof ServicesRouteWithChildren
   '/solutions': typeof SolutionsRouteWithChildren
-  '/services/$slug': typeof ServicesSlugRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -149,7 +142,6 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/solutions': typeof SolutionsRouteWithChildren
-  '/services/$slug': typeof ServicesSlugRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -170,7 +162,6 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/services': typeof ServicesRouteWithChildren
   '/solutions': typeof SolutionsRouteWithChildren
-  '/services/$slug': typeof ServicesSlugRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -192,7 +183,6 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/services'
     | '/solutions'
-    | '/services/$slug'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -211,7 +201,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/pricing'
     | '/solutions'
-    | '/services/$slug'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -231,7 +220,6 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/services'
     | '/solutions'
-    | '/services/$slug'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -375,18 +363,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesAiChatbotsRouteImport
       parentRoute: typeof ServicesRoute
     }
-    '/services/$slug': {
-      id: '/services/$slug'
-      path: '/$slug'
-      fullPath: '/services/$slug'
-      preLoaderRoute: typeof ServicesSlugRouteImport
-      parentRoute: typeof ServicesRoute
-    }
   }
 }
 
 interface ServicesRouteChildren {
-  ServicesSlugRoute: typeof ServicesSlugRoute
   ServicesAiChatbotsRoute: typeof ServicesAiChatbotsRoute
   ServicesCrmIntegrationRoute: typeof ServicesCrmIntegrationRoute
   ServicesCustomerSupportRoute: typeof ServicesCustomerSupportRoute
@@ -397,7 +377,6 @@ interface ServicesRouteChildren {
 }
 
 const ServicesRouteChildren: ServicesRouteChildren = {
-  ServicesSlugRoute: ServicesSlugRoute,
   ServicesAiChatbotsRoute: ServicesAiChatbotsRoute,
   ServicesCrmIntegrationRoute: ServicesCrmIntegrationRoute,
   ServicesCustomerSupportRoute: ServicesCustomerSupportRoute,
