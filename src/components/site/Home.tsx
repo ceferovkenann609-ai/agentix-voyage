@@ -513,6 +513,7 @@ function ServiceCard({
   s: { i: typeof MessageSquare; t: string; d: string; slug: string };
   i: number;
 }) {
+  const { t: tr } = useTranslation();
   const ref = useRef<HTMLAnchorElement>(null);
   const mx = useMotionValue(-200);
   const my = useMotionValue(-200);
@@ -528,6 +529,8 @@ function ServiceCard({
     my.set(-200);
   };
 
+  const bg = useMotionTemplate`radial-gradient(240px circle at ${mx}px ${my}px, oklch(0.65 0.26 295 / 0.22), transparent 70%)`;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -537,7 +540,7 @@ function ServiceCard({
     >
       <Link
         ref={ref}
-        to="/services"
+        to={`/services/${s.slug}` as string}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         className="group relative block gradient-border rounded-2xl p-6 h-full transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-glow"
@@ -545,9 +548,7 @@ function ServiceCard({
         <motion.div
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background: useMotionTemplate`radial-gradient(240px circle at ${mx}px ${my}px, oklch(0.65 0.26 295 / 0.22), transparent 70%)`,
-          }}
+          style={{ background: bg }}
         />
         <div className="absolute inset-0 rounded-2xl bg-brand-gradient opacity-0 group-hover:opacity-10 blur-xl transition duration-500" />
         <div className="relative">
@@ -557,7 +558,7 @@ function ServiceCard({
           <h3 className="text-lg font-semibold mb-2">{s.t}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed line-clamp-1">{s.d}</p>
           <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium text-purple-300 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition">
-            Learn more <ArrowRight className="h-3 w-3" />
+            {tr("common.learnMore")} <ArrowRight className="h-3 w-3" />
           </div>
         </div>
       </Link>
@@ -566,13 +567,14 @@ function ServiceCard({
 }
 
 function Services() {
+  const { t } = useTranslation();
   const services = [
-    { i: MessageSquare, t: "AI Chatbots", d: "Human-like conversations across every channel.", slug: "ai-chatbots" },
-    { i: Phone, t: "Voice AI Agents", d: "Natural voice agents that handle calls in real time.", slug: "voice-ai" },
-    { i: Target, t: "Lead Generation", d: "Qualify and route leads to your sales team 24/7.", slug: "lead-generation" },
-    { i: Headphones, t: "Customer Support", d: "Resolve 80% of tickets instantly with tier-1 AI.", slug: "customer-support" },
-    { i: Workflow, t: "Workflow Automation", d: "Chain multi-step processes with intelligent agents.", slug: "workflow-automation" },
-    { i: Database, t: "CRM Integration", d: "Sync with Salesforce, HubSpot, Zoho, and 50+ tools.", slug: "crm-integration" },
+    { i: MessageSquare, t: t("home.services.items.chatbots.t"), d: t("home.services.items.chatbots.d"), slug: "ai-chatbots" },
+    { i: Phone, t: t("home.services.items.voice.t"), d: t("home.services.items.voice.d"), slug: "voice-ai" },
+    { i: Target, t: t("home.services.items.leads.t"), d: t("home.services.items.leads.d"), slug: "lead-generation" },
+    { i: Headphones, t: t("home.services.items.support.t"), d: t("home.services.items.support.d"), slug: "customer-support" },
+    { i: Workflow, t: t("home.services.items.workflow.t"), d: t("home.services.items.workflow.d"), slug: "workflow-automation" },
+    { i: Database, t: t("home.services.items.crm.t"), d: t("home.services.items.crm.d"), slug: "crm-integration" },
   ];
 
   return (
@@ -581,10 +583,10 @@ function Services() {
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-4">
             <Sparkles className="h-3 w-3 text-purple-400" />
-            <span className="text-xs font-medium">Services</span>
+            <span className="text-xs font-medium">{t("home.services.badge")}</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
-            Our AI Services
+            {t("home.services.title")}
           </h2>
         </div>
 
@@ -597,6 +599,7 @@ function Services() {
     </section>
   );
 }
+
 
 
 /* ---------------- How It Works ---------------- */
