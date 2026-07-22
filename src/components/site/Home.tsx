@@ -233,6 +233,7 @@ function AIVisualization() {
 
 /* ---------------- Hero ---------------- */
 function Hero() {
+  const { t } = useTranslation();
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
@@ -259,20 +260,18 @@ function Hero() {
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-6">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-xs font-medium text-muted-foreground">
-              Now with GPT-5 & Claude 4 support
+              {t("home.hero.badge")}
             </span>
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
-            <span className="text-gradient">Your Business Never Sleeps.</span>
+            <span className="text-gradient">{t("home.hero.titleTop")}</span>
             <br />
-            <span className="text-brand-gradient">Neither Do Our AI Agents.</span>
+            <span className="text-brand-gradient">{t("home.hero.titleBottom")}</span>
           </h1>
 
           <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
-            Agentix builds production-grade AI agents for customer support, sales,
-            scheduling, lead generation, and workflow automation — trained on your data,
-            deployed in days.
+            {t("home.hero.subtitle")}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -280,24 +279,31 @@ function Hero() {
               to="/book-demo"
               className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.65_0.26_295/0.5)] hover:shadow-[0_0_50px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
             >
-              Book a Demo
+              {t("common.bookDemo")}
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
             </Link>
-            <button className="group inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition">
+            <Link
+              to="/demo"
+              className="group inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
+            >
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-gradient">
                 <Play className="h-3 w-3 text-white fill-white" />
               </div>
-              Watch Demo
-            </button>
+              {t("common.watchDemo")}
+            </Link>
           </div>
 
           <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
-            {["24/7 AI Support", "No Coding Required", "Easy Integration"].map((t) => (
-              <div key={t} className="flex items-center gap-2">
+            {[
+              t("home.hero.chips.support"),
+              t("home.hero.chips.noCode"),
+              t("home.hero.chips.integration"),
+            ].map((c) => (
+              <div key={c} className="flex items-center gap-2">
                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-gradient">
                   <Check className="h-3 w-3 text-white" />
                 </div>
-                <span className="text-sm text-muted-foreground">{t}</span>
+                <span className="text-sm text-muted-foreground">{c}</span>
               </div>
             ))}
           </div>
@@ -314,6 +320,7 @@ function Hero() {
     </section>
   );
 }
+
 
 /* ---------------- Trusted By ---------------- */
 function TrustedBy() {
