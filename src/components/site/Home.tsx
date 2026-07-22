@@ -430,8 +430,9 @@ function DashboardPreview() {
                 <div className="gradient-border rounded-xl p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <div className="text-sm font-semibold">Conversations</div>
-                      <div className="text-xs text-muted-foreground">Last 24 hours</div>
+                      <div className="text-sm font-semibold">{t("home.dashboard.conversations")}</div>
+                      <div className="text-xs text-muted-foreground">{t("home.dashboard.last24")}</div>
+
                     </div>
                     <BarChart3 className="h-4 w-4 text-muted-foreground" />
                   </div>
