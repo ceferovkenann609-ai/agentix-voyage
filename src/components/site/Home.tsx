@@ -604,19 +604,20 @@ function Services() {
 
 /* ---------------- How It Works ---------------- */
 function HowItWorks() {
+  const { t } = useTranslation();
   const steps = [
-    { n: "01", t: "Discover", d: "We audit your workflows and identify high-ROI automation opportunities." },
-    { n: "02", t: "Build", d: "Our team trains custom agents on your data, tone, and business logic." },
-    { n: "03", t: "Deploy", d: "Launch across your existing stack — no code changes, no downtime." },
-    { n: "04", t: "Scale", d: "Continuously optimize with analytics and expand to new use cases." },
+    { n: "01", t: t("home.how.steps.1.t"), d: t("home.how.steps.1.d") },
+    { n: "02", t: t("home.how.steps.2.t"), d: t("home.how.steps.2.d") },
+    { n: "03", t: t("home.how.steps.3.t"), d: t("home.how.steps.3.d") },
+    { n: "04", t: t("home.how.steps.4.t"), d: t("home.how.steps.4.d") },
   ];
 
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">How it works</h2>
-          <p className="mt-4 text-muted-foreground">From discovery to scale in weeks, not quarters.</p>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">{t("home.how.title")}</h2>
+          <p className="mt-4 text-muted-foreground">{t("home.how.subtitle")}</p>
         </div>
 
         <div className="relative">
@@ -648,6 +649,7 @@ function HowItWorks() {
     </section>
   );
 }
+
 
 /* ---------------- Features ---------------- */
 function Features() {
