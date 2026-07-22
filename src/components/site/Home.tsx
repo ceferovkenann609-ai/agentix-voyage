@@ -779,12 +779,14 @@ function Counter({ end, suffix = "", prefix = "" }: { end: number; suffix?: stri
 }
 
 function Stats() {
+  const { t } = useTranslation();
   const stats = [
-    { n: 100, s: "+", l: "Businesses Automated" },
-    { n: 500, s: "K+", l: "Messages Processed" },
-    { n: 98, s: "%", l: "Customer Satisfaction" },
-    { n: 24, s: "/7", l: "Availability" },
+    { n: 100, s: "+", l: t("home.stats.businesses") },
+    { n: 500, s: "K+", l: t("home.stats.messages") },
+    { n: 98, s: "%", l: t("home.stats.csat") },
+    { n: 24, s: "/7", l: t("home.stats.availability") },
   ];
+
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
