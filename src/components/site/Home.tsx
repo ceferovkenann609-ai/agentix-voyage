@@ -809,23 +809,24 @@ function Stats() {
 
 /* ---------------- Testimonials ---------------- */
 function Testimonials() {
-  const t = [
+  const { t } = useTranslation();
+  const items = [
     {
-      n: "Elena Marchetti",
-      r: "COO, Nebula Retail",
-      q: "Agentix cut our support response time by 82%. Our team now focuses on complex cases while AI handles the rest — flawlessly.",
+      n: t("home.testimonials.items.1.n"),
+      r: t("home.testimonials.items.1.r"),
+      q: t("home.testimonials.items.1.q"),
       avatar: "linear-gradient(135deg,#a855f7,#3b82f6)",
     },
     {
-      n: "David Okafor",
-      r: "Head of Sales, Vertex Labs",
-      q: "We booked 3x more qualified meetings the month we deployed Agentix. The voice agent sounds indistinguishable from our best reps.",
+      n: t("home.testimonials.items.2.n"),
+      r: t("home.testimonials.items.2.r"),
+      q: t("home.testimonials.items.2.q"),
       avatar: "linear-gradient(135deg,#3b82f6,#06b6d4)",
     },
     {
-      n: "Aiko Tanaka",
-      r: "Founder, Lumen Studio",
-      q: "The setup was seamless. Within two weeks we had AI agents running our entire scheduling and follow-up pipeline.",
+      n: t("home.testimonials.items.3.n"),
+      r: t("home.testimonials.items.3.r"),
+      q: t("home.testimonials.items.3.q"),
       avatar: "linear-gradient(135deg,#ec4899,#a855f7)",
     },
   ];
@@ -833,13 +834,13 @@ function Testimonials() {
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">Loved by operators</h2>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">{t("home.testimonials.title")}</h2>
           <p className="mt-4 text-muted-foreground">
-            Teams across industries trust Agentix to run their AI workforce.
+            {t("home.testimonials.subtitle")}
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-5">
-          {t.map((x, i) => (
+          {items.map((x, i) => (
             <motion.div
               key={x.n}
               initial={{ opacity: 0, y: 20 }}
@@ -871,6 +872,7 @@ function Testimonials() {
     </section>
   );
 }
+
 
 /* ---------------- FAQ ---------------- */
 function FAQ() {
