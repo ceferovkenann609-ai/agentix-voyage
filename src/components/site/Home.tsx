@@ -876,31 +876,14 @@ function Testimonials() {
 
 /* ---------------- FAQ ---------------- */
 function FAQ() {
+  const { t } = useTranslation();
   const faqs = [
-    {
-      q: "How long does it take to deploy an AI agent?",
-      a: "Most agents go live within 2-4 weeks. We handle discovery, training on your data, and integration with your existing stack.",
-    },
-    {
-      q: "Do I need engineering resources?",
-      a: "No. Agentix is fully managed. Our team builds, deploys, and maintains your agents — you review and approve.",
-    },
-    {
-      q: "Which platforms do you integrate with?",
-      a: "50+ platforms including Salesforce, HubSpot, Zendesk, Intercom, Slack, Shopify, WhatsApp, Twilio, and custom APIs.",
-    },
-    {
-      q: "How do you ensure data security?",
-      a: "SOC 2 Type II certified, GDPR compliant, and end-to-end encryption. Your data is never used to train foundation models.",
-    },
-    {
-      q: "Can agents handle multiple languages?",
-      a: "Yes. Agents support 95+ languages natively and switch context seamlessly within a single conversation.",
-    },
-    {
-      q: "What if the AI can't answer a question?",
-      a: "Configurable escalation. Agents hand off to human teammates with full conversation context and suggested next steps.",
-    },
+    { q: t("home.faq.items.1.q"), a: t("home.faq.items.1.a") },
+    { q: t("home.faq.items.2.q"), a: t("home.faq.items.2.a") },
+    { q: t("home.faq.items.3.q"), a: t("home.faq.items.3.a") },
+    { q: t("home.faq.items.4.q"), a: t("home.faq.items.4.a") },
+    { q: t("home.faq.items.5.q"), a: t("home.faq.items.5.a") },
+    { q: t("home.faq.items.6.q"), a: t("home.faq.items.6.a") },
   ];
   const [open, setOpen] = useState<number | null>(0);
 
@@ -908,8 +891,9 @@ function FAQ() {
     <section className="relative py-24">
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">Frequently asked</h2>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">{t("home.faq.title")}</h2>
         </div>
+
         <div className="space-y-3">
           {faqs.map((f, i) => (
             <div key={i} className="gradient-border rounded-2xl overflow-hidden">
