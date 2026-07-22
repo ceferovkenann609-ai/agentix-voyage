@@ -454,7 +454,7 @@ function DashboardPreview() {
               {/* Messages */}
               <div className="gradient-border rounded-xl p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="text-sm font-semibold">Live Messages</div>
+                  <div className="text-sm font-semibold">{t("home.dashboard.liveMessages")}</div>
                   <MessageSquare className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div className="space-y-3">
