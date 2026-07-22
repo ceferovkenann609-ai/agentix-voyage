@@ -409,10 +409,11 @@ function DashboardPreview() {
               <div className="lg:col-span-2 space-y-4">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[
-                    { l: "Active Chats", v: "1,248", d: "+12%", i: Users },
-                    { l: "Response", v: "0.8s", d: "-24%", i: Clock },
-                    { l: "Automation", v: "94%", d: "+8%", i: Bot },
-                    { l: "CSAT", v: "4.9", d: "+0.2", i: Star },
+                    { l: t("home.dashboard.stats.activeChats"), v: "1,248", d: "+12%", i: Users },
+                    { l: t("home.dashboard.stats.response"), v: "0.8s", d: "-24%", i: Clock },
+                    { l: t("home.dashboard.stats.automation"), v: "94%", d: "+8%", i: Bot },
+                    { l: t("home.dashboard.stats.csat"), v: "4.9", d: "+0.2", i: Star },
+
                   ].map((s) => (
                     <div key={s.l} className="gradient-border rounded-xl p-3">
                       <div className="flex items-center justify-between mb-2">
