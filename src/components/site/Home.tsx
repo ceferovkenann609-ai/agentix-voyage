@@ -400,7 +400,7 @@ function DashboardPreview() {
               <div className="text-xs font-mono text-muted-foreground">agentix.ai/dashboard</div>
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs text-muted-foreground">Live</span>
+                <span className="text-xs text-muted-foreground">{t("home.dashboard.live")}</span>
               </div>
             </div>
 
