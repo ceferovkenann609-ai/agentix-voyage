@@ -324,12 +324,13 @@ function Hero() {
 
 /* ---------------- Trusted By ---------------- */
 function TrustedBy() {
+  const { t } = useTranslation();
   const companies = ["Nebula", "Orbit", "Quantum", "Vertex", "Lumen", "Pulse", "Axiom", "Zenith"];
   return (
     <section className="relative py-20 border-y border-white/5">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <p className="text-center text-xs font-mono uppercase tracking-[0.3em] text-muted-foreground mb-10">
-          Trusted by innovative companies
+          {t("home.trusted")}
         </p>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
           {companies.map((c) => (
@@ -347,6 +348,7 @@ function TrustedBy() {
     </section>
   );
 }
+
 
 /* ---------------- Dashboard Preview ---------------- */
 function DashboardPreview() {
