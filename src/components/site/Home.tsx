@@ -653,15 +653,16 @@ function HowItWorks() {
 
 /* ---------------- Features ---------------- */
 function Features() {
+  const { t } = useTranslation();
   const features = [
-    { i: MessageSquare, t: "Human-like conversations" },
-    { i: Workflow, t: "50+ integrations" },
-    { i: Shield, t: "Secure infrastructure" },
-    { i: Globe, t: "Multi-language support" },
-    { i: BarChart3, t: "Analytics dashboard" },
-    { i: Clock, t: "24/7 availability" },
-    { i: Zap, t: "Smart automation" },
-    { i: Bot, t: "Custom AI agents" },
+    { i: MessageSquare, t: t("home.features.items.conversations") },
+    { i: Workflow, t: t("home.features.items.integrations") },
+    { i: Shield, t: t("home.features.items.security") },
+    { i: Globe, t: t("home.features.items.multilang") },
+    { i: BarChart3, t: t("home.features.items.analytics") },
+    { i: Clock, t: t("home.features.items.availability") },
+    { i: Zap, t: t("home.features.items.automation") },
+    { i: Bot, t: t("home.features.items.custom") },
   ];
 
   return (
@@ -669,10 +670,10 @@ function Features() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-16 items-center">
         <div>
           <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
-            Everything you need to run an AI-first business
+            {t("home.features.title")}
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Enterprise-grade features in a platform that ships in days.
+            {t("home.features.subtitle")}
           </p>
           <div className="mt-8 grid sm:grid-cols-2 gap-3">
             {features.map((f) => (
@@ -695,34 +696,35 @@ function Features() {
                 <Bot className="h-4 w-4 text-white" />
               </div>
               <div>
-                <div className="text-sm font-semibold">Agentix Assistant</div>
+                <div className="text-sm font-semibold">{t("home.features.chat.assistant")}</div>
                 <div className="text-xs text-emerald-400 flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Online
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> {t("home.features.chat.online")}
                 </div>
               </div>
             </div>
             <div className="space-y-3 mt-4">
               <div className="flex justify-end">
                 <div className="bg-white/5 rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-[80%] text-sm">
-                  I need to reschedule my appointment for next Tuesday.
+                  {t("home.features.chat.u1")}
                 </div>
               </div>
               <div className="flex justify-start">
                 <div className="bg-brand-gradient/20 border border-purple-500/20 rounded-2xl rounded-tl-sm px-4 py-2.5 max-w-[80%] text-sm">
-                  Of course. I see your 3pm slot on Tuesday. Would 2pm or 4pm work better?
+                  {t("home.features.chat.a1")}
                 </div>
               </div>
               <div className="flex justify-end">
                 <div className="bg-white/5 rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-[80%] text-sm">
-                  4pm is perfect.
+                  {t("home.features.chat.u2")}
                 </div>
               </div>
               <div className="flex justify-start">
                 <div className="bg-brand-gradient/20 border border-purple-500/20 rounded-2xl rounded-tl-sm px-4 py-2.5 max-w-[80%] text-sm">
-                  Done ✓ Confirmation sent to your email. Anything else?
+                  {t("home.features.chat.a2")}
                 </div>
               </div>
             </div>
+
             <div className="mt-5 flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-4 py-3">
               <input
                 className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
