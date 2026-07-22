@@ -728,12 +728,14 @@ function Features() {
             <div className="mt-5 flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-4 py-3">
               <input
                 className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                placeholder="Type a message…"
+                placeholder={t("home.features.chat.placeholder")}
+                aria-label={t("home.features.chat.placeholder")}
               />
-              <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient">
+              <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient" aria-label="Send">
                 <ArrowRight className="h-4 w-4 text-white" />
               </button>
             </div>
+
           </div>
         </div>
       </div>
