@@ -352,6 +352,7 @@ function TrustedBy() {
 
 /* ---------------- Dashboard Preview ---------------- */
 function DashboardPreview() {
+  const { t } = useTranslation();
   const messages = [
     { user: "Sarah K.", msg: "What's your return policy?", time: "2s ago" },
     { user: "Marcus D.", msg: "Can I upgrade my plan?", time: "5s ago" },
@@ -369,14 +370,15 @@ function DashboardPreview() {
         >
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-4">
             <Activity className="h-3 w-3 text-purple-400" />
-            <span className="text-xs font-medium">Live Dashboard</span>
+            <span className="text-xs font-medium">{t("home.dashboard.badge")}</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
-            One command center for every AI agent
+            {t("home.dashboard.title")}
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Monitor conversations, automation rate, and business impact in real time.
+            {t("home.dashboard.subtitle")}
           </p>
+
         </motion.div>
 
         <motion.div
