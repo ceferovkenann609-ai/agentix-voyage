@@ -926,6 +926,7 @@ function FAQ() {
 
 /* ---------------- Final CTA ---------------- */
 function FinalCTA() {
+  const { t } = useTranslation();
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -937,26 +938,27 @@ function FinalCTA() {
 
           <div className="relative">
             <h2 className="text-4xl sm:text-6xl font-bold text-gradient max-w-3xl mx-auto leading-[1.1]">
-              Ready to Build Your AI Workforce?
+              {t("home.cta.title")}
             </h2>
             <p className="mt-6 text-muted-foreground max-w-xl mx-auto">
-              Join hundreds of teams shipping intelligent automation with Agentix.
+              {t("home.cta.subtitle")}
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link
                 to="/book-demo"
                 className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-7 py-4 text-sm font-semibold text-white shadow-glow hover:shadow-[0_0_60px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
               >
-                Book a Demo
+                {t("common.bookDemo")}
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
               </Link>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 rounded-xl glass-strong px-7 py-4 text-sm font-semibold hover:bg-white/10 transition"
               >
-                Contact Sales
+                {t("common.contactSales")}
               </Link>
             </div>
+
           </div>
         </div>
       </div>
