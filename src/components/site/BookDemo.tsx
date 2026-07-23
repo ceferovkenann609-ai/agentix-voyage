@@ -137,7 +137,10 @@ export default function BookDemo() {
                 {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
               </div>
               <input type="text" placeholder={t.company} value={form.company} onChange={update("company")} maxLength={100} className="bg-black border border-zinc-700 rounded-xl p-4 outline-none focus:border-cyan-400" />
-              <input type="tel" placeholder={t.phone} value={form.phone} onChange={update("phone")} maxLength={30} className="bg-black border border-zinc-700 rounded-xl p-4 outline-none focus:border-cyan-400" />
+              <div>
+                <input type="tel" placeholder={t.phone} value={form.phone} onChange={update("phone")} maxLength={30} className="w-full bg-black border border-zinc-700 rounded-xl p-4 outline-none focus:border-cyan-400" />
+                {errors.phone && <p className="mt-1 text-sm text-red-400">{errors.phone}</p>}
+              </div>
             </div>
 
             <select value={form.service} onChange={update("service")} className="mt-6 w-full bg-black border border-zinc-700 rounded-xl p-4 outline-none focus:border-cyan-400">
