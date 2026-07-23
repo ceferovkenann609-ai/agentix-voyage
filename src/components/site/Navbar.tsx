@@ -47,7 +47,7 @@ export function Navbar() {
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1">
             {nav.map((item) => (
               <Link
                 key={item.to}
@@ -61,7 +61,7 @@ export function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <LanguageSwitcher />
             <Link
               to="/login"
@@ -79,7 +79,7 @@ export function Navbar() {
 
           <button
             onClick={() => setOpen(!open)}
-            className="lg:hidden flex h-10 w-10 items-center justify-center rounded-lg glass"
+            className="md:hidden flex h-10 w-10 items-center justify-center rounded-lg glass"
             aria-label="Toggle menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -87,7 +87,7 @@ export function Navbar() {
         </div>
 
         {open && (
-          <div className="lg:hidden mt-2 glass-strong rounded-2xl p-4 animate-fade-in">
+          <div className="md:hidden mt-2 glass-strong rounded-2xl p-4 animate-fade-in">
             <nav className="flex flex-col gap-1">
               {nav.map((item) => (
                 <Link
