@@ -2,6 +2,29 @@ import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, Check, PlayCircle } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+
+function useShellLabels() {
+  const { i18n } = useTranslation();
+  const isEn = i18n.resolvedLanguage === "en";
+  return {
+    bookDemo: isEn ? "Book a Demo" : "Demo Sifariş Et",
+    contactSales: isEn ? "Contact Sales" : "Satış ilə əlaqə",
+    steps: isEn
+      ? [
+          { number: "01", title: "Business Analysis", text: "We understand your business, goals, and customer journey." },
+          { number: "02", title: "AI Configuration", text: "We train and customize your AI agent using your business data." },
+          { number: "03", title: "Deployment", text: "Your AI goes live across your website, WhatsApp, social media, and more." },
+          { number: "04", title: "Optimization", text: "We continuously improve performance based on real customer interactions." },
+        ]
+      : [
+          { number: "01", title: "Biznes Analizi", text: "Biznesinizi, hədəflərinizi və müştəri səyahətini öyrənirik." },
+          { number: "02", title: "AI Konfiqurasiyası", text: "AI agentinizi biznes datanızla təlim edir və fərdiləşdiririk." },
+          { number: "03", title: "Yayım", text: "AI-niz vebsayt, WhatsApp, sosial media və digər kanallarda canlı olur." },
+          { number: "04", title: "Optimizasiya", text: "Real müştəri qarşılıqlı təsirlərinə əsasən performansı təkmilləşdiririk." },
+        ],
+  };
+}
 
 export function Particles({ count = 24 }: { count?: number }) {
   const [particles, setParticles] = useState<
@@ -61,6 +84,7 @@ export function ServiceHero({
   badges: string[];
   demo: ReactNode;
 }) {
+  const L = useShellLabels();
   return (
     <section className="relative pt-32 pb-20 overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
@@ -113,13 +137,13 @@ export function ServiceHero({
               to="/book-demo"
               className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.65_0.26_295/0.5)] hover:shadow-[0_0_50px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
             >
-              Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+              {L.bookDemo} <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
             </Link>
             <Link
               to="/contact"
               className="group inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
             >
-              <PlayCircle className="h-4 w-4" /> Contact Sales
+              <PlayCircle className="h-4 w-4" /> {L.contactSales}
             </Link>
           </div>
         </motion.div>
@@ -212,28 +236,7 @@ export function ServiceSolution({
   title: string;
   subtitle: string;
 }) {
-  const steps = [
-    {
-      number: "01",
-      title: "Business Analysis",
-      text: "We understand your business, goals, and customer journey.",
-    },
-    {
-      number: "02",
-      title: "AI Configuration",
-      text: "We train and customize your AI agent using your business data.",
-    },
-    {
-      number: "03",
-      title: "Deployment",
-      text: "Your AI goes live across your website, WhatsApp, social media, and more.",
-    },
-    {
-      number: "04",
-      title: "Optimization",
-      text: "We continuously improve performance based on real customer interactions.",
-    },
-  ];
+  const { steps } = useShellLabels();
 
   return (
     <section className="py-24">
@@ -282,6 +285,7 @@ export function ServiceSolution({
 }
 
 export function ServiceCTA({ title, description }: { title: string; description: string }) {
+  const L = useShellLabels();
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
@@ -292,16 +296,16 @@ export function ServiceCTA({ title, description }: { title: string; description:
             <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">{description}</p>
             <div className="mt-8 flex flex-wrap gap-3 justify-center">
               <Link
-                to="/demo"
+                to="/book-demo"
                 className="inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-glow hover:shadow-glow-lg transition-all hover:-translate-y-0.5"
               >
-                Book a Demo <ArrowRight className="h-4 w-4" />
+                {L.bookDemo} <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
               >
-                Contact Sales
+                {L.contactSales}
               </Link>
             </div>
           </div>
