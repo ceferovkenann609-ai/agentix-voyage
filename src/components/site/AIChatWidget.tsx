@@ -30,6 +30,10 @@ export default function AIChatWidget() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [typing, setTyping] = useState(false);
+  const sessionId = useMemo(() => {
+    if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+    return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }, []);
   const [messages, setMessages] = useState<Msg[]>([
     { sender: "ai", text: isAz ? "👋 Salam! Mən Agentix AI-yam. Biznesiniz haqqında danışın." : "👋 Hi! I'm Agentix AI. Tell me about your business." },
   ]);
@@ -39,6 +43,15 @@ export default function AIChatWidget() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
 
+  const persist = (sender: "user" | "ai", text: string) => {
+    void supabase
+      .from("chat_messages")
+      .insert({ session_id: sessionId, sender, message: text, locale: i18n.resolvedLanguage ?? null })
+      .then(({ error }) => {
+        if (error) console.error("[chat] insert failed", error);
+      });
+  };
+
   const sendMessage = () => {
     const text = message.trim();
     if (!text) return;
@@ -46,6 +59,7 @@ export default function AIChatWidget() {
     setMessages((prev) => [...prev, { sender: "user", text }]);
     setMessage("");
     setTyping(true);
+    persist("user", text);
 
     const rules = isAz ? REPLIES.az : REPLIES.en;
     const match = rules.find((r) => r.match.test(text));
@@ -57,6 +71,7 @@ export default function AIChatWidget() {
     window.setTimeout(() => {
       setMessages((prev) => [...prev, { sender: "ai", text: reply }]);
       setTyping(false);
+      persist("ai", reply);
     }, 700 + Math.random() * 500);
   };
 
