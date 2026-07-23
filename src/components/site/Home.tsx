@@ -327,6 +327,33 @@ function Hero() {
           <AIVisualization />
         </motion.div>
       </div>
+      {demoOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+          onClick={() => setDemoOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl aspect-video rounded-2xl overflow-hidden glass-strong border border-white/10 shadow-[0_0_60px_oklch(0.75_0.18_200/0.25)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setDemoOpen(false)}
+              aria-label="Close"
+              className="absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80 transition"
+            >
+              ✕
+            </button>
+            <iframe
+              className="h-full w-full"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0"
+              title="Agentix Demo"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }
