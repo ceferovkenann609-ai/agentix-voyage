@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent, type MouseEvent } from "react";
 
 type DemoForm = {
   name: string;
@@ -45,7 +45,7 @@ export default function BookDemo() {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!validate()) return;
     setLoading(true);
