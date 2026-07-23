@@ -314,24 +314,3 @@ export function ServiceCTA({ title, description }: { title: string; description:
     </section>
   );
 }
-            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">{description}</p>
-            <div className="mt-8 flex flex-wrap gap-3 justify-center">
-              <Link
-                to="/demo"
-                className="inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-glow hover:shadow-glow-lg transition-all hover:-translate-y-0.5"
-              >
-                Book a Demo <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
-              >
-                Contact Sales
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
