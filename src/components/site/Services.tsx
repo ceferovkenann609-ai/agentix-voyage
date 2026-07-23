@@ -36,16 +36,23 @@ import {
 /* Reused visual pieces — kept locally to avoid touching Home.tsx */
 
 function Particles({ count = 24 }: { count?: number }) {
-  const particles = Array.from({ length: count }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    dx: (Math.random() - 0.5) * 200,
-    dy: (Math.random() - 0.5) * 200,
-    size: Math.random() * 3 + 1,
-    delay: Math.random() * 10,
-    duration: Math.random() * 15 + 15,
-  }));
+  const [particles, setParticles] = useState<
+    { id: number; x: number; y: number; dx: number; dy: number; size: number; delay: number; duration: number }[]
+  >([]);
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: count }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        dx: (Math.random() - 0.5) * 200,
+        dy: (Math.random() - 0.5) * 200,
+        size: Math.random() * 3 + 1,
+        delay: Math.random() * 10,
+        duration: Math.random() * 15 + 15,
+      })),
+    );
+  }, [count]);
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       {particles.map((p) => (
@@ -67,6 +74,7 @@ function Particles({ count = 24 }: { count?: number }) {
     </div>
   );
 }
+
 
 /* ---------- AI orb — smaller variant tuned for the services hero ---------- */
 function ServicesOrb() {
