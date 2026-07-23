@@ -291,15 +291,16 @@ function Hero() {
               {t("common.bookDemo")}
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
             </Link>
-            <Link
-              to="/demo"
+            <button
+              type="button"
+              onClick={() => setDemoOpen(true)}
               className="group inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
             >
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-gradient">
                 <Play className="h-3 w-3 text-white fill-white" />
               </div>
               {t("common.watchDemo")}
-            </Link>
+            </button>
           </div>
 
           <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
