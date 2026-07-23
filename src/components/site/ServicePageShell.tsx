@@ -137,13 +137,13 @@ export function ServiceHero({
               to="/book-demo"
               className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.65_0.26_295/0.5)] hover:shadow-[0_0_50px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
             >
-              Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+              {L.bookDemo} <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
             </Link>
             <Link
               to="/contact"
               className="group inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
             >
-              <PlayCircle className="h-4 w-4" /> Contact Sales
+              <PlayCircle className="h-4 w-4" /> {L.contactSales}
             </Link>
           </div>
         </motion.div>
