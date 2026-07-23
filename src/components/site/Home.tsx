@@ -242,6 +242,7 @@ function AIVisualization() {
 /* ---------------- Hero ---------------- */
 function Hero() {
   const { t } = useTranslation();
+  const [demoOpen, setDemoOpen] = useState(false);
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
