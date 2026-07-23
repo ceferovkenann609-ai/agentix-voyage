@@ -14,7 +14,105 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          created_at: string
+          id: string
+          locale: string | null
+          message: string
+          sender: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          locale?: string | null
+          message: string
+          sender: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          locale?: string | null
+          message?: string
+          sender?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
+      contact_requests: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          id: string
+          locale: string | null
+          message: string
+          name: string
+          phone: string | null
+          subject: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          locale?: string | null
+          message: string
+          name: string
+          phone?: string | null
+          subject?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          locale?: string | null
+          message?: string
+          name?: string
+          phone?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      demo_bookings: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          id: string
+          locale: string | null
+          message: string | null
+          name: string
+          phone: string | null
+          service: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          locale?: string | null
+          message?: string | null
+          name: string
+          phone?: string | null
+          service?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          locale?: string | null
+          message?: string | null
+          name?: string
+          phone?: string | null
+          service?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
