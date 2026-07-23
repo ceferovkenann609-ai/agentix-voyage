@@ -12,7 +12,13 @@ i18n.use(initReactI18next).init({
   fallbackLng: "en",
   interpolation: { escapeValue: false },
   returnNull: false,
+  returnEmptyString: false,
+  parseMissingKeyHandler: (key) => {
+    const leaf = key.split(".").pop() ?? key;
+    return leaf.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase()).trim();
+  },
 });
+
 
 if (typeof window !== "undefined") {
   i18n.on("languageChanged", (lng) => {
