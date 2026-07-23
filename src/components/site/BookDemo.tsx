@@ -149,6 +149,7 @@ export default function BookDemo() {
 
             <button
               type="submit"
+              onClick={handleSubmit}
               disabled={loading}
               className="mt-8 w-full rounded-xl bg-brand-gradient p-4 text-lg font-bold text-white hover:opacity-90 transition disabled:opacity-50"
             >

@@ -136,6 +136,7 @@ export default function Contact() {
 
             <button
               type="submit"
+              onClick={handleSubmit}
               disabled={status === "loading"}
               className="mt-8 w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 transition p-4 text-black font-bold text-lg disabled:opacity-60"
             >
