@@ -13,6 +13,9 @@ const SCRIPT: Turn[] = [
   { from: "ai", text: "Booked! You'll receive a confirmation text shortly. Anything else, Alex?" },
 ];
 
+const WAVE_HEIGHTS = Array.from({ length: 32 }, (_, i) => 10 + ((i * 17) % 30));
+const WAVE_DURATIONS = Array.from({ length: 32 }, (_, i) => 0.5 + ((i * 7) % 4) / 10);
+
 function VoiceDemo() {
   const [active, setActive] = useState(false);
   const [transcript, setTranscript] = useState<Turn[]>([]);
@@ -100,16 +103,16 @@ function VoiceDemo() {
 
           {/* Waveform */}
           <div className="flex items-center justify-center gap-1 h-12 mb-6">
-            {Array.from({ length: 32 }).map((_, i) => (
+            {WAVE_HEIGHTS.map((height, i) => (
               <motion.span
                 key={i}
                 className="w-1 rounded-full bg-brand-gradient"
                 animate={
                   speaking
-                    ? { height: [6, 6 + Math.random() * 34, 6] }
+                    ? { height: [6, height, 6] }
                     : { height: 6 }
                 }
-                transition={{ duration: 0.5 + Math.random() * 0.4, repeat: Infinity, delay: i * 0.03 }}
+                transition={{ duration: WAVE_DURATIONS[i], repeat: Infinity, delay: i * 0.03 }}
               />
             ))}
           </div>

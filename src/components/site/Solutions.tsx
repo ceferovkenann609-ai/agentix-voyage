@@ -21,12 +21,12 @@ export default function Solutions() {
 
         <div className="mt-12 flex justify-center gap-5 flex-wrap">
 
-          <a
-            href="/book-demo"
+          <Link
+            to="/book-demo"
             className="rounded-xl bg-brand-gradient px-8 py-4 font-semibold hover:scale-105 transition"
           >
             Book a Demo
-          </a>
+          </Link>
 
           <a
             href="#industries"
@@ -338,19 +338,19 @@ export default function Solutions() {
 
       <div className="mt-10 flex justify-center gap-5 flex-wrap">
 
-        <a
-          href="/book-demo"
+        <Link
+          to="/book-demo"
           className="rounded-xl bg-brand-gradient px-8 py-4 font-semibold hover:scale-105 transition"
         >
           🚀 Book Free Demo
-        </a>
+        </Link>
 
-        <a
-          href="/contact"
+        <Link
+          to="/contact"
           className="rounded-xl border border-zinc-700 px-8 py-4 hover:border-cyan-400 transition"
         >
           Contact Us
-        </a>
+        </Link>
 
       </div>
 

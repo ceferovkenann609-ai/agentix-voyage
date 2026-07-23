@@ -9,8 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SolutionsRouteImport } from './routes/solutions'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DemoRouteImport } from './routes/demo'
@@ -27,6 +29,11 @@ import { Route as ServicesCustomerSupportRouteImport } from './routes/services.c
 import { Route as ServicesCrmIntegrationRouteImport } from './routes/services.crm-integration'
 import { Route as ServicesAiChatbotsRouteImport } from './routes/services.ai-chatbots'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SolutionsRoute = SolutionsRouteImport.update({
   id: '/solutions',
   path: '/solutions',
@@ -35,6 +42,11 @@ const SolutionsRoute = SolutionsRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -122,8 +134,10 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRouteWithChildren
   '/solutions': typeof SolutionsRouteWithChildren
+  '/terms': typeof TermsRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -141,7 +155,9 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/solutions': typeof SolutionsRouteWithChildren
+  '/terms': typeof TermsRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -160,8 +176,10 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRouteWithChildren
   '/solutions': typeof SolutionsRouteWithChildren
+  '/terms': typeof TermsRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -181,8 +199,10 @@ export interface FileRouteTypes {
     | '/demo'
     | '/login'
     | '/pricing'
+    | '/privacy'
     | '/services'
     | '/solutions'
+    | '/terms'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -200,7 +220,9 @@ export interface FileRouteTypes {
     | '/demo'
     | '/login'
     | '/pricing'
+    | '/privacy'
     | '/solutions'
+    | '/terms'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -218,8 +240,10 @@ export interface FileRouteTypes {
     | '/demo'
     | '/login'
     | '/pricing'
+    | '/privacy'
     | '/services'
     | '/solutions'
+    | '/terms'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -238,12 +262,21 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   SolutionsRoute: typeof SolutionsRouteWithChildren
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/solutions': {
       id: '/solutions'
       path: '/solutions'
@@ -256,6 +289,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -410,8 +450,10 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
   ServicesRoute: ServicesRouteWithChildren,
   SolutionsRoute: SolutionsRouteWithChildren,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

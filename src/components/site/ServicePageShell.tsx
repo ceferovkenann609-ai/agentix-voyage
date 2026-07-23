@@ -1,19 +1,27 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, Check, PlayCircle } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 export function Particles({ count = 24 }: { count?: number }) {
-  const particles = Array.from({ length: count }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    dx: (Math.random() - 0.5) * 200,
-    dy: (Math.random() - 0.5) * 200,
-    size: Math.random() * 3 + 1,
-    delay: Math.random() * 10,
-    duration: Math.random() * 15 + 15,
-  }));
+  const [particles, setParticles] = useState<
+    { id: number; x: number; y: number; dx: number; dy: number; size: number; delay: number; duration: number }[]
+  >([]);
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: count }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        dx: (Math.random() - 0.5) * 200,
+        dy: (Math.random() - 0.5) * 200,
+        size: Math.random() * 3 + 1,
+        delay: Math.random() * 10,
+        duration: Math.random() * 15 + 15,
+      })),
+    );
+  }, [count]);
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       {particles.map((p) => (
@@ -102,7 +110,7 @@ export function ServiceHero({
 
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              to="/demo"
+              to="/book-demo"
               className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.65_0.26_295/0.5)] hover:shadow-[0_0_50px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
             >
               Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />

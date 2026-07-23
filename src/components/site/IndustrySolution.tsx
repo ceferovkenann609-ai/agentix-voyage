@@ -99,6 +99,166 @@ const industries = {
       "Automated Scheduling",
     ],
   },
+  "real-estate": {
+    title: "Real Estate AI Solutions",
+    subtitle:
+      "Qualify property inquiries, book viewings and follow up with buyers automatically.",
+    stats: [
+      { label: "Lead Response", value: "<10 sec" },
+      { label: "Viewings", value: "+31%" },
+      { label: "Follow-ups", value: "24/7" },
+    ],
+    problems: [
+      "Slow lead response",
+      "Manual viewing scheduling",
+      "Missed property inquiries",
+      "Inconsistent follow-up",
+    ],
+    features: [
+      "Lead Qualification",
+      "Viewing Scheduler",
+      "Property FAQ",
+      "WhatsApp Follow-up",
+      "CRM Updates",
+      "Buyer Segmentation",
+    ],
+    benefits: [
+      "More Qualified Buyers",
+      "Faster Response Times",
+      "Higher Viewing Rate",
+      "Automated Follow-ups",
+      "Cleaner CRM Data",
+      "Better Client Experience",
+    ],
+  },
+  "law-firms": {
+    title: "Law Firm AI Solutions",
+    subtitle:
+      "Automate client intake, document requests and consultation scheduling with secure AI assistants.",
+    stats: [
+      { label: "Intake Time", value: "-45%" },
+      { label: "Availability", value: "24/7" },
+      { label: "Consults", value: "+22%" },
+    ],
+    problems: [
+      "Manual client intake",
+      "Repeated document requests",
+      "Missed consultation leads",
+      "Slow first response",
+    ],
+    features: [
+      "Client Intake Bot",
+      "Document Checklist",
+      "Consultation Booking",
+      "Case Routing",
+      "Secure FAQ",
+      "CRM Integration",
+    ],
+    benefits: [
+      "Faster Intake",
+      "Higher Consult Conversion",
+      "Reduced Admin Work",
+      "Better Lead Qualification",
+      "Consistent Communication",
+      "Secure Operations",
+    ],
+  },
+  hotels: {
+    title: "Hotel AI Solutions",
+    subtitle:
+      "Deliver instant guest support, reservation automation and AI concierge service around the clock.",
+    stats: [
+      { label: "Guest Replies", value: "24/7" },
+      { label: "Reception Load", value: "-52%" },
+      { label: "Upsells", value: "+18%" },
+    ],
+    problems: [
+      "Reception overload",
+      "Repeated guest questions",
+      "Manual reservation changes",
+      "Missed upsell opportunities",
+    ],
+    features: [
+      "AI Concierge",
+      "Reservation Support",
+      "Guest FAQ",
+      "Room Service Requests",
+      "Review Assistant",
+      "CRM Integration",
+    ],
+    benefits: [
+      "Better Guest Experience",
+      "Lower Reception Workload",
+      "Faster Service",
+      "More Upsell Revenue",
+      "Consistent Communication",
+      "24/7 Availability",
+    ],
+  },
+  "beauty-salons": {
+    title: "Beauty Salon AI Solutions",
+    subtitle:
+      "Automate appointment booking, reminders and customer engagement for salons and clinics.",
+    stats: [
+      { label: "No-shows", value: "-34%" },
+      { label: "Bookings", value: "+29%" },
+      { label: "Replies", value: "24/7" },
+    ],
+    problems: [
+      "Manual appointment booking",
+      "No-show customers",
+      "Slow social media replies",
+      "Limited receptionist hours",
+    ],
+    features: [
+      "Appointment Booking",
+      "Reminder Automation",
+      "Instagram DM Assistant",
+      "Service Recommendations",
+      "Customer Rebooking",
+      "CRM Integration",
+    ],
+    benefits: [
+      "More Bookings",
+      "Fewer No-shows",
+      "Higher Rebooking Rate",
+      "Faster Replies",
+      "Reduced Admin Work",
+      "Better Client Experience",
+    ],
+  },
+  education: {
+    title: "Education AI Solutions",
+    subtitle:
+      "Support students, automate admissions and answer parent or applicant questions instantly.",
+    stats: [
+      { label: "Student Support", value: "24/7" },
+      { label: "Admin Work", value: "-48%" },
+      { label: "Enrollment", value: "+21%" },
+    ],
+    problems: [
+      "High volume of repeated questions",
+      "Manual enrollment follow-up",
+      "Slow student support",
+      "Fragmented communications",
+    ],
+    features: [
+      "Student Support Bot",
+      "Admissions Assistant",
+      "Course FAQ",
+      "Enrollment Follow-up",
+      "WhatsApp Support",
+      "CRM Integration",
+    ],
+    benefits: [
+      "Faster Student Support",
+      "Higher Enrollment Conversion",
+      "Reduced Admin Load",
+      "Better Applicant Experience",
+      "Automated Follow-up",
+      "Consistent Answers",
+    ],
+  },
 } as const;
 
 export default function IndustrySolution() {

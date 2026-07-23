@@ -3,6 +3,8 @@ import { Sparkles, Twitter, Linkedin, Github, Youtube } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
+const currentYear = 2026;
+
 export function Footer() {
   const { t } = useTranslation();
   return (
@@ -22,21 +24,21 @@ export function Footer() {
             </p>
             <div className="mt-6 flex items-center gap-3">
               {[
-                { Icon: Twitter, href: "https://twitter.com/agentix", label: "Twitter" },
-                { Icon: Linkedin, href: "https://linkedin.com/company/agentix", label: "LinkedIn" },
-                { Icon: Github, href: "https://github.com/agentix", label: "GitHub" },
-                { Icon: Youtube, href: "https://youtube.com/@agentix", label: "YouTube" },
-              ].map(({ Icon, href, label }) => (
-                <a
+                { Icon: Twitter, label: "Twitter/X" },
+                { Icon: Linkedin, label: "LinkedIn" },
+                { Icon: Github, label: "GitHub" },
+                { Icon: Youtube, label: "YouTube" },
+              ].map(({ Icon, label }) => (
+                <span
                   key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  role="link"
+                  aria-disabled="true"
                   aria-label={label}
+                  title={`${label} profile coming soon`}
                   className="flex h-10 w-10 items-center justify-center rounded-lg glass hover:bg-white/10 transition"
                 >
                   <Icon className="h-4 w-4" />
-                </a>
+                </span>
               ))}
             </div>
 
@@ -55,12 +57,12 @@ export function Footer() {
           <FooterCol
             title={t("footer.servicesCol")}
             links={[
-              { to: "/services", label: t("footer.chatbots") },
-              { to: "/services", label: t("footer.voice") },
-              { to: "/services", label: t("footer.automation") },
-              { to: "/services", label: t("footer.websites") },
-              { to: "/services", label: t("footer.marketing") },
-              { to: "/services", label: t("footer.custom") },
+              { to: "/services/ai-chatbots", label: t("footer.chatbots") },
+              { to: "/services/voice-ai", label: t("footer.voice") },
+              { to: "/services/lead-generation", label: t("home.services.items.leads.t") },
+              { to: "/services/customer-support", label: t("home.services.items.support.t") },
+              { to: "/services/workflow-automation", label: t("footer.automation") },
+              { to: "/services/crm-integration", label: t("home.services.items.crm.t") },
             ]}
           />
           <FooterCol
@@ -68,17 +70,17 @@ export function Footer() {
             links={[
               { to: "/about", label: t("footer.faq") },
               { to: "/about", label: t("footer.blog") },
-              { to: "/about", label: t("footer.privacy") },
-              { to: "/contact", label: t("footer.terms") },
+              { to: "/privacy", label: t("footer.privacy") },
+              { to: "/terms", label: t("footer.terms") },
             ]}
           />
         </div>
 
         <div className="mt-16 flex flex-col md:flex-row justify-between gap-4 pt-8 border-t border-white/5 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Agentix. {t("footer.rights")}</p>
+          <p>© {currentYear} Agentix. {t("footer.rights")}</p>
           <div className="flex gap-6">
-            <a href="#">{t("footer.privacy")}</a>
-            <a href="#">{t("footer.terms")}</a>
+            <Link to="/privacy">{t("footer.privacy")}</Link>
+            <Link to="/terms">{t("footer.terms")}</Link>
             <span>hello@agentix.ai</span>
           </div>
         </div>
@@ -92,14 +94,33 @@ function FooterCol({
   links,
 }: {
   title: string;
-  links: { to: "/" | "/services" | "/solutions" | "/pricing" | "/about" | "/contact" | "/demo" | "/login"; label: string }[];
+  links: {
+    to:
+      | "/"
+      | "/services"
+      | "/services/ai-chatbots"
+      | "/services/voice-ai"
+      | "/services/lead-generation"
+      | "/services/customer-support"
+      | "/services/workflow-automation"
+      | "/services/crm-integration"
+      | "/solutions"
+      | "/pricing"
+      | "/about"
+      | "/contact"
+      | "/privacy"
+      | "/terms"
+      | "/demo"
+      | "/login";
+    label: string;
+  }[];
 }) {
   return (
     <div>
       <h4 className="text-sm font-semibold text-foreground mb-4">{title}</h4>
       <ul className="space-y-3">
-        {links.map((l, i) => (
-          <li key={i}>
+        {links.map((l) => (
+          <li key={`${l.to}-${l.label}`}>
             <Link to={l.to} className="text-sm text-muted-foreground hover:text-foreground transition">
               {l.label}
             </Link>

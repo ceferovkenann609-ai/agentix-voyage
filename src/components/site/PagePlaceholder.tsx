@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function PagePlaceholder({
   eyebrow,
@@ -10,6 +11,8 @@ export function PagePlaceholder({
   title: string;
   description: string;
 }) {
+  const { t } = useTranslation();
+
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
@@ -25,16 +28,16 @@ export function PagePlaceholder({
         <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">{description}</p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <Link
-            to="/demo"
+            to="/book-demo"
             className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-glow hover:-translate-y-0.5 transition"
           >
-            Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+            {t("common.bookDemo")} <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
           </Link>
           <Link
             to="/"
             className="inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
           >
-            Back to home
+            {t("nav.home")}
           </Link>
         </div>
       </div>

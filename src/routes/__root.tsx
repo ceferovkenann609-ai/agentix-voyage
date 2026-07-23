@@ -12,7 +12,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "../components/site/Navbar";
 import { Footer } from "../components/site/Footer";
-import "../i18n";
+import i18n from "../i18n";
 
 function NotFoundComponent() {
   return (
@@ -97,10 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
-  const initialLang =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("agentix-lang") || "az"
-      : "az";
+  const initialLang = i18n.resolvedLanguage === "en" ? "en" : "az";
   return (
     <html lang={initialLang}>
       <head>
@@ -117,6 +114,13 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("agentix-lang");
+    if ((stored === "az" || stored === "en") && stored !== i18n.language) {
+      void i18n.changeLanguage(stored);
+    }
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
