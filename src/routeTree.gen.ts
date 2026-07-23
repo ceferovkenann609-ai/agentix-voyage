@@ -14,7 +14,6 @@ import { Route as SolutionsRouteImport } from './routes/solutions'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookDemoRouteImport } from './routes/book-demo'
@@ -52,11 +51,6 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoRoute = DemoRouteImport.update({
@@ -132,7 +126,6 @@ export interface FileRoutesByFullPath {
   '/book-demo': typeof BookDemoRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
-  '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRouteWithChildren
@@ -153,7 +146,6 @@ export interface FileRoutesByTo {
   '/book-demo': typeof BookDemoRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
-  '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/solutions': typeof SolutionsRouteWithChildren
@@ -174,7 +166,6 @@ export interface FileRoutesById {
   '/book-demo': typeof BookDemoRoute
   '/contact': typeof ContactRoute
   '/demo': typeof DemoRoute
-  '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRouteWithChildren
@@ -197,7 +188,6 @@ export interface FileRouteTypes {
     | '/book-demo'
     | '/contact'
     | '/demo'
-    | '/login'
     | '/pricing'
     | '/privacy'
     | '/services'
@@ -218,7 +208,6 @@ export interface FileRouteTypes {
     | '/book-demo'
     | '/contact'
     | '/demo'
-    | '/login'
     | '/pricing'
     | '/privacy'
     | '/solutions'
@@ -238,7 +227,6 @@ export interface FileRouteTypes {
     | '/book-demo'
     | '/contact'
     | '/demo'
-    | '/login'
     | '/pricing'
     | '/privacy'
     | '/services'
@@ -260,7 +248,6 @@ export interface RootRouteChildren {
   BookDemoRoute: typeof BookDemoRoute
   ContactRoute: typeof ContactRoute
   DemoRoute: typeof DemoRoute
-  LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ServicesRoute: typeof ServicesRouteWithChildren
@@ -303,13 +290,6 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo': {
@@ -448,7 +428,6 @@ const rootRouteChildren: RootRouteChildren = {
   BookDemoRoute: BookDemoRoute,
   ContactRoute: ContactRoute,
   DemoRoute: DemoRoute,
-  LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ServicesRoute: ServicesRouteWithChildren,
