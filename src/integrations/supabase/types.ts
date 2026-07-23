@@ -22,6 +22,7 @@ export type Database = {
           message: string
           sender: string
           session_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -30,6 +31,7 @@ export type Database = {
           message: string
           sender: string
           session_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -38,6 +40,7 @@ export type Database = {
           message?: string
           sender?: string
           session_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -52,6 +55,7 @@ export type Database = {
           name: string
           phone: string | null
           subject: string | null
+          user_id: string | null
         }
         Insert: {
           company?: string | null
@@ -63,6 +67,7 @@ export type Database = {
           name: string
           phone?: string | null
           subject?: string | null
+          user_id?: string | null
         }
         Update: {
           company?: string | null
@@ -74,6 +79,7 @@ export type Database = {
           name?: string
           phone?: string | null
           subject?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -88,6 +94,7 @@ export type Database = {
           name: string
           phone: string | null
           service: string | null
+          user_id: string | null
         }
         Insert: {
           company?: string | null
@@ -99,6 +106,7 @@ export type Database = {
           name: string
           phone?: string | null
           service?: string | null
+          user_id?: string | null
         }
         Update: {
           company?: string | null
@@ -110,6 +118,37 @@ export type Database = {
           name?: string
           phone?: string | null
           service?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          company: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          company?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          company?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
