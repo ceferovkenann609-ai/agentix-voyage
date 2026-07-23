@@ -21,19 +21,25 @@ export function Footer() {
               {t("footer.tagline")}
             </p>
             <div className="mt-6 flex items-center gap-3">
-              {[Twitter, Linkedin, Github, Youtube].map((Icon, i) => (
+              {[
+                { Icon: Twitter, href: "https://twitter.com/agentix", label: "Twitter" },
+                { Icon: Linkedin, href: "https://linkedin.com/company/agentix", label: "LinkedIn" },
+                { Icon: Github, href: "https://github.com/agentix", label: "GitHub" },
+                { Icon: Youtube, href: "https://youtube.com/@agentix", label: "YouTube" },
+              ].map(({ Icon, href, label }) => (
                 <a
-                  key={i}
-                  href="https://linkedin.com"
+                  key={label}
+                  href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Social link"
+                  aria-label={label}
                   className="flex h-10 w-10 items-center justify-center rounded-lg glass hover:bg-white/10 transition"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
+
             <div className="mt-6"><LanguageSwitcher /></div>
           </div>
 
