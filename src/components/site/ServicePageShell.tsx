@@ -2,6 +2,29 @@ import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, Check, PlayCircle } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+
+function useShellLabels() {
+  const { i18n } = useTranslation();
+  const isEn = i18n.resolvedLanguage === "en";
+  return {
+    bookDemo: isEn ? "Book a Demo" : "Demo Sifariş Et",
+    contactSales: isEn ? "Contact Sales" : "Satış ilə əlaqə",
+    steps: isEn
+      ? [
+          { number: "01", title: "Business Analysis", text: "We understand your business, goals, and customer journey." },
+          { number: "02", title: "AI Configuration", text: "We train and customize your AI agent using your business data." },
+          { number: "03", title: "Deployment", text: "Your AI goes live across your website, WhatsApp, social media, and more." },
+          { number: "04", title: "Optimization", text: "We continuously improve performance based on real customer interactions." },
+        ]
+      : [
+          { number: "01", title: "Biznes Analizi", text: "Biznesinizi, hədəflərinizi və müştəri səyahətini öyrənirik." },
+          { number: "02", title: "AI Konfiqurasiyası", text: "AI agentinizi biznes datanızla təlim edir və fərdiləşdiririk." },
+          { number: "03", title: "Yayım", text: "AI-niz vebsayt, WhatsApp, sosial media və digər kanallarda canlı olur." },
+          { number: "04", title: "Optimizasiya", text: "Real müştəri qarşılıqlı təsirlərinə əsasən performansı təkmilləşdiririk." },
+        ],
+  };
+}
 
 export function Particles({ count = 24 }: { count?: number }) {
   const [particles, setParticles] = useState<
