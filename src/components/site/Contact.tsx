@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 type FormState = {
   name: string;
@@ -76,7 +77,9 @@ const T = {
 
 export default function Contact() {
   const { i18n } = useTranslation();
+  const { user } = useAuth();
   const t = i18n.resolvedLanguage === "en" ? T.en : T.az;
+
 
   const [form, setForm] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
@@ -110,6 +113,7 @@ export default function Contact() {
         subject: form.service.trim() || null,
         message: form.message.trim(),
         locale: i18n.resolvedLanguage ?? null,
+        user_id: user?.id ?? null,
       });
       if (error) throw error;
       setStatus("success");
