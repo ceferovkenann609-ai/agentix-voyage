@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Bot, X, Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Msg = { sender: "ai" | "user"; text: string };
 
@@ -26,6 +27,7 @@ const REPLIES: { az: { match: RegExp; reply: string }[]; en: { match: RegExp; re
 
 export default function AIChatWidget() {
   const { i18n } = useTranslation();
+  const { user } = useAuth();
   const isAz = i18n.resolvedLanguage !== "en";
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -46,7 +48,7 @@ export default function AIChatWidget() {
   const persist = (sender: "user" | "ai", text: string) => {
     void supabase
       .from("chat_messages")
-      .insert({ session_id: sessionId, sender, message: text, locale: i18n.resolvedLanguage ?? null })
+      .insert({ session_id: sessionId, sender, message: text, locale: i18n.resolvedLanguage ?? null, user_id: user?.id ?? null })
       .then(({ error }) => {
         if (error) console.error("[chat] insert failed", error);
       });

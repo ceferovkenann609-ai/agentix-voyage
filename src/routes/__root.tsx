@@ -13,6 +13,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "../components/site/Navbar";
 import { Footer } from "../components/site/Footer";
 import i18n from "../i18n";
+import { AuthProvider } from "../contexts/AuthContext";
 
 function NotFoundComponent() {
   return (
@@ -124,16 +125,18 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-[#07090C]">
-        <Navbar />
-        <main>
-          <Outlet />
-        </main>
-        <AIChatWidget />
-      </div>
-      <div className="bg-[#07090C]">
-        <Footer />
-      </div>
+      <AuthProvider>
+        <div className="min-h-screen bg-[#07090C]">
+          <Navbar />
+          <main>
+            <Outlet />
+          </main>
+          <AIChatWidget />
+        </div>
+        <div className="bg-[#07090C]">
+          <Footer />
+        </div>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

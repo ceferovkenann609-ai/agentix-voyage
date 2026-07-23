@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 type DemoForm = {
   name: string;
@@ -54,7 +55,9 @@ const T = {
 
 export default function BookDemo() {
   const { i18n } = useTranslation();
+  const { user } = useAuth();
   const t = i18n.resolvedLanguage === "en" ? T.en : T.az;
+
 
   const [form, setForm] = useState<DemoForm>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof DemoForm, string>>>({});
@@ -94,6 +97,7 @@ export default function BookDemo() {
         service: form.service.trim() || null,
         message: form.message.trim() || null,
         locale: i18n.resolvedLanguage ?? null,
+        user_id: user?.id ?? null,
       });
       if (error) {
         if (error.code === "23505") {
