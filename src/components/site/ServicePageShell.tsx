@@ -285,6 +285,7 @@ export function ServiceSolution({
 }
 
 export function ServiceCTA({ title, description }: { title: string; description: string }) {
+  const L = useShellLabels();
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
@@ -292,6 +293,27 @@ export function ServiceCTA({ title, description }: { title: string; description:
           <div className="pointer-events-none absolute inset-0 opacity-40" style={{ background: "var(--gradient-glow)" }} />
           <div className="relative">
             <h2 className="text-4xl sm:text-5xl font-bold text-gradient">{title}</h2>
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">{description}</p>
+            <div className="mt-8 flex flex-wrap gap-3 justify-center">
+              <Link
+                to="/book-demo"
+                className="inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-glow hover:shadow-glow-lg transition-all hover:-translate-y-0.5"
+              >
+                {L.bookDemo} <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
+              >
+                {L.contactSales}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
             <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">{description}</p>
             <div className="mt-8 flex flex-wrap gap-3 justify-center">
               <Link
