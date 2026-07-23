@@ -236,28 +236,7 @@ export function ServiceSolution({
   title: string;
   subtitle: string;
 }) {
-  const steps = [
-    {
-      number: "01",
-      title: "Business Analysis",
-      text: "We understand your business, goals, and customer journey.",
-    },
-    {
-      number: "02",
-      title: "AI Configuration",
-      text: "We train and customize your AI agent using your business data.",
-    },
-    {
-      number: "03",
-      title: "Deployment",
-      text: "Your AI goes live across your website, WhatsApp, social media, and more.",
-    },
-    {
-      number: "04",
-      title: "Optimization",
-      text: "We continuously improve performance based on real customer interactions.",
-    },
-  ];
+  const { steps } = useShellLabels();
 
   return (
     <section className="py-24">
