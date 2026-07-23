@@ -1,6 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+
+function useSvcLang() {
+  const { i18n } = useTranslation();
+  return i18n.resolvedLanguage === "en" ? "en" : "az";
+}
 import {
   MessageSquare,
   Phone,
