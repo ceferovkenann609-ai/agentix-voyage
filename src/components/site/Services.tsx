@@ -150,7 +150,26 @@ function ServicesOrb() {
 
 /* ---------- Hero ---------- */
 function Hero() {
-  const badges = ["24/7 AI Automation", "Custom Solutions", "Fast Deployment"];
+  const lang = useSvcLang();
+  const t = lang === "en"
+    ? {
+        eyebrow: "Services",
+        title1: "AI Services for",
+        title2: "Modern Businesses",
+        desc: "We build intelligent AI solutions that automate customer communication, sales, support, and business operations.",
+        badges: ["24/7 AI Automation", "Custom Solutions", "Fast Deployment"],
+        book: "Book a Demo",
+        contact: "Contact Sales",
+      }
+    : {
+        eyebrow: "Xidmətlər",
+        title1: "Müasir Bizneslər üçün",
+        title2: "AI Xidmətləri",
+        desc: "Müştəri kommunikasiyası, satış, dəstək və biznes əməliyyatlarını avtomatlaşdıran intellektual AI həlləri qururuq.",
+        badges: ["24/7 AI Avtomatlaşdırma", "Fərdi Həllər", "Sürətli Yayım"],
+        book: "Demo Sifariş Et",
+        contact: "Satış ilə əlaqə",
+      };
   return (
     <section className="relative pt-32 pb-20 overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
@@ -172,24 +191,18 @@ function Hero() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-6">
             <Sparkles className="h-3 w-3 text-purple-400" />
-            <span className="text-xs font-medium text-muted-foreground">Services</span>
+            <span className="text-xs font-medium text-muted-foreground">{t.eyebrow}</span>
           </div>
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
-            <span className="text-gradient">AI Services for</span>
+            <span className="text-gradient">{t.title1}</span>
             <br />
-            <span className="text-brand-gradient">Modern Businesses</span>
+            <span className="text-brand-gradient">{t.title2}</span>
           </h1>
-          <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
-            We build intelligent AI solutions that automate customer communication, sales,
-            support, and business operations.
-          </p>
+          <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">{t.desc}</p>
 
           <div className="mt-8 flex flex-wrap gap-2.5">
-            {badges.map((b) => (
-              <div
-                key={b}
-                className="inline-flex items-center gap-2 rounded-full glass-strong px-3.5 py-1.5"
-              >
+            {t.badges.map((b) => (
+              <div key={b} className="inline-flex items-center gap-2 rounded-full glass-strong px-3.5 py-1.5">
                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-gradient">
                   <Check className="h-3 w-3 text-white" />
                 </div>
@@ -200,19 +213,20 @@ function Hero() {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              to="/demo"
+              to="/book-demo"
               className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.65_0.26_295/0.5)] hover:shadow-[0_0_50px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
             >
-              Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+              {t.book} <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
             </Link>
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 rounded-xl glass-strong px-6 py-3.5 text-sm font-semibold hover:bg-white/10 transition"
             >
-              Contact Sales
+              {t.contact}
             </Link>
           </div>
         </motion.div>
+
 
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.2 }}>
           <ServicesOrb />
