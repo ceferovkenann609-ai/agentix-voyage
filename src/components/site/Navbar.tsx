@@ -87,7 +87,7 @@ export function Navbar() {
         </div>
 
         {open && (
-          <div className="lg:hidden mt-2 glass-strong rounded-2xl p-4 animate-fade-in">
+          <div className="md:hidden mt-2 glass-strong rounded-2xl p-4 animate-fade-in">
             <nav className="flex flex-col gap-1">
               {nav.map((item) => (
                 <Link
