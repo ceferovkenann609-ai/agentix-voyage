@@ -8,6 +8,8 @@ export const Route = createFileRoute("/demo")({
       { name: "description", content: "See Agentix AI agents in action." },
       { property: "og:title", content: "Book a Demo — Agentix" },
       { property: "og:description", content: "See Agentix AI agents in action." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (

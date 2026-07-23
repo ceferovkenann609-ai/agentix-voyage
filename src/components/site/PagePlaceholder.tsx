@@ -25,7 +25,7 @@ export function PagePlaceholder({
         <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">{description}</p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <Link
-            to="/demo"
+            to="/book-demo"
             className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-glow hover:-translate-y-0.5 transition"
           >
             Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />

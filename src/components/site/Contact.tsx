@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 type FormState = {
   name: string;
@@ -23,19 +23,22 @@ export default function Contact() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const update = (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+  const update = (k: keyof FormState) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((f) => ({ ...f, [k]: e.target.value }));
+    setErrors((current) => ({ ...current, [k]: undefined }));
+  };
 
   const validate = () => {
     const next: Partial<Record<keyof FormState, string>> = {};
     if (!form.name.trim()) next.name = "Required";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) next.email = "Valid email required";
+    if (!form.service.trim()) next.service = "Please select a service";
     if (!form.message.trim() || form.message.trim().length < 10) next.message = "Please add a short message (10+ chars)";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setStatus("loading");
@@ -119,6 +122,7 @@ export default function Contact() {
               <option>Lead Generation</option>
               <option>Customer Support</option>
             </select>
+            {errors.service && <p className="mt-1 text-sm text-red-400">{errors.service}</p>}
 
             <textarea
               rows={6}

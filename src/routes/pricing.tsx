@@ -9,6 +9,8 @@ export const Route = createFileRoute("/pricing")({
       { name: "description", content: "Transparent pricing for Agentix AI agents. Choose a plan or estimate your ROI." },
       { property: "og:title", content: "Pricing — Agentix" },
       { property: "og:description", content: "Transparent pricing for Agentix AI agents." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PricingPage,

@@ -3,20 +3,27 @@ import { initReactI18next } from "react-i18next";
 import az from "./locales/az.json";
 import en from "./locales/en.json";
 
-const stored =
-  typeof window !== "undefined" ? window.localStorage.getItem("agentix-lang") : null;
+function readableFallback(key: string) {
+  const leaf = key.split(".").pop() ?? key;
+  return leaf
+    .replace(/([A-Z])/g, " $1")
+    .replace(/[-_]/g, " ")
+    .replace(/^./, (c) => c.toUpperCase())
+    .trim();
+}
 
 i18n.use(initReactI18next).init({
   resources: { az: { translation: az }, en: { translation: en } },
-  lng: stored ?? "az",
+  lng: "az",
   fallbackLng: "en",
+  supportedLngs: ["az", "en"],
+  cleanCode: true,
+  lowerCaseLng: true,
   interpolation: { escapeValue: false },
   returnNull: false,
   returnEmptyString: false,
-  parseMissingKeyHandler: (key) => {
-    const leaf = key.split(".").pop() ?? key;
-    return leaf.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase()).trim();
-  },
+  missingKeyNoValueFallbackToKey: false,
+  parseMissingKeyHandler: readableFallback,
 });
 
 

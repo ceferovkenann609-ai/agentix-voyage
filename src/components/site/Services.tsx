@@ -253,8 +253,7 @@ function ServiceCard({
     >
       <Link
         ref={ref}
-        to="/services/$slug"
-        params={{ slug: s.slug }}
+        to={`/services/${s.slug}` as const}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         className="group relative block gradient-border rounded-2xl p-8 h-full transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-glow"
@@ -555,7 +554,7 @@ function CTA() {
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link
-                to="/demo"
+              to="/book-demo"
                 className="group inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_oklch(0.65_0.26_295/0.5)] hover:shadow-[0_0_50px_oklch(0.65_0.26_295/0.7)] transition-all hover:-translate-y-0.5"
               >
                 Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
