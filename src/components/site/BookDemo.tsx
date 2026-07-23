@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { supabase } from "@/integrations/supabase/client";
 
 type DemoForm = {
   name: string;
