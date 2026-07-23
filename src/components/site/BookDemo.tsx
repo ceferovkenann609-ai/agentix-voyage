@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { supabase } from "@/integrations/supabase/client";
 
 type DemoForm = {
   name: string;
@@ -69,23 +70,47 @@ export default function BookDemo() {
   const validate = () => {
     const next: Partial<Record<keyof DemoForm, string>> = {};
     const email = form.email.trim();
+    const phone = form.phone.trim();
     if (!form.name.trim()) next.name = t.nameErr;
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = t.emailErr;
+    if (phone && !/^[+()\-\s\d]{6,30}$/.test(phone)) next.phone = i18n.resolvedLanguage === "en" ? "Enter a valid phone number" : "Düzgün telefon nömrəsi daxil edin";
     if (!form.service.trim()) next.service = t.serviceErr;
     if (form.message.trim().length > 0 && form.message.trim().length < 10) next.message = t.messageErr;
     setErrors(next);
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!validate()) return;
+    if (loading || success) return;
     setLoading(true);
-    window.setTimeout(() => {
+    try {
+      const { error } = await supabase.from("demo_bookings").insert({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim() || null,
+        company: form.company.trim() || null,
+        service: form.service.trim() || null,
+        message: form.message.trim() || null,
+        locale: i18n.resolvedLanguage ?? null,
+      });
+      if (error) {
+        if (error.code === "23505") {
+          setErrors({ email: i18n.resolvedLanguage === "en" ? "You already booked this service. We'll be in touch soon." : "Bu xidmət üçün artıq sorğu göndərmisiniz. Tezliklə əlaqə saxlayacağıq." });
+        } else {
+          throw error;
+        }
+      } else {
+        setSuccess(true);
+        setForm(initialForm);
+      }
+    } catch (err) {
+      console.error("[book-demo] insert failed", err);
+      setErrors({ message: i18n.resolvedLanguage === "en" ? "Something went wrong. Please try again." : "Xəta baş verdi. Yenidən cəhd edin." });
+    } finally {
       setLoading(false);
-      setSuccess(true);
-      setForm(initialForm);
-    }, 900);
+    }
   };
 
   return (
@@ -112,7 +137,10 @@ export default function BookDemo() {
                 {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
               </div>
               <input type="text" placeholder={t.company} value={form.company} onChange={update("company")} maxLength={100} className="bg-black border border-zinc-700 rounded-xl p-4 outline-none focus:border-cyan-400" />
-              <input type="tel" placeholder={t.phone} value={form.phone} onChange={update("phone")} maxLength={30} className="bg-black border border-zinc-700 rounded-xl p-4 outline-none focus:border-cyan-400" />
+              <div>
+                <input type="tel" placeholder={t.phone} value={form.phone} onChange={update("phone")} maxLength={30} className="w-full bg-black border border-zinc-700 rounded-xl p-4 outline-none focus:border-cyan-400" />
+                {errors.phone && <p className="mt-1 text-sm text-red-400">{errors.phone}</p>}
+              </div>
             </div>
 
             <select value={form.service} onChange={update("service")} className="mt-6 w-full bg-black border border-zinc-700 rounded-xl p-4 outline-none focus:border-cyan-400">

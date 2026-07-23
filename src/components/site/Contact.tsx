@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { supabase } from "@/integrations/supabase/client";
 
 type FormState = {
   name: string;
@@ -101,10 +102,20 @@ export default function Contact() {
     if (!validate()) return;
     setStatus("loading");
     try {
-      await new Promise((r) => setTimeout(r, 1200));
+      const { error } = await supabase.from("contact_requests").insert({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim() || null,
+        company: form.company.trim() || null,
+        subject: form.service.trim() || null,
+        message: form.message.trim(),
+        locale: i18n.resolvedLanguage ?? null,
+      });
+      if (error) throw error;
       setStatus("success");
       setForm(initial);
-    } catch {
+    } catch (err) {
+      console.error("[contact] insert failed", err);
       setStatus("error");
     }
   };
