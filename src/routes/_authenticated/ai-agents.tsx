@@ -38,7 +38,7 @@ import {
   BookOpen,
   CheckCircle2,
   Pencil,
-  ExternalLink,
+  
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
