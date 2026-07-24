@@ -105,7 +105,7 @@ export default function Contact() {
     if (!validate()) return;
     setStatus("loading");
     try {
-      const { error } = await supabase.from("contact_requests").insert({
+      const { error } = await supabase.from("contact_submissions").insert({
         name: form.name.trim(),
         email: form.email.trim(),
         phone: form.phone.trim() || null,

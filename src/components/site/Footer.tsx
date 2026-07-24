@@ -1,12 +1,50 @@
 import { Link } from "@tanstack/react-router";
-import { Sparkles, Twitter, Linkedin, Github, Youtube } from "lucide-react";
+import { Sparkles, Twitter, Linkedin, Github, Youtube, Mail, Check, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useState, type FormEvent } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const currentYear = 2026;
 
 export function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { user } = useAuth();
+  const isAz = i18n.resolvedLanguage === "az";
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errMsg, setErrMsg] = useState("");
+
+  const onSubscribe = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const value = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      setStatus("error");
+      setErrMsg(isAz ? "Düzgün e-poçt daxil edin." : "Please enter a valid email.");
+      return;
+    }
+    setStatus("loading");
+    const { error } = await supabase.from("newsletter_subscribers").insert({
+      email: value,
+      locale: i18n.resolvedLanguage ?? null,
+      source: "footer",
+      user_id: user?.id ?? null,
+    });
+    if (error) {
+      if (error.code === "23505") {
+        setStatus("success");
+        setEmail("");
+        return;
+      }
+      setStatus("error");
+      setErrMsg(isAz ? "Xəta baş verdi. Yenidən cəhd edin." : "Something went wrong. Please try again.");
+      return;
+    }
+    setStatus("success");
+    setEmail("");
+  };
+
   return (
     <footer className="relative border-t border-white/5 bg-[#07090C] pt-20 pb-8">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
@@ -43,7 +81,41 @@ export function Footer() {
             </div>
 
             <div className="mt-6"><LanguageSwitcher /></div>
+
+            <form onSubmit={onSubscribe} className="mt-8 max-w-sm">
+              <label className="block text-sm font-semibold text-foreground mb-2">
+                {isAz ? "Yenilikləri əldə edin" : "Get product updates"}
+              </label>
+              <div className="flex items-center gap-2 rounded-xl glass p-1.5 pl-3 border border-white/10 focus-within:border-cyan-400/40 transition">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); if (status !== "idle") setStatus("idle"); }}
+                  placeholder={isAz ? "sizin@email.com" : "you@company.com"}
+                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
+                  aria-label={isAz ? "E-poçt ünvanı" : "Email address"}
+                  disabled={status === "loading"}
+                />
+                <button
+                  type="submit"
+                  disabled={status === "loading" || status === "success"}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-brand-gradient px-3 py-2 text-xs font-semibold text-white disabled:opacity-70"
+                >
+                  {status === "loading" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : status === "success" ? <Check className="h-3.5 w-3.5" /> : null}
+                  {status === "success" ? (isAz ? "Abunə oldunuz" : "Subscribed") : (isAz ? "Abunə ol" : "Subscribe")}
+                </button>
+              </div>
+              {status === "error" && <p className="mt-2 text-xs text-red-400">{errMsg}</p>}
+              {status === "success" && (
+                <p className="mt-2 text-xs text-emerald-400">
+                  {isAz ? "Təşəkkürlər! Yeniliklər e-poçt qutunuza gələcək." : "Thanks! You'll receive updates in your inbox."}
+                </p>
+              )}
+            </form>
           </div>
+
 
           <FooterCol
             title={t("footer.company")}

@@ -35,8 +35,8 @@ function HistoryPage() {
       setLoading(true);
       const [d, c, ch] = await Promise.all([
         supabase.from("demo_bookings").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-        supabase.from("contact_requests").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-        supabase.from("chat_messages").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(100),
+        supabase.from("contact_submissions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("ai_chat_messages").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(100),
       ]);
       setDemos(d.data ?? []);
       setContacts(c.data ?? []);

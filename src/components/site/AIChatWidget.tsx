@@ -47,7 +47,7 @@ export default function AIChatWidget() {
 
   const persist = (sender: "user" | "ai", text: string) => {
     void supabase
-      .from("chat_messages")
+      .from("ai_chat_messages")
       .insert({ session_id: sessionId, sender, message: text, locale: i18n.resolvedLanguage ?? null, user_id: user?.id ?? null })
       .then(({ error }) => {
         if (error) console.error("[chat] insert failed", error);
