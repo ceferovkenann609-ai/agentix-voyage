@@ -36,6 +36,7 @@ import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCrmRouteImport } from './routes/_authenticated/crm'
 import { Route as AuthenticatedConversationsRouteImport } from './routes/_authenticated/conversations'
+import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedAiAgentsRouteImport } from './routes/_authenticated/ai-agents'
 
 const TermsRoute = TermsRouteImport.update({
@@ -174,6 +175,11 @@ const AuthenticatedConversationsRoute =
     path: '/conversations',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAiAgentsRoute = AuthenticatedAiAgentsRouteImport.update({
   id: '/ai-agents',
   path: '/ai-agents',
@@ -195,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/solutions': typeof SolutionsRouteWithChildren
   '/terms': typeof TermsRoute
   '/ai-agents': typeof AuthenticatedAiAgentsRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
   '/conversations': typeof AuthenticatedConversationsRoute
   '/crm': typeof AuthenticatedCrmRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -223,6 +230,7 @@ export interface FileRoutesByTo {
   '/solutions': typeof SolutionsRouteWithChildren
   '/terms': typeof TermsRoute
   '/ai-agents': typeof AuthenticatedAiAgentsRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
   '/conversations': typeof AuthenticatedConversationsRoute
   '/crm': typeof AuthenticatedCrmRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -254,6 +262,7 @@ export interface FileRoutesById {
   '/solutions': typeof SolutionsRouteWithChildren
   '/terms': typeof TermsRoute
   '/_authenticated/ai-agents': typeof AuthenticatedAiAgentsRoute
+  '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/conversations': typeof AuthenticatedConversationsRoute
   '/_authenticated/crm': typeof AuthenticatedCrmRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -285,6 +294,7 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/terms'
     | '/ai-agents'
+    | '/analytics'
     | '/conversations'
     | '/crm'
     | '/dashboard'
@@ -313,6 +323,7 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/terms'
     | '/ai-agents'
+    | '/analytics'
     | '/conversations'
     | '/crm'
     | '/dashboard'
@@ -343,6 +354,7 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/terms'
     | '/_authenticated/ai-agents'
+    | '/_authenticated/analytics'
     | '/_authenticated/conversations'
     | '/_authenticated/crm'
     | '/_authenticated/dashboard'
@@ -566,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedConversationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/analytics': {
+      id: '/_authenticated/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/ai-agents': {
       id: '/_authenticated/ai-agents'
       path: '/ai-agents'
@@ -578,6 +597,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAiAgentsRoute: typeof AuthenticatedAiAgentsRoute
+  AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedConversationsRoute: typeof AuthenticatedConversationsRoute
   AuthenticatedCrmRoute: typeof AuthenticatedCrmRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
@@ -587,6 +607,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAiAgentsRoute: AuthenticatedAiAgentsRoute,
+  AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedConversationsRoute: AuthenticatedConversationsRoute,
   AuthenticatedCrmRoute: AuthenticatedCrmRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
@@ -652,3 +673,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
