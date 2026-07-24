@@ -34,6 +34,7 @@ import { Route as ServicesAiChatbotsRouteImport } from './routes/services.ai-cha
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAiAgentsRouteImport } from './routes/_authenticated/ai-agents'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -160,6 +161,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAiAgentsRoute = AuthenticatedAiAgentsRouteImport.update({
+  id: '/ai-agents',
+  path: '/ai-agents',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -175,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRouteWithChildren
   '/solutions': typeof SolutionsRouteWithChildren
   '/terms': typeof TermsRoute
+  '/ai-agents': typeof AuthenticatedAiAgentsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -200,6 +207,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/solutions': typeof SolutionsRouteWithChildren
   '/terms': typeof TermsRoute
+  '/ai-agents': typeof AuthenticatedAiAgentsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -228,6 +236,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRouteWithChildren
   '/solutions': typeof SolutionsRouteWithChildren
   '/terms': typeof TermsRoute
+  '/_authenticated/ai-agents': typeof AuthenticatedAiAgentsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -256,6 +265,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/solutions'
     | '/terms'
+    | '/ai-agents'
     | '/dashboard'
     | '/history'
     | '/profile'
@@ -281,6 +291,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/solutions'
     | '/terms'
+    | '/ai-agents'
     | '/dashboard'
     | '/history'
     | '/profile'
@@ -308,6 +319,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/solutions'
     | '/terms'
+    | '/_authenticated/ai-agents'
     | '/_authenticated/dashboard'
     | '/_authenticated/history'
     | '/_authenticated/profile'
@@ -515,16 +527,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ai-agents': {
+      id: '/_authenticated/ai-agents'
+      path: '/ai-agents'
+      fullPath: '/ai-agents'
+      preLoaderRoute: typeof AuthenticatedAiAgentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAiAgentsRoute: typeof AuthenticatedAiAgentsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAiAgentsRoute: AuthenticatedAiAgentsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
