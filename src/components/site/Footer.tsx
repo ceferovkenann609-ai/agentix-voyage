@@ -1,12 +1,50 @@
 import { Link } from "@tanstack/react-router";
-import { Sparkles, Twitter, Linkedin, Github, Youtube } from "lucide-react";
+import { Sparkles, Twitter, Linkedin, Github, Youtube, Mail, Check, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useState, type FormEvent } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const currentYear = 2026;
 
 export function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { user } = useAuth();
+  const isAz = i18n.resolvedLanguage === "az";
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errMsg, setErrMsg] = useState("");
+
+  const onSubscribe = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const value = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      setStatus("error");
+      setErrMsg(isAz ? "Düzgün e-poçt daxil edin." : "Please enter a valid email.");
+      return;
+    }
+    setStatus("loading");
+    const { error } = await supabase.from("newsletter_subscribers").insert({
+      email: value,
+      locale: i18n.resolvedLanguage ?? null,
+      source: "footer",
+      user_id: user?.id ?? null,
+    });
+    if (error) {
+      if (error.code === "23505") {
+        setStatus("success");
+        setEmail("");
+        return;
+      }
+      setStatus("error");
+      setErrMsg(isAz ? "Xəta baş verdi. Yenidən cəhd edin." : "Something went wrong. Please try again.");
+      return;
+    }
+    setStatus("success");
+    setEmail("");
+  };
+
   return (
     <footer className="relative border-t border-white/5 bg-[#07090C] pt-20 pb-8">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
