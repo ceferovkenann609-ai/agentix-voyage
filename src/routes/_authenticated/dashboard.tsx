@@ -33,9 +33,9 @@ function DashboardPage() {
     (async () => {
       const [demos, contacts, chatsRes, profile] = await Promise.all([
         supabase.from("demo_bookings").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-        supabase.from("contact_requests").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+        supabase.from("contact_submissions").select("id", { count: "exact", head: true }).eq("user_id", user.id),
         supabase
-          .from("chat_messages")
+          .from("ai_chat_messages")
           .select("id,message,sender,created_at")
           .eq("user_id", user.id)
           .order("created_at", { ascending: false })
