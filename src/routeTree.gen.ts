@@ -35,6 +35,7 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCrmRouteImport } from './routes/_authenticated/crm'
+import { Route as AuthenticatedConversationsRouteImport } from './routes/_authenticated/conversations'
 import { Route as AuthenticatedAiAgentsRouteImport } from './routes/_authenticated/ai-agents'
 
 const TermsRoute = TermsRouteImport.update({
@@ -167,6 +168,12 @@ const AuthenticatedCrmRoute = AuthenticatedCrmRouteImport.update({
   path: '/crm',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedConversationsRoute =
+  AuthenticatedConversationsRouteImport.update({
+    id: '/conversations',
+    path: '/conversations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAiAgentsRoute = AuthenticatedAiAgentsRouteImport.update({
   id: '/ai-agents',
   path: '/ai-agents',
@@ -188,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/solutions': typeof SolutionsRouteWithChildren
   '/terms': typeof TermsRoute
   '/ai-agents': typeof AuthenticatedAiAgentsRoute
+  '/conversations': typeof AuthenticatedConversationsRoute
   '/crm': typeof AuthenticatedCrmRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/history': typeof AuthenticatedHistoryRoute
@@ -215,6 +223,7 @@ export interface FileRoutesByTo {
   '/solutions': typeof SolutionsRouteWithChildren
   '/terms': typeof TermsRoute
   '/ai-agents': typeof AuthenticatedAiAgentsRoute
+  '/conversations': typeof AuthenticatedConversationsRoute
   '/crm': typeof AuthenticatedCrmRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/history': typeof AuthenticatedHistoryRoute
@@ -245,6 +254,7 @@ export interface FileRoutesById {
   '/solutions': typeof SolutionsRouteWithChildren
   '/terms': typeof TermsRoute
   '/_authenticated/ai-agents': typeof AuthenticatedAiAgentsRoute
+  '/_authenticated/conversations': typeof AuthenticatedConversationsRoute
   '/_authenticated/crm': typeof AuthenticatedCrmRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/terms'
     | '/ai-agents'
+    | '/conversations'
     | '/crm'
     | '/dashboard'
     | '/history'
@@ -302,6 +313,7 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/terms'
     | '/ai-agents'
+    | '/conversations'
     | '/crm'
     | '/dashboard'
     | '/history'
@@ -331,6 +343,7 @@ export interface FileRouteTypes {
     | '/solutions'
     | '/terms'
     | '/_authenticated/ai-agents'
+    | '/_authenticated/conversations'
     | '/_authenticated/crm'
     | '/_authenticated/dashboard'
     | '/_authenticated/history'
@@ -546,6 +559,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCrmRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/conversations': {
+      id: '/_authenticated/conversations'
+      path: '/conversations'
+      fullPath: '/conversations'
+      preLoaderRoute: typeof AuthenticatedConversationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/ai-agents': {
       id: '/_authenticated/ai-agents'
       path: '/ai-agents'
@@ -558,6 +578,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAiAgentsRoute: typeof AuthenticatedAiAgentsRoute
+  AuthenticatedConversationsRoute: typeof AuthenticatedConversationsRoute
   AuthenticatedCrmRoute: typeof AuthenticatedCrmRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
@@ -566,6 +587,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAiAgentsRoute: AuthenticatedAiAgentsRoute,
+  AuthenticatedConversationsRoute: AuthenticatedConversationsRoute,
   AuthenticatedCrmRoute: AuthenticatedCrmRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
