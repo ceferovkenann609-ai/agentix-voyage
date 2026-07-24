@@ -14,7 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      chat_messages: {
+      ai_chat_messages: {
         Row: {
           created_at: string
           id: string
@@ -22,6 +22,7 @@ export type Database = {
           message: string
           sender: string
           session_id: string
+          updated_at: string
           user_id: string | null
         }
         Insert: {
@@ -31,6 +32,7 @@ export type Database = {
           message: string
           sender: string
           session_id: string
+          updated_at?: string
           user_id?: string | null
         }
         Update: {
@@ -40,11 +42,12 @@ export type Database = {
           message?: string
           sender?: string
           session_id?: string
+          updated_at?: string
           user_id?: string | null
         }
         Relationships: []
       }
-      contact_requests: {
+      contact_submissions: {
         Row: {
           company: string | null
           created_at: string
@@ -55,6 +58,7 @@ export type Database = {
           name: string
           phone: string | null
           subject: string | null
+          updated_at: string
           user_id: string | null
         }
         Insert: {
@@ -67,6 +71,7 @@ export type Database = {
           name: string
           phone?: string | null
           subject?: string | null
+          updated_at?: string
           user_id?: string | null
         }
         Update: {
@@ -79,6 +84,7 @@ export type Database = {
           name?: string
           phone?: string | null
           subject?: string | null
+          updated_at?: string
           user_id?: string | null
         }
         Relationships: []
@@ -94,6 +100,7 @@ export type Database = {
           name: string
           phone: string | null
           service: string | null
+          updated_at: string
           user_id: string | null
         }
         Insert: {
@@ -106,6 +113,7 @@ export type Database = {
           name: string
           phone?: string | null
           service?: string | null
+          updated_at?: string
           user_id?: string | null
         }
         Update: {
@@ -118,6 +126,37 @@ export type Database = {
           name?: string
           phone?: string | null
           service?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          locale: string | null
+          source: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          locale?: string | null
+          source?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          locale?: string | null
+          source?: string | null
+          updated_at?: string
           user_id?: string | null
         }
         Relationships: []
