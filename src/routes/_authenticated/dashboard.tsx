@@ -87,7 +87,6 @@ function DashboardPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [active, setActive] = useState("dashboard");
 
   const name = user?.email?.split("@")[0] || "Operator";
 
