@@ -55,15 +55,15 @@ export const Route = createFileRoute("/_authenticated/ai-agents")({
 });
 
 const navItems = [
-  { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
-  { key: "agents", label: "AI Agents", icon: Bot, to: "/ai-agents", active: true },
-  { key: "conversations", label: "Conversations", icon: MessageSquare },
-  { key: "leads", label: "Leads", icon: Users },
-  { key: "demos", label: "Demo Requests", icon: CalendarCheck },
-  { key: "analytics", label: "Analytics", icon: BarChart3 },
-  { key: "billing", label: "Billing", icon: CreditCard },
-  { key: "settings", label: "Settings", icon: Settings },
-  { key: "support", label: "Support", icon: LifeBuoy },
+  { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" as const },
+  { key: "agents", label: "AI Agents", icon: Bot, to: "/ai-agents" as const, active: true },
+  { key: "conversations", label: "Conversations", icon: MessageSquare, to: "/conversations" as const },
+  { key: "leads", label: "Leads", icon: Users, to: "/crm" as const },
+  { key: "demos", label: "Demo Requests", icon: CalendarCheck, to: "/demo-requests" as const },
+  { key: "analytics", label: "Analytics", icon: BarChart3, to: "/analytics" as const },
+  { key: "billing", label: "Billing", icon: CreditCard, to: "/billing" as const },
+  { key: "settings", label: "Settings", icon: Settings, to: "/settings" as const },
+  { key: "support", label: "Support", icon: LifeBuoy, to: "/support" as const },
 ];
 
 const stats = [
