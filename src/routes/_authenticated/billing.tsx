@@ -49,11 +49,11 @@ const navItems = [
   { key: "agents", label: "AI Agents", icon: Bot, to: "/ai-agents" as const },
   { key: "conversations", label: "Conversations", icon: MessageSquare, to: "/conversations" as const },
   { key: "leads", label: "Leads", icon: Users, to: "/crm" as const },
-  { key: "demos", label: "Demo Requests", icon: CalendarCheck, to: "/history" as const },
+  { key: "demos", label: "Demo Requests", icon: CalendarCheck, to: "/demo-requests" as const },
   { key: "analytics", label: "Analytics", icon: BarChart3, to: "/analytics" as const },
   { key: "billing", label: "Billing", icon: CreditCard, to: "/billing" as const, active: true },
   { key: "settings", label: "Settings", icon: Settings, to: "/settings" as const },
-  { key: "support", label: "Support", icon: LifeBuoy },
+  { key: "support", label: "Support", icon: LifeBuoy, to: "/support" as const },
 ];
 
 const plans = [
