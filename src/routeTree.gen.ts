@@ -31,6 +31,7 @@ import { Route as ServicesLeadGenerationRouteImport } from './routes/services.le
 import { Route as ServicesCustomerSupportRouteImport } from './routes/services.customer-support'
 import { Route as ServicesCrmIntegrationRouteImport } from './routes/services.crm-integration'
 import { Route as ServicesAiChatbotsRouteImport } from './routes/services.ai-chatbots'
+import { Route as AuthenticatedSupportRouteImport } from './routes/_authenticated/support'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
@@ -152,6 +153,11 @@ const ServicesAiChatbotsRoute = ServicesAiChatbotsRouteImport.update({
   path: '/ai-chatbots',
   getParentRoute: () => ServicesRoute,
 } as any)
+const AuthenticatedSupportRoute = AuthenticatedSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -229,6 +235,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof AuthenticatedHistoryRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/support': typeof AuthenticatedSupportRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -261,6 +268,7 @@ export interface FileRoutesByTo {
   '/history': typeof AuthenticatedHistoryRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/support': typeof AuthenticatedSupportRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/support': typeof AuthenticatedSupportRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -331,6 +340,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/profile'
     | '/settings'
+    | '/support'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -363,6 +373,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/profile'
     | '/settings'
+    | '/support'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -397,6 +408,7 @@ export interface FileRouteTypes {
     | '/_authenticated/history'
     | '/_authenticated/profile'
     | '/_authenticated/settings'
+    | '/_authenticated/support'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -580,6 +592,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesAiChatbotsRouteImport
       parentRoute: typeof ServicesRoute
     }
+    '/_authenticated/support': {
+      id: '/_authenticated/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof AuthenticatedSupportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -664,6 +683,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedSupportRoute: typeof AuthenticatedSupportRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -677,6 +697,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedSupportRoute: AuthenticatedSupportRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
