@@ -43,15 +43,15 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 const navItems = [
-  { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, active: true },
-  { key: "agents", label: "AI Agents", icon: Bot },
-  { key: "conversations", label: "Conversations", icon: MessageSquare },
-  { key: "leads", label: "Leads", icon: Users },
-  { key: "demos", label: "Demo Requests", icon: CalendarCheck },
-  { key: "analytics", label: "Analytics", icon: BarChart3 },
-  { key: "billing", label: "Billing", icon: CreditCard },
-  { key: "settings", label: "Settings", icon: Settings },
-  { key: "support", label: "Support", icon: LifeBuoy },
+  { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" as const, active: true },
+  { key: "agents", label: "AI Agents", icon: Bot, to: "/ai-agents" as const },
+  { key: "conversations", label: "Conversations", icon: MessageSquare, to: "/conversations" as const },
+  { key: "leads", label: "Leads", icon: Users, to: "/crm" as const },
+  { key: "demos", label: "Demo Requests", icon: CalendarCheck, to: "/demo-requests" as const },
+  { key: "analytics", label: "Analytics", icon: BarChart3, to: "/analytics" as const },
+  { key: "billing", label: "Billing", icon: CreditCard, to: "/billing" as const },
+  { key: "settings", label: "Settings", icon: Settings, to: "/settings" as const },
+  { key: "support", label: "Support", icon: LifeBuoy, to: "/support" as const },
 ];
 
 const stats = [
@@ -87,7 +87,6 @@ function DashboardPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [active, setActive] = useState("dashboard");
 
   const name = user?.email?.split("@")[0] || "Operator";
 
@@ -142,14 +141,12 @@ function DashboardPage() {
             <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = active === item.key;
+                const isActive = !!item.active;
                 return (
-                  <button
+                  <Link
                     key={item.key}
-                    onClick={() => {
-                      setActive(item.key);
-                      setSidebarOpen(false);
-                    }}
+                    to={item.to}
+                    onClick={() => setSidebarOpen(false)}
                     className={`group relative flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all ${
                       isActive
                         ? "text-white"
@@ -168,7 +165,7 @@ function DashboardPage() {
                     {isActive && (
                       <span className="relative ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
                     )}
-                  </button>
+                  </Link>
                 );
               })}
             </nav>

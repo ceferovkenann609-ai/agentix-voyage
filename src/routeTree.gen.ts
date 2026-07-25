@@ -31,9 +31,11 @@ import { Route as ServicesLeadGenerationRouteImport } from './routes/services.le
 import { Route as ServicesCustomerSupportRouteImport } from './routes/services.customer-support'
 import { Route as ServicesCrmIntegrationRouteImport } from './routes/services.crm-integration'
 import { Route as ServicesAiChatbotsRouteImport } from './routes/services.ai-chatbots'
+import { Route as AuthenticatedSupportRouteImport } from './routes/_authenticated/support'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
+import { Route as AuthenticatedDemoRequestsRouteImport } from './routes/_authenticated/demo-requests'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCrmRouteImport } from './routes/_authenticated/crm'
 import { Route as AuthenticatedConversationsRouteImport } from './routes/_authenticated/conversations'
@@ -151,6 +153,11 @@ const ServicesAiChatbotsRoute = ServicesAiChatbotsRouteImport.update({
   path: '/ai-chatbots',
   getParentRoute: () => ServicesRoute,
 } as any)
+const AuthenticatedSupportRoute = AuthenticatedSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -166,6 +173,12 @@ const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDemoRequestsRoute =
+  AuthenticatedDemoRequestsRouteImport.update({
+    id: '/demo-requests',
+    path: '/demo-requests',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -218,9 +231,11 @@ export interface FileRoutesByFullPath {
   '/conversations': typeof AuthenticatedConversationsRoute
   '/crm': typeof AuthenticatedCrmRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/demo-requests': typeof AuthenticatedDemoRequestsRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/support': typeof AuthenticatedSupportRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -249,9 +264,11 @@ export interface FileRoutesByTo {
   '/conversations': typeof AuthenticatedConversationsRoute
   '/crm': typeof AuthenticatedCrmRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/demo-requests': typeof AuthenticatedDemoRequestsRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/support': typeof AuthenticatedSupportRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -283,9 +300,11 @@ export interface FileRoutesById {
   '/_authenticated/conversations': typeof AuthenticatedConversationsRoute
   '/_authenticated/crm': typeof AuthenticatedCrmRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/demo-requests': typeof AuthenticatedDemoRequestsRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/support': typeof AuthenticatedSupportRoute
   '/services/ai-chatbots': typeof ServicesAiChatbotsRoute
   '/services/crm-integration': typeof ServicesCrmIntegrationRoute
   '/services/customer-support': typeof ServicesCustomerSupportRoute
@@ -317,9 +336,11 @@ export interface FileRouteTypes {
     | '/conversations'
     | '/crm'
     | '/dashboard'
+    | '/demo-requests'
     | '/history'
     | '/profile'
     | '/settings'
+    | '/support'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -348,9 +369,11 @@ export interface FileRouteTypes {
     | '/conversations'
     | '/crm'
     | '/dashboard'
+    | '/demo-requests'
     | '/history'
     | '/profile'
     | '/settings'
+    | '/support'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -381,9 +404,11 @@ export interface FileRouteTypes {
     | '/_authenticated/conversations'
     | '/_authenticated/crm'
     | '/_authenticated/dashboard'
+    | '/_authenticated/demo-requests'
     | '/_authenticated/history'
     | '/_authenticated/profile'
     | '/_authenticated/settings'
+    | '/_authenticated/support'
     | '/services/ai-chatbots'
     | '/services/crm-integration'
     | '/services/customer-support'
@@ -567,6 +592,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesAiChatbotsRouteImport
       parentRoute: typeof ServicesRoute
     }
+    '/_authenticated/support': {
+      id: '/_authenticated/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof AuthenticatedSupportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -586,6 +618,13 @@ declare module '@tanstack/react-router' {
       path: '/history'
       fullPath: '/history'
       preLoaderRoute: typeof AuthenticatedHistoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/demo-requests': {
+      id: '/_authenticated/demo-requests'
+      path: '/demo-requests'
+      fullPath: '/demo-requests'
+      preLoaderRoute: typeof AuthenticatedDemoRequestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -640,9 +679,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedConversationsRoute: typeof AuthenticatedConversationsRoute
   AuthenticatedCrmRoute: typeof AuthenticatedCrmRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDemoRequestsRoute: typeof AuthenticatedDemoRequestsRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedSupportRoute: typeof AuthenticatedSupportRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -652,9 +693,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedConversationsRoute: AuthenticatedConversationsRoute,
   AuthenticatedCrmRoute: AuthenticatedCrmRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDemoRequestsRoute: AuthenticatedDemoRequestsRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedSupportRoute: AuthenticatedSupportRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

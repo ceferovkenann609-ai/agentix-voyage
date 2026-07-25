@@ -49,11 +49,11 @@ const navItems = [
   { key: "agents", label: "AI Agents", icon: Bot, to: "/ai-agents" as const },
   { key: "conversations", label: "Conversations", icon: MessageSquare, to: "/conversations" as const },
   { key: "leads", label: "Leads", icon: Users, to: "/crm" as const },
-  { key: "demos", label: "Demo Requests", icon: CalendarCheck, to: "/history" as const },
+  { key: "demos", label: "Demo Requests", icon: CalendarCheck, to: "/demo-requests" as const },
   { key: "analytics", label: "Analytics", icon: BarChart3, to: "/analytics" as const },
   { key: "billing", label: "Billing", icon: CreditCard, to: "/billing" as const, active: true },
   { key: "settings", label: "Settings", icon: Settings, to: "/settings" as const },
-  { key: "support", label: "Support", icon: LifeBuoy },
+  { key: "support", label: "Support", icon: LifeBuoy, to: "/support" as const },
 ];
 
 const plans = [
@@ -190,14 +190,10 @@ function BillingPage() {
                 const cls = `group relative flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all ${
                   isActive ? "text-white" : "text-white/60 hover:text-white hover:bg-white/5"
                 }`;
-                return item.to ? (
+                return (
                   <Link key={item.key} to={item.to} onClick={() => setSidebarOpen(false)} className={cls}>
                     {content}
                   </Link>
-                ) : (
-                  <button key={item.key} onClick={() => setSidebarOpen(false)} className={cls}>
-                    {content}
-                  </button>
                 );
               })}
             </nav>
