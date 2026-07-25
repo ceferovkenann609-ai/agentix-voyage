@@ -142,14 +142,12 @@ function DashboardPage() {
             <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = active === item.key;
+                const isActive = !!item.active;
                 return (
-                  <button
+                  <Link
                     key={item.key}
-                    onClick={() => {
-                      setActive(item.key);
-                      setSidebarOpen(false);
-                    }}
+                    to={item.to}
+                    onClick={() => setSidebarOpen(false)}
                     className={`group relative flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all ${
                       isActive
                         ? "text-white"
@@ -168,7 +166,7 @@ function DashboardPage() {
                     {isActive && (
                       <span className="relative ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
                     )}
-                  </button>
+                  </Link>
                 );
               })}
             </nav>
