@@ -52,15 +52,15 @@ export const Route = createFileRoute("/_authenticated/conversations")({
 });
 
 const navItems = [
-  { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" as const },
-  { key: "agents", label: "AI Agents", icon: Bot, to: "/ai-agents" as const },
-  { key: "conversations", label: "Conversations", icon: MessageSquare, to: "/conversations" as const, active: true },
+  { key: "dashboard", label: "İdarəetmə Paneli", icon: LayoutDashboard, to: "/dashboard" as const },
+  { key: "agents", label: "AI Agentləri", icon: Bot, to: "/ai-agents" as const },
+  { key: "conversations", label: "Söhbətlər", icon: MessageSquare, to: "/conversations" as const, active: true },
   { key: "leads", label: "CRM", icon: Users, to: "/crm" as const },
-  { key: "demos", label: "Demo Requests", icon: CalendarCheck, to: "/demo-requests" as const },
-  { key: "analytics", label: "Analytics", icon: BarChart3, to: "/analytics" as const },
-  { key: "billing", label: "Billing", icon: CreditCard, to: "/billing" as const },
-  { key: "settings", label: "Settings", icon: Settings, to: "/settings" as const },
-  { key: "support", label: "Support", icon: LifeBuoy, to: "/support" as const },
+  { key: "demos", label: "Demo Sorğuları", icon: CalendarCheck, to: "/demo-requests" as const },
+  { key: "analytics", label: "Analitika", icon: BarChart3, to: "/analytics" as const },
+  { key: "billing", label: "Ödənişlər", icon: CreditCard, to: "/billing" as const },
+  { key: "settings", label: "Tənzimləmələr", icon: Settings, to: "/settings" as const },
+  { key: "support", label: "Dəstək", icon: LifeBuoy, to: "/support" as const },
 ];
 
 type Channel = "WhatsApp" | "Website" | "Instagram" | "Messenger" | "Email" | "Voice AI";
@@ -310,7 +310,7 @@ function ConversationsPage() {
   const [activeId, setActiveId] = useState<string>(conversations[0].id);
   const [draft, setDraft] = useState("");
 
-  const name = user?.email?.split("@")[0] || "Operator";
+  const name = user?.email?.split("@")[0] || "İstifadəçi";
 
   const filtered = useMemo(() => {
     return conversations.filter((c) => {
@@ -370,7 +370,7 @@ function ConversationsPage() {
                 </div>
                 <div>
                   <div className="text-sm font-bold tracking-tight">Agentix</div>
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Workspace</div>
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">İş Sahəsi</div>
                 </div>
               </div>
               <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white/60 hover:text-white">
@@ -415,7 +415,7 @@ function ConversationsPage() {
                 className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 transition"
               >
                 <LogOut className="h-4.5 w-4.5" />
-                Logout
+                Çıxış
               </button>
             </div>
           </div>
@@ -427,7 +427,7 @@ function ConversationsPage() {
               <button
                 onClick={() => setSidebarOpen(true)}
                 className="lg:hidden grid h-9 w-9 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-white"
-                aria-label="Open sidebar"
+                aria-label="Yan paneli aç"
               >
                 <Menu className="h-4.5 w-4.5" />
               </button>
@@ -637,7 +637,7 @@ function ConversationsPage() {
 
                 <div className="border-t border-white/5 px-4 py-3">
                   <div className="flex items-center gap-2 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2">
-                    <button className="grid h-8 w-8 place-items-center rounded-lg text-white/50 hover:text-white transition" aria-label="Attach">
+                    <button className="grid h-8 w-8 place-items-center rounded-lg text-white/50 hover:text-white transition" aria-label="Əlavə et">
                       <Paperclip className="h-4 w-4" />
                     </button>
                     <input
