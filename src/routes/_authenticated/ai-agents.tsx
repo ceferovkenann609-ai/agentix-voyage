@@ -45,32 +45,32 @@ import { useAuth } from "@/contexts/AuthContext";
 export const Route = createFileRoute("/_authenticated/ai-agents")({
   head: () => ({
     meta: [
-      { title: "AI Agents — Agentix" },
-      { name: "description", content: "Create, manage and monitor your AI workforce." },
-      { property: "og:title", content: "AI Agents — Agentix" },
-      { property: "og:description", content: "Create, manage and monitor your AI workforce." },
+      { title: "AI Agentləri — Agentix" },
+      { name: "description", content: "AI iş qüvvənizi yaradın, idarə edin və izləyin." },
+      { property: "og:title", content: "AI Agentləri — Agentix" },
+      { property: "og:description", content: "AI iş qüvvənizi yaradın, idarə edin və izləyin." },
     ],
   }),
   component: AIAgentsPage,
 });
 
 const navItems = [
-  { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" as const },
-  { key: "agents", label: "AI Agents", icon: Bot, to: "/ai-agents" as const, active: true },
-  { key: "conversations", label: "Conversations", icon: MessageSquare, to: "/conversations" as const },
-  { key: "leads", label: "Leads", icon: Users, to: "/crm" as const },
-  { key: "demos", label: "Demo Requests", icon: CalendarCheck, to: "/demo-requests" as const },
-  { key: "analytics", label: "Analytics", icon: BarChart3, to: "/analytics" as const },
-  { key: "billing", label: "Billing", icon: CreditCard, to: "/billing" as const },
-  { key: "settings", label: "Settings", icon: Settings, to: "/settings" as const },
-  { key: "support", label: "Support", icon: LifeBuoy, to: "/support" as const },
+  { key: "dashboard", label: "İdarəetmə Paneli", icon: LayoutDashboard, to: "/dashboard" as const },
+  { key: "agents", label: "AI Agentləri", icon: Bot, to: "/ai-agents" as const, active: true },
+  { key: "conversations", label: "Söhbətlər", icon: MessageSquare, to: "/conversations" as const },
+  { key: "leads", label: "Müştəri Namizədləri", icon: Users, to: "/crm" as const },
+  { key: "demos", label: "Demo Sorğuları", icon: CalendarCheck, to: "/demo-requests" as const },
+  { key: "analytics", label: "Analitika", icon: BarChart3, to: "/analytics" as const },
+  { key: "billing", label: "Ödənişlər", icon: CreditCard, to: "/billing" as const },
+  { key: "settings", label: "Tənzimləmələr", icon: Settings, to: "/settings" as const },
+  { key: "support", label: "Dəstək", icon: LifeBuoy, to: "/support" as const },
 ];
 
 const stats = [
-  { label: "Active Agents", value: "12", growth: "+2 this week", icon: Bot },
-  { label: "Messages Today", value: "3,842", growth: "+18.2%", icon: MessageSquare },
-  { label: "Automations", value: "47", growth: "+5 new", icon: Zap },
-  { label: "Avg Response Time", value: "1.2s", growth: "-0.3s", icon: Clock },
+  { label: "Aktiv Agentlər", value: "12", growth: "+2 bu həftə", icon: Bot },
+  { label: "Bu günkü mesajlar", value: "3,842", growth: "+18.2%", icon: MessageSquare },
+  { label: "Avtomatlaşdırmalar", value: "47", growth: "+5 yeni", icon: Zap },
+  { label: "Orta cavab müddəti", value: "1.2s", growth: "-0.3s", icon: Clock },
 ];
 
 type Agent = {
@@ -85,14 +85,14 @@ type Agent = {
 };
 
 const agents: Agent[] = [
-  { name: "Customer Support AI", role: "Support", status: "online", description: "Handles tier-1 support, refunds and FAQs 24/7.", performance: 96, messages: "12,482", icon: Headphones, tone: "from-cyan-500/20 to-blue-500/10" },
-  { name: "Sales Assistant", role: "Sales", status: "online", description: "Qualifies leads and books discovery calls automatically.", performance: 92, messages: "5,204", icon: ShoppingBag, tone: "from-emerald-500/20 to-cyan-500/10" },
-  { name: "Appointment Booking AI", role: "Scheduling", status: "online", description: "Books, reschedules and confirms meetings in real time.", performance: 98, messages: "3,910", icon: CalendarClock, tone: "from-blue-500/20 to-indigo-500/10" },
-  { name: "WhatsApp AI", role: "Messaging", status: "online", description: "Conversational agent for WhatsApp Business inbox.", performance: 94, messages: "8,721", icon: MessageCircle, tone: "from-emerald-500/20 to-teal-500/10" },
-  { name: "Voice Receptionist", role: "Voice", status: "training", description: "Answers inbound calls, routes and takes messages.", performance: 88, messages: "1,204", icon: Phone, tone: "from-cyan-400/20 to-blue-500/10" },
-  { name: "Website Chatbot", role: "Web", status: "online", description: "Embedded assistant for your marketing website.", performance: 95, messages: "14,038", icon: Globe2, tone: "from-blue-500/20 to-cyan-500/10" },
-  { name: "Email Assistant", role: "Email", status: "paused", description: "Drafts, triages and replies to inbound email.", performance: 90, messages: "2,617", icon: Mail, tone: "from-indigo-500/20 to-blue-500/10" },
-  { name: "Lead Qualification AI", role: "Growth", status: "online", description: "Scores and enriches inbound leads instantly.", performance: 93, messages: "4,182", icon: Filter, tone: "from-cyan-500/20 to-emerald-500/10" },
+  { name: "Müştəri Dəstək AI", role: "Dəstək", status: "online", description: "24/7 tier-1 dəstək, geri qaytarma və tez-tez verilən sualları idarə edir.", performance: 96, messages: "12,482", icon: Headphones, tone: "from-cyan-500/20 to-blue-500/10" },
+  { name: "Satış Köməkçisi", role: "Satış", status: "online", description: "Namizədləri kvalifikasiya edir və kəşf zənglərini avtomatik təyin edir.", performance: 92, messages: "5,204", icon: ShoppingBag, tone: "from-emerald-500/20 to-cyan-500/10" },
+  { name: "Görüş Rezervasiyası AI", role: "Planlama", status: "online", description: "Real vaxtda görüşləri təyin edir, təxirə salır və təsdiqləyir.", performance: 98, messages: "3,910", icon: CalendarClock, tone: "from-blue-500/20 to-indigo-500/10" },
+  { name: "WhatsApp AI", role: "Mesajlaşma", status: "online", description: "WhatsApp Business gələnlər qutusu üçün söhbət agenti.", performance: 94, messages: "8,721", icon: MessageCircle, tone: "from-emerald-500/20 to-teal-500/10" },
+  { name: "Səsli Resepsiyonist", role: "Səs", status: "training", description: "Daxil olan zənglərə cavab verir, yönləndirir və mesajları qəbul edir.", performance: 88, messages: "1,204", icon: Phone, tone: "from-cyan-400/20 to-blue-500/10" },
+  { name: "Veb Çatbot", role: "Veb", status: "online", description: "Marketinq saytınız üçün quraşdırılmış köməkçi.", performance: 95, messages: "14,038", icon: Globe2, tone: "from-blue-500/20 to-cyan-500/10" },
+  { name: "E-poçt Köməkçisi", role: "E-poçt", status: "paused", description: "E-poçtları hazırlayır, sıralayır və cavab verir.", performance: 90, messages: "2,617", icon: Mail, tone: "from-indigo-500/20 to-blue-500/10" },
+  { name: "Namizəd Kvalifikasiya AI", role: "Böyümə", status: "online", description: "Daxil olan namizədləri anında qiymətləndirir və zənginləşdirir.", performance: 93, messages: "4,182", icon: Filter, tone: "from-cyan-500/20 to-emerald-500/10" },
 ];
 
 const statusStyles: Record<Agent["status"], string> = {
@@ -102,15 +102,15 @@ const statusStyles: Record<Agent["status"], string> = {
 };
 
 const recentTraining = [
-  { name: "Customer Support AI", detail: "Trained on 42 new FAQs", time: "5 min ago" },
-  { name: "Sales Assistant", detail: "Playbook updated", time: "1 hr ago" },
-  { name: "Voice Receptionist", detail: "New voice model deployed", time: "3 hr ago" },
+  { name: "Customer Support AI", detail: "42 yeni FAQ üzərində öyrədildi", time: "5 dəq öncə" },
+  { name: "Sales Assistant", detail: "Playbook yeniləndi", time: "1 saat öncə" },
+  { name: "Voice Receptionist", detail: "Yeni səs modeli tətbiq edildi", time: "3 saat öncə" },
 ];
 
 const knowledgeSources = [
-  { name: "Product Docs", items: "1,284 pages", status: "Synced" },
-  { name: "Help Center", items: "312 articles", status: "Synced" },
-  { name: "CRM Notes", items: "8,910 records", status: "Syncing" },
+  { name: "Məhsul Sənədləri", items: "1,284 səhifə", status: "Sinxronlaşdı" },
+  { name: "Yardım Mərkəzi", items: "312 məqalə", status: "Sinxronlaşdı" },
+  { name: "CRM Qeydləri", items: "8,910 qeyd", status: "Sinxronlaşır" },
 ];
 
 const channels = [
@@ -127,7 +127,7 @@ function AIAgentsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
 
-  const name = user?.email?.split("@")[0] || "Operator";
+  const name = user?.email?.split("@")[0] || "İstifadəçi";
 
   const handleLogout = async () => {
     await signOut();
@@ -167,7 +167,7 @@ function AIAgentsPage() {
                 </div>
                 <div>
                   <div className="text-sm font-bold tracking-tight">Agentix</div>
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Workspace</div>
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">İş Sahəsi</div>
                 </div>
               </div>
               <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white/60 hover:text-white">
@@ -212,7 +212,7 @@ function AIAgentsPage() {
                 className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 transition"
               >
                 <LogOut className="h-4.5 w-4.5" />
-                Logout
+                Çıxış
               </button>
             </div>
           </div>
@@ -224,7 +224,7 @@ function AIAgentsPage() {
               <button
                 onClick={() => setSidebarOpen(true)}
                 className="lg:hidden grid h-9 w-9 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-white"
-                aria-label="Open sidebar"
+                aria-label="Yan paneli aç"
               >
                 <Menu className="h-4.5 w-4.5" />
               </button>
@@ -232,14 +232,14 @@ function AIAgentsPage() {
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
                 <input
-                  placeholder="Search agents…"
+                  placeholder="Agentləri axtar…"
                   className="h-10 w-full rounded-xl border border-white/8 bg-white/[0.03] pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
                 />
               </div>
 
               <div className="ml-auto flex items-center gap-2">
                 <button
-                  aria-label="Notifications"
+                  aria-label="Bildirişlər"
                   className="relative grid h-10 w-10 place-items-center rounded-xl border border-white/8 bg-white/[0.03] text-white/70 hover:text-white hover:border-cyan-400/30 transition"
                 >
                   <Bell className="h-4.5 w-4.5" />
@@ -269,9 +269,9 @@ function AIAgentsPage() {
               >
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-1 text-[11px] font-medium text-cyan-300">
-                    <Bot className="h-3 w-3" /> Workforce
+                    <Bot className="h-3 w-3" /> İş Qüvvəsi
                   </div>
-                  <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">AI Agents</h1>
+                  <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">AI Agentləri</h1>
                   <p className="mt-1 text-white/60 max-w-xl">
                     Create, manage and monitor your AI workforce.
                   </p>
@@ -281,10 +281,10 @@ function AIAgentsPage() {
                     onClick={() => setCreateOpen(true)}
                     className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <Plus className="h-4 w-4" /> Create Agent
+                    <Plus className="h-4 w-4" /> Agent Yarat
                   </button>
                   <button className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/[0.06] hover:border-white/20 transition">
-                    <Upload className="h-4 w-4" /> Import Agent
+                    <Upload className="h-4 w-4" /> Agent İdxal Et
                   </button>
                 </div>
               </motion.section>
@@ -324,10 +324,10 @@ function AIAgentsPage() {
               <section>
                 <div className="mb-4 flex items-end justify-between">
                   <div>
-                    <h2 className="text-lg font-bold tracking-tight">Your agents</h2>
-                    <p className="text-xs text-white/50">A live view of every AI employee</p>
+                    <h2 className="text-lg font-bold tracking-tight">Sizin agentləriniz</h2>
+                    <p className="text-xs text-white/50">Hər AI işçinin canlı görünüşü</p>
                   </div>
-                  <button className="text-xs font-medium text-cyan-300 hover:text-cyan-200">Manage roles</button>
+                  <button className="text-xs font-medium text-cyan-300 hover:text-cyan-200">Rolları idarə et</button>
                 </div>
 
                 <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -361,7 +361,7 @@ function AIAgentsPage() {
 
                           <div className="mt-4">
                             <div className="flex items-center justify-between text-[11px] text-white/50">
-                              <span>Performance</span>
+                              <span>Performans</span>
                               <span className="text-cyan-300 font-medium">{a.performance}%</span>
                             </div>
                             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/5">
@@ -376,14 +376,14 @@ function AIAgentsPage() {
 
                           <div className="mt-4 flex items-center justify-between">
                             <div className="text-[11px] text-white/50">
-                              <span className="text-white/80 font-medium">{a.messages}</span> messages
+                              <span className="text-white/80 font-medium">{a.messages}</span> mesaj
                             </div>
                             <div className="flex items-center gap-2">
                               <button className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-white/70 hover:text-white hover:border-white/20 transition">
-                                <Pencil className="h-3 w-3" /> Edit
+                                <Pencil className="h-3 w-3" /> Düzəlt
                               </button>
                               <button className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 px-2.5 py-1.5 text-[11px] font-semibold text-[#07090C] hover:shadow-[0_0_20px_-4px_rgba(34,211,238,0.7)] transition">
-                                Open <ArrowUpRight className="h-3 w-3" />
+                                Aç <ArrowUpRight className="h-3 w-3" />
                               </button>
                             </div>
                           </div>
@@ -400,7 +400,7 @@ function AIAgentsPage() {
               <div className="sticky top-40 space-y-6">
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold">Recent training</h3>
+                    <h3 className="text-sm font-semibold">Son öyrətmə</h3>
                     <Activity className="h-4 w-4 text-cyan-300" />
                   </div>
                   <ul className="mt-4 space-y-3">
@@ -416,7 +416,7 @@ function AIAgentsPage() {
 
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold">Knowledge base</h3>
+                    <h3 className="text-sm font-semibold">Bilik bazası</h3>
                     <BookOpen className="h-4 w-4 text-cyan-300" />
                   </div>
                   <ul className="mt-4 space-y-2">
@@ -431,7 +431,7 @@ function AIAgentsPage() {
                             <div className="text-[10px] text-white/50">{k.items}</div>
                           </div>
                         </div>
-                        <span className={`text-[10px] font-medium ${k.status === "Synced" ? "text-emerald-300" : "text-cyan-300"}`}>
+                        <span className={`text-[10px] font-medium ${k.status === "Sinxronlaşdı" ? "text-emerald-300" : "text-cyan-300"}`}>
                           {k.status}
                         </span>
                       </li>
@@ -441,9 +441,9 @@ function AIAgentsPage() {
 
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold">Connected channels</h3>
+                    <h3 className="text-sm font-semibold">Qoşulmuş kanallar</h3>
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
-                      <Circle className="h-1.5 w-1.5 fill-current" /> All online
+                      <Circle className="h-1.5 w-1.5 fill-current" /> Hamısı onlayn
                     </span>
                   </div>
                   <ul className="mt-4 space-y-2">
@@ -496,40 +496,40 @@ function AIAgentsPage() {
               <div className="relative flex items-start justify-between px-6 pt-6 sm:px-8 sm:pt-8">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-1 text-[11px] font-medium text-cyan-300">
-                    <Sparkles className="h-3 w-3" /> New agent
+                    <Sparkles className="h-3 w-3" /> Yeni agent
                   </div>
-                  <h2 className="mt-3 text-2xl font-bold tracking-tight">Create AI Agent</h2>
+                  <h2 className="mt-3 text-2xl font-bold tracking-tight">AI Agent Yarat</h2>
                   <p className="mt-1 text-sm text-white/60">Configure a new AI employee for your workspace.</p>
                 </div>
                 <button
                   onClick={() => setCreateOpen(false)}
                   className="grid h-9 w-9 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/60 hover:text-white"
-                  aria-label="Close"
+                  aria-label="Bağla"
                 >
                   <X className="h-4 w-4" />
                 </button>
               </div>
 
               <div className="relative grid gap-4 px-6 py-6 sm:grid-cols-2 sm:px-8">
-                <Field label="Agent Name" placeholder="e.g. Nova Support" />
-                <Field label="Role" placeholder="e.g. Customer Support" />
-                <SelectField label="Language" options={["Azerbaijani", "English", "Turkish", "Russian", "Arabic"]} />
+                <Field label="Agent Adı" placeholder="məs. Nova Dəstək" />
+                <Field label="Rol" placeholder="məs. Müştəri Dəstəyi" />
+                <SelectField label="Dil" options={["Azerbaijani", "English", "Turkish", "Russian", "Arabic"]} />
                 <SelectField label="Model" options={["Agentix Pro", "Agentix Lite", "GPT-4o", "Claude 3.5 Sonnet"]} />
                 <div className="sm:col-span-2">
-                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Description</label>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Təsvir</label>
                   <textarea
                     rows={3}
-                    placeholder="Describe what this agent will handle…"
+                    placeholder="Bu agentin nə edəcəyini təsvir edin…"
                     className="mt-1.5 w-full resize-none rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Knowledge source</label>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Bilik mənbəyi</label>
                   <div className="mt-1.5 grid gap-2 sm:grid-cols-3">
                     {[
-                      { label: "Upload files", icon: Upload },
-                      { label: "Website URL", icon: Globe2 },
-                      { label: "Existing base", icon: Database },
+                      { label: "Faylları yüklə", icon: Upload },
+                      { label: "Sayt URL-i", icon: Globe2 },
+                      { label: "Mövcud baza", icon: Database },
                     ].map((k) => {
                       const Icon = k.icon;
                       return (
@@ -548,20 +548,20 @@ function AIAgentsPage() {
 
               <div className="relative flex items-center justify-between gap-3 border-t border-white/8 bg-white/[0.02] px-6 py-4 sm:px-8">
                 <div className="hidden sm:flex items-center gap-2 text-[11px] text-white/50">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" /> Deploys instantly across all channels
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" /> Bütün kanallara dərhal tətbiq olunur
                 </div>
                 <div className="ml-auto flex items-center gap-2">
                   <button
                     onClick={() => setCreateOpen(false)}
                     className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/[0.06] transition"
                   >
-                    Cancel
+                    Ləğv et
                   </button>
                   <button
                     onClick={() => setCreateOpen(false)}
                     className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition"
                   >
-                    <Sparkles className="h-4 w-4" /> Create Agent
+                    <Sparkles className="h-4 w-4" /> Agent Yarat
                   </button>
                 </div>
               </div>
