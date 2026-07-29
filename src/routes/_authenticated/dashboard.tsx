@@ -33,10 +33,10 @@ import { useAuth } from "@/contexts/AuthContext";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Agentix" },
-      { name: "description", content: "Manage all your AI operations from one intelligent workspace." },
-      { property: "og:title", content: "Dashboard — Agentix" },
-      { property: "og:description", content: "Manage all your AI operations from one intelligent workspace." },
+      { title: "İdarəetmə Paneli — Agentix" },
+      { name: "description", content: "Bütün AI əməliyyatlarınızı vahid ağıllı iş sahəsindən idarə edin." },
+      { property: "og:title", content: "İdarəetmə Paneli — Agentix" },
+      { property: "og:description", content: "Bütün AI əməliyyatlarınızı vahid ağıllı iş sahəsindən idarə edin." },
     ],
   }),
   component: DashboardPage,
@@ -55,32 +55,32 @@ const navItems = [
 ];
 
 const stats = [
-  { label: "Active AI Agents", value: "12", growth: "+3 this week", icon: Bot, tone: "from-cyan-500/20 to-blue-500/10" },
+  { label: "Aktiv AI Agentləri", value: "12", growth: "+3 bu həftə", icon: Bot, tone: "from-cyan-500/20 to-blue-500/10" },
   { label: "Söhbətlər", value: "8,429", growth: "+12.4%", icon: MessageSquare, tone: "from-emerald-500/20 to-cyan-500/10" },
-  { label: "Generated Leads", value: "1,284", growth: "+8.2%", icon: Users, tone: "from-blue-500/20 to-indigo-500/10" },
-  { label: "Automations Running", value: "47", growth: "+5 new", icon: Zap, tone: "from-cyan-400/20 to-emerald-500/10" },
+  { label: "Cəlb Edilmiş Namizədlər", value: "1,284", growth: "+8.2%", icon: Users, tone: "from-blue-500/20 to-indigo-500/10" },
+  { label: "İşləyən Avtomatlaşdırmalar", value: "47", growth: "+5 yeni", icon: Zap, tone: "from-cyan-400/20 to-emerald-500/10" },
 ];
 
 const quickActions = [
-  { label: "Create AI Agent", desc: "Deploy a new agent in minutes", icon: Plus },
-  { label: "Upload Knowledge Base", desc: "Feed docs, PDFs, or URLs", icon: Upload },
-  { label: "Connect Website", desc: "Embed the widget on your site", icon: Globe },
-  { label: "Invite Team Member", desc: "Collaborate with your team", icon: UserPlus },
+  { label: "AI Agent Yarat", desc: "Yeni agenti dəqiqələr ərzində tətbiq et", icon: Plus },
+  { label: "Bilik Bazası Yüklə", desc: "Sənədləri, PDF-ləri və ya URL-ləri əlavə et", icon: Upload },
+  { label: "Veb saytı Qoş", desc: "Vidgeti saytınıza yerləşdirin", icon: Globe },
+  { label: "Komanda Üzvü Dəvət Et", desc: "Komandanızla əməkdaşlıq edin", icon: UserPlus },
 ];
 
 const activity = [
-  { title: "Support Agent handled 42 chats", time: "2 min ago", meta: "AI Chatbot · Tier 1 support", icon: MessageSquare, dot: "bg-cyan-400" },
-  { title: "New lead captured — Neuralift LLC", time: "18 min ago", meta: "Lead Generation · Enterprise", icon: Users, dot: "bg-emerald-400" },
-  { title: "Voice agent completed 12 outbound calls", time: "1 hr ago", meta: "Voice AI · Sales campaign", icon: Activity, dot: "bg-blue-400" },
-  { title: "Automation 'CRM sync' completed", time: "3 hr ago", meta: "Workflow · 214 records updated", icon: Zap, dot: "bg-cyan-400" },
-  { title: "Demo booked — Vertex Group", time: "Yesterday", meta: "Demo Request · Follow-up scheduled", icon: CalendarCheck, dot: "bg-emerald-400" },
+  { title: "Dəstək agenti 42 söhbət idarə etdi", time: "2 dəq öncə", meta: "AI Çatbot · Tier 1 dəstək", icon: MessageSquare, dot: "bg-cyan-400" },
+  { title: "Yeni namizəd cəlb edildi — Neuralift LLC", time: "18 dəq öncə", meta: "Namizəd cəlbi · Enterprise", icon: Users, dot: "bg-emerald-400" },
+  { title: "Səsli agent 12 çıxış zəngi tamamladı", time: "1 saat öncə", meta: "Səsli AI · Satış kampaniyası", icon: Activity, dot: "bg-blue-400" },
+  { title: "'CRM sinxron' avtomatlaşdırması tamamlandı", time: "3 saat öncə", meta: "İş axını · 214 qeyd yeniləndi", icon: Zap, dot: "bg-cyan-400" },
+  { title: "Demo sifariş edildi — Vertex Group", time: "Dünən", meta: "Demo sorğusu · İzləmə planlaşdırılıb", icon: CalendarCheck, dot: "bg-emerald-400" },
 ];
 
 const systems = [
-  { name: "OpenAI", status: "Operational" },
-  { name: "Supabase", status: "Operational" },
-  { name: "Website", status: "Operational" },
-  { name: "Automation", status: "Operational" },
+  { name: "OpenAI", status: "İşləyir" },
+  { name: "Supabase", status: "İşləyir" },
+  { name: "Website", status: "İşləyir" },
+  { name: "Automation", status: "İşləyir" },
 ];
 
 function DashboardPage() {
@@ -198,7 +198,7 @@ function DashboardPage() {
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
                 <input
-                  placeholder="Search agents, conversations, leads…"
+                  placeholder="Agent, söhbət və ya namizəd axtar…"
                   className="h-10 w-full rounded-xl border border-white/8 bg-white/[0.03] pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
                 />
               </div>
@@ -239,17 +239,17 @@ function DashboardPage() {
                 <div className="relative">
                   <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-1 text-[11px] font-medium text-cyan-300">
                     <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                    All systems operational
+                    Bütün sistemlər fəaliyyətdədir
                   </div>
                   <h1 className="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">
-                    Welcome back, <span className="bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent capitalize">{name}</span>
+                    Yenidən xoş gəldiniz, <span className="bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent capitalize">{name}</span>
                   </h1>
                   <p className="mt-2 text-white/60 max-w-xl">
                     Manage all your AI operations from one intelligent workspace.
                   </p>
                   <div className="mt-6 flex flex-wrap gap-3">
                     <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]">
-                      <Plus className="h-4 w-4" /> Create AI Agent
+                      <Plus className="h-4 w-4" /> AI Agent Yarat
                     </button>
                     <Link
                       to="/book-demo"
@@ -296,8 +296,8 @@ function DashboardPage() {
               <section>
                 <div className="mb-4 flex items-end justify-between">
                   <div>
-                    <h2 className="text-lg font-bold tracking-tight">Quick actions</h2>
-                    <p className="text-xs text-white/50">Jump into the most common tasks</p>
+                    <h2 className="text-lg font-bold tracking-tight">Sürətli əməliyyatlar</h2>
+                    <p className="text-xs text-white/50">Ən çox istifadə olunan tapşırıqlara keç</p>
                   </div>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -328,10 +328,10 @@ function DashboardPage() {
               <section>
                 <div className="mb-4 flex items-end justify-between">
                   <div>
-                    <h2 className="text-lg font-bold tracking-tight">Recent activity</h2>
-                    <p className="text-xs text-white/50">Live feed across all your agents</p>
+                    <h2 className="text-lg font-bold tracking-tight">Son fəaliyyət</h2>
+                    <p className="text-xs text-white/50">Bütün agentləriniz üzrə canlı axın</p>
                   </div>
-                  <button className="text-xs font-medium text-cyan-300 hover:text-cyan-200">View all</button>
+                  <button className="text-xs font-medium text-cyan-300 hover:text-cyan-200">Hamısına bax</button>
                 </div>
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-2">
                   <ol className="relative">
@@ -372,7 +372,7 @@ function DashboardPage() {
               <div className="sticky top-40 space-y-6">
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold">System status</h3>
+                    <h3 className="text-sm font-semibold">Sistem statusu</h3>
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
                       <Circle className="h-1.5 w-1.5 fill-current" /> All online
                     </span>
@@ -397,9 +397,9 @@ function DashboardPage() {
                   <div className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
                   <div className="relative">
                     <CheckCircle2 className="h-5 w-5 text-cyan-300" />
-                    <h3 className="mt-3 text-sm font-semibold">Performance is up 24%</h3>
+                    <h3 className="mt-3 text-sm font-semibold">Performans 24% artıb</h3>
                     <p className="mt-1 text-xs text-white/60">
-                      Your agents resolved conversations 2.3× faster this week. Keep the momentum going.
+                      Agentləriniz bu həftə söhbətləri 2.3× daha sürətli həll etdi. Bu tempi saxlayın.
                     </p>
                     <button className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-cyan-300 hover:text-cyan-200">
                       View report <ArrowUpRight className="h-3.5 w-3.5" />
