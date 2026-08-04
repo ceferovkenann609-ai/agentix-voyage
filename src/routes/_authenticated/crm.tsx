@@ -808,27 +808,32 @@ function CRMPage() {
                   </button>
                 </div>
                 <div className="p-5 grid gap-3 sm:grid-cols-2">
-                  <Field label="Full name" placeholder="Aylin Mehdiyeva" />
-                  <Field label="Company" placeholder="Nova Logistics" />
-                  <Field label="Email" placeholder="lead@company.com" />
-                  <Field label="Phone" placeholder="+994 …" />
-                  <Field label="Assigned AI" placeholder="Sales Assistant" />
-                  <Field label="Status" placeholder="New" />
+                  <Field label="Ad Soyad" placeholder="Aylin Mehdiyeva" value={form.name} onChange={(v) => setForm((f) => ({ ...f, name: v }))} />
+                  <Field label="Şirkət" placeholder="Nova Logistics" value={form.company} onChange={(v) => setForm((f) => ({ ...f, company: v }))} />
+                  <Field label="E-poçt" placeholder="lead@company.com" value={form.email} onChange={(v) => setForm((f) => ({ ...f, email: v }))} />
+                  <Field label="Telefon" placeholder="+994 …" value={form.phone} onChange={(v) => setForm((f) => ({ ...f, phone: v }))} />
+                  <Field label="Təyin olunmuş AI" placeholder="Sales Assistant" value={form.agent} onChange={(v) => setForm((f) => ({ ...f, agent: v }))} />
+                  <Field label="Sövdələşmə dəyəri" placeholder="18400" value={form.value} onChange={(v) => setForm((f) => ({ ...f, value: v }))} />
+                  {formError && (
+                    <p className="sm:col-span-2 rounded-xl border border-rose-400/30 bg-rose-400/10 p-3 text-xs text-rose-200">{formError}</p>
+                  )}
                 </div>
                 <div className="flex items-center justify-end gap-3 border-t border-white/5 px-5 py-4">
                   <button
                     onClick={() => setNewLeadOpen(false)}
                     className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-white/80 hover:bg-white/[0.06]"
                   >
-                    Cancel
+                    Ləğv et
                   </button>
                   <button
-                    onClick={() => setNewLeadOpen(false)}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_25px_-6px_rgba(34,211,238,0.7)] hover:shadow-[0_0_35px_-6px_rgba(34,211,238,0.9)] transition"
+                    onClick={() => void handleCreateLead()}
+                    disabled={createLead.isPending}
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_25px_-6px_rgba(34,211,238,0.7)] hover:shadow-[0_0_35px_-6px_rgba(34,211,238,0.9)] transition disabled:opacity-60"
                   >
-                    <Plus className="h-4 w-4" /> Create lead
+                    <Plus className="h-4 w-4" /> {createLead.isPending ? "Yaradılır…" : "Namizəd yarat"}
                   </button>
                 </div>
+
               </div>
             </motion.div>
           </>
