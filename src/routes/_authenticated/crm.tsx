@@ -553,7 +553,13 @@ function CRMPage() {
                       {filteredLeads.length === 0 && (
                         <tr>
                           <td colSpan={8} className="px-5 py-12 text-center text-sm text-white/50">
-                            No leads match your filters.
+                            {leadsQuery.isLoading
+                              ? "Namizədlər yüklənir…"
+                              : leadsQuery.error
+                                ? describeError(leadsQuery.error, "crm:load-leads")
+                                : leads.length === 0
+                                  ? "Hələ namizəd yoxdur — ilk namizədi yaradın."
+                                  : "Filtrlərə uyğun namizəd tapılmadı."}
                           </td>
                         </tr>
                       )}
