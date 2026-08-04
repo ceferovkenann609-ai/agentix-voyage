@@ -353,7 +353,7 @@ function DashboardPage() {
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="text-sm font-medium truncate">{a.title}</div>
-                            <div className="mt-0.5 text-xs text-white/50 truncate">{a.detail ?? a.type}</div>
+                            <div className="mt-0.5 text-xs text-white/50 truncate">Müştəri namizədi fəaliyyəti</div>
                           </div>
                           <div className="text-xs text-white/40 shrink-0">{formatRelative(a.created_at)}</div>
                         </motion.li>
