@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -38,6 +38,8 @@ import {
   Save,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useProfile, useUpdateProfile } from "@/lib/profile";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
@@ -321,12 +323,18 @@ function Field({
   label,
   placeholder,
   defaultValue,
+  value,
+  onChange,
+  disabled,
   type = "text",
   suffix,
 }: {
   label: string;
   placeholder?: string;
   defaultValue?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  disabled?: boolean;
   type?: string;
   suffix?: React.ReactNode;
 }) {
@@ -337,7 +345,8 @@ function Field({
         <input
           type={type}
           placeholder={placeholder}
-          defaultValue={defaultValue}
+          {...(value !== undefined ? { value, onChange: (e) => onChange?.(e.target.value) } : { defaultValue })}
+          disabled={disabled}
           className="h-10 w-full rounded-xl border border-white/8 bg-white/[0.03] px-3 pr-10 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
         />
         {suffix && <div className="absolute right-2 top-1/2 -translate-y-1/2">{suffix}</div>}
@@ -346,14 +355,36 @@ function Field({
   );
 }
 
-function SaveButton() {
+function SaveButton({
+  onSave,
+  onCancel,
+  saving,
+  message,
+}: {
+  onSave?: () => void;
+  onCancel?: () => void;
+  saving?: boolean;
+  message?: { tone: "ok" | "error"; text: string } | null;
+}) {
   return (
     <>
-      <button className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold hover:bg-white/[0.06] transition">
-        Cancel
+      {message && (
+        <span className={`mr-auto text-xs ${message.tone === "ok" ? "text-emerald-300" : "text-rose-300"}`}>
+          {message.text}
+        </span>
+      )}
+      <button
+        onClick={onCancel}
+        className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold hover:bg-white/[0.06] transition"
+      >
+        Ləğv et
       </button>
-      <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:scale-[1.02] active:scale-[0.98] transition">
-        <Save className="h-4 w-4" /> Save changes
+      <button
+        onClick={onSave}
+        disabled={saving}
+        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:scale-[1.02] active:scale-[0.98] transition disabled:opacity-60"
+      >
+        <Save className="h-4 w-4" /> {saving ? "Yadda saxlanılır…" : "Dəyişiklikləri yadda saxla"}
       </button>
     </>
   );
@@ -378,25 +409,61 @@ function Toggle({ defaultOn = false }: { defaultOn?: boolean }) {
 }
 
 function ProfileSection({ name, email }: { name: string; email: string }) {
+  const { user } = useAuth();
+  const profileQuery = useProfile(user?.id);
+  const updateProfile = useUpdateProfile(user?.id);
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    if (profileQuery.data) {
+      setFullName(profileQuery.data.full_name ?? "");
+      setPhone(profileQuery.data.phone ?? "");
+    }
+  }, [profileQuery.data]);
+
+  const reset = () => {
+    setFullName(profileQuery.data?.full_name ?? "");
+    setPhone(profileQuery.data?.phone ?? "");
+    setMessage(null);
+  };
+
+  const save = async () => {
+    setMessage(null);
+    if (!fullName.trim()) {
+      setMessage({ tone: "error", text: "Ad Soyad boş ola bilməz." });
+      return;
+    }
+    try {
+      await updateProfile.mutateAsync({ full_name: fullName.trim(), phone: phone.trim() || null });
+      setMessage({ tone: "ok", text: "Profil yeniləndi." });
+    } catch (error) {
+      console.error("[settings] profile update failed", error);
+      setMessage({ tone: "error", text: "Profil yenilənmədi. Yenidən cəhd edin." });
+    }
+  };
+
+  const initials = (fullName || name).slice(0, 2);
+
   return (
-    <Card title="Profile" desc="Your personal information visible across Agentix." footer={<SaveButton />}>
+    <Card
+      title="Profil"
+      desc="Agentix daxilində görünən şəxsi məlumatlarınız."
+      footer={<SaveButton onSave={() => void save()} onCancel={reset} saving={updateProfile.isPending} message={message} />}
+    >
       <div className="flex flex-col sm:flex-row items-start gap-6">
         <div className="relative">
           <div className="h-24 w-24 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 grid place-items-center text-2xl font-bold uppercase shadow-[0_0_30px_-5px_rgba(34,211,238,0.5)]">
-            {name.slice(0, 2)}
+            {initials}
           </div>
-          <button className="absolute -bottom-2 -right-2 grid h-8 w-8 place-items-center rounded-xl border border-white/10 bg-[#0B0F14] text-cyan-300 hover:border-cyan-400/40 transition">
-            <Camera className="h-4 w-4" />
-          </button>
         </div>
         <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field label="First name" defaultValue={name} />
-          <Field label="Last name" defaultValue="Doe" />
-          <Field label="Email" defaultValue={email} type="email" />
-          <Field label="Phone" defaultValue="+994 55 555 55 55" />
           <div className="sm:col-span-2">
-            <Field label="Job title" defaultValue="AI Operations Manager" />
+            <Field label="Ad Soyad" value={fullName} onChange={setFullName} placeholder="Aylin Mehdiyeva" />
           </div>
+          <Field label="E-poçt" value={email} onChange={() => {}} type="email" disabled />
+          <Field label="Telefon" value={phone} onChange={setPhone} placeholder="+994 55 555 55 55" />
         </div>
       </div>
     </Card>
@@ -404,17 +471,46 @@ function ProfileSection({ name, email }: { name: string; email: string }) {
 }
 
 function CompanySection() {
+  const { user } = useAuth();
+  const profileQuery = useProfile(user?.id);
+  const updateProfile = useUpdateProfile(user?.id);
+  const [company, setCompany] = useState("");
+  const [message, setMessage] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    if (profileQuery.data) setCompany(profileQuery.data.company ?? "");
+  }, [profileQuery.data]);
+
+  const save = async () => {
+    setMessage(null);
+    try {
+      await updateProfile.mutateAsync({ company: company.trim() || null });
+      setMessage({ tone: "ok", text: "Şirkət məlumatı yeniləndi." });
+    } catch (error) {
+      console.error("[settings] company update failed", error);
+      setMessage({ tone: "error", text: "Məlumat yenilənmədi. Yenidən cəhd edin." });
+    }
+  };
+
   return (
-    <Card title="Company" desc="Organization details used across invoices and integrations." footer={<SaveButton />}>
+    <Card
+      title="Şirkət"
+      desc="Hesabınıza bağlı təşkilat məlumatları."
+      footer={
+        <SaveButton
+          onSave={() => void save()}
+          onCancel={() => {
+            setCompany(profileQuery.data?.company ?? "");
+            setMessage(null);
+          }}
+          saving={updateProfile.isPending}
+          message={message}
+        />
+      }
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Field label="Company name" defaultValue="Agentix Labs" />
-        <Field label="Website" defaultValue="https://agentix.ai" />
-        <Field label="Industry" defaultValue="AI Automation" />
-        <Field label="Company size" defaultValue="11 — 50" />
-        <Field label="Country" defaultValue="Azerbaijan" />
-        <Field label="VAT / Tax ID" defaultValue="AZ-1234567890" />
         <div className="sm:col-span-2">
-          <Field label="Billing address" defaultValue="28 May Street 12, Baku, Azerbaijan" />
+          <Field label="Şirkət adı" value={company} onChange={setCompany} placeholder="Agentix Labs" />
         </div>
       </div>
     </Card>
@@ -423,25 +519,71 @@ function CompanySection() {
 
 function PasswordSection() {
   const [show, setShow] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
+
+  const save = async () => {
+    setMessage(null);
+    if (password.length < 12) {
+      setMessage({ tone: "error", text: "Şifrə ən azı 12 simvol olmalıdır." });
+      return;
+    }
+    if (password !== confirm) {
+      setMessage({ tone: "error", text: "Şifrələr uyğun gəlmir." });
+      return;
+    }
+    setSaving(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password });
+      if (error) throw error;
+      setPassword("");
+      setConfirm("");
+      setMessage({ tone: "ok", text: "Şifrə yeniləndi." });
+    } catch (error) {
+      console.error("[settings] password update failed", error);
+      setMessage({ tone: "error", text: "Şifrə yenilənmədi. Yenidən cəhd edin." });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
-    <Card title="Password" desc="Use a strong password with at least 12 characters." footer={<SaveButton />}>
+    <Card
+      title="Şifrə"
+      desc="Ən azı 12 simvoldan ibarət güclü şifrə istifadə edin."
+      footer={
+        <SaveButton
+          onSave={() => void save()}
+          onCancel={() => {
+            setPassword("");
+            setConfirm("");
+            setMessage(null);
+          }}
+          saving={saving}
+          message={message}
+        />
+      }
+    >
       <div className="grid grid-cols-1 gap-4 max-w-lg">
         <Field
-          label="Current password"
+          label="Yeni şifrə"
           type={show ? "text" : "password"}
-          placeholder="••••••••••"
+          value={password}
+          onChange={setPassword}
+          placeholder="Ən azı 12 simvol"
           suffix={
             <button onClick={() => setShow(!show)} className="text-white/50 hover:text-white transition">
               {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           }
         />
-        <Field label="New password" type="password" placeholder="At least 12 characters" />
-        <Field label="Confirm new password" type="password" placeholder="Repeat new password" />
+        <Field label="Yeni şifrəni təkrarlayın" type="password" value={confirm} onChange={setConfirm} placeholder="Şifrəni təkrar yazın" />
         <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs text-white/60">
-          <div className="font-semibold text-white/80 mb-2">Password strength</div>
+          <div className="font-semibold text-white/80 mb-2">Şifrə tələbləri</div>
           <ul className="space-y-1">
-            {["At least 12 characters", "One uppercase letter", "One number", "One symbol"].map((r) => (
+            {["Ən azı 12 simvol", "Bir böyük hərf", "Bir rəqəm", "Bir simvol"].map((r) => (
               <li key={r} className="flex items-center gap-2">
                 <Check className="h-3.5 w-3.5 text-emerald-300" /> {r}
               </li>
