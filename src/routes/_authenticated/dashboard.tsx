@@ -29,6 +29,8 @@ import {
   Circle,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAgentixMetrics } from "@/lib/metrics";
+import { useRecentActivities, formatMoney, formatRelative } from "@/lib/crm";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -54,26 +56,11 @@ const navItems = [
   { key: "support", label: "Dəstək", icon: LifeBuoy, to: "/support" as const },
 ];
 
-const stats = [
-  { label: "Aktiv AI Agentləri", value: "12", growth: "+3 bu həftə", icon: Bot, tone: "from-cyan-500/20 to-blue-500/10" },
-  { label: "Söhbətlər", value: "8,429", growth: "+12.4%", icon: MessageSquare, tone: "from-emerald-500/20 to-cyan-500/10" },
-  { label: "Cəlb Edilmiş Namizədlər", value: "1,284", growth: "+8.2%", icon: Users, tone: "from-blue-500/20 to-indigo-500/10" },
-  { label: "İşləyən Avtomatlaşdırmalar", value: "47", growth: "+5 yeni", icon: Zap, tone: "from-cyan-400/20 to-emerald-500/10" },
-];
-
 const quickActions = [
   { label: "AI Agent Yarat", desc: "Yeni agenti dəqiqələr ərzində tətbiq et", icon: Plus },
   { label: "Bilik Bazası Yüklə", desc: "Sənədləri, PDF-ləri və ya URL-ləri əlavə et", icon: Upload },
   { label: "Veb saytı Qoş", desc: "Vidgeti saytınıza yerləşdirin", icon: Globe },
   { label: "Komanda Üzvü Dəvət Et", desc: "Komandanızla əməkdaşlıq edin", icon: UserPlus },
-];
-
-const activity = [
-  { title: "Dəstək agenti 42 söhbət idarə etdi", time: "2 dəq öncə", meta: "AI Çatbot · Tier 1 dəstək", icon: MessageSquare, dot: "bg-cyan-400" },
-  { title: "Yeni namizəd cəlb edildi — Neuralift LLC", time: "18 dəq öncə", meta: "Namizəd cəlbi · Enterprise", icon: Users, dot: "bg-emerald-400" },
-  { title: "Səsli agent 12 çıxış zəngi tamamladı", time: "1 saat öncə", meta: "Səsli AI · Satış kampaniyası", icon: Activity, dot: "bg-blue-400" },
-  { title: "'CRM sinxron' avtomatlaşdırması tamamlandı", time: "3 saat öncə", meta: "İş axını · 214 qeyd yeniləndi", icon: Zap, dot: "bg-cyan-400" },
-  { title: "Demo sifariş edildi — Vertex Group", time: "Dünən", meta: "Demo sorğusu · İzləmə planlaşdırılıb", icon: CalendarCheck, dot: "bg-emerald-400" },
 ];
 
 const systems = [
@@ -87,6 +74,16 @@ function DashboardPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const metricsQuery = useAgentixMetrics(user?.id);
+  const activityQuery = useRecentActivities(user?.id);
+  const m = metricsQuery.data;
+  const activity = activityQuery.data ?? [];
+  const stats = [
+    { label: "Müştəri Namizədləri", value: String(m?.leadsTotal ?? 0), growth: `${m?.leadsQualified ?? 0} kvalifikasiyalı`, icon: Users, tone: "from-cyan-500/20 to-blue-500/10" },
+    { label: "Demo Sorğuları", value: String(m?.demoRequests ?? 0), growth: `${m?.contactRequests ?? 0} əlaqə`, icon: CalendarCheck, tone: "from-emerald-500/20 to-cyan-500/10" },
+    { label: "AI Söhbət Mesajları", value: String(m?.chatMessages ?? 0), growth: "canlı", icon: MessageSquare, tone: "from-blue-500/20 to-indigo-500/10" },
+    { label: "Satış Boru Kəməri", value: formatMoney(m?.pipelineValue ?? 0), growth: `${m?.conversionRate ?? 0}% konversiya`, icon: Zap, tone: "from-cyan-400/20 to-emerald-500/10" },
+  ];
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
 
@@ -336,17 +333,17 @@ function DashboardPage() {
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-2">
                   <ol className="relative">
                     {activity.map((a, i) => {
-                      const Icon = a.icon;
+                      const Icon = Activity;
                       return (
                         <motion.li
-                          key={i}
+                          key={a.id}
                           initial={{ opacity: 0, x: -6 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.35, delay: i * 0.05 }}
                           className="relative flex items-start gap-4 rounded-xl p-4 hover:bg-white/[0.03] transition"
                         >
                           <div className="relative mt-0.5">
-                            <div className={`h-2.5 w-2.5 rounded-full ${a.dot} shadow-[0_0_10px_currentColor]`} />
+                            <div className="h-2.5 w-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_currentColor]" />
                             {i !== activity.length - 1 && (
                               <div className="absolute left-1/2 top-4 -translate-x-1/2 h-10 w-px bg-gradient-to-b from-white/10 to-transparent" />
                             )}
@@ -356,12 +353,17 @@ function DashboardPage() {
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="text-sm font-medium truncate">{a.title}</div>
-                            <div className="mt-0.5 text-xs text-white/50 truncate">{a.meta}</div>
+                            <div className="mt-0.5 text-xs text-white/50 truncate">Müştəri namizədi fəaliyyəti</div>
                           </div>
-                          <div className="text-xs text-white/40 shrink-0">{a.time}</div>
+                          <div className="text-xs text-white/40 shrink-0">{formatRelative(a.created_at)}</div>
                         </motion.li>
                       );
                     })}
+                    {activity.length === 0 && (
+                      <li className="p-6 text-center text-sm text-white/50">
+                        {activityQuery.isLoading ? "Yüklənir…" : "Hələ fəaliyyət qeydi yoxdur."}
+                      </li>
+                    )}
                   </ol>
                 </div>
               </section>

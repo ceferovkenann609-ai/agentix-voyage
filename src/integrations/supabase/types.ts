@@ -89,6 +89,92 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_lead_activities: {
+        Row: {
+          created_at: string
+          id: string
+          lead_id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lead_id: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lead_id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_leads: {
+        Row: {
+          agent: string | null
+          archived: boolean
+          company: string | null
+          created_at: string
+          email: string | null
+          id: string
+          last_activity_at: string
+          name: string
+          notes: string | null
+          phone: string | null
+          status: string
+          tags: string[]
+          updated_at: string
+          user_id: string
+          value: number
+        }
+        Insert: {
+          agent?: string | null
+          archived?: boolean
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          last_activity_at?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          user_id: string
+          value?: number
+        }
+        Update: {
+          agent?: string | null
+          archived?: boolean
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          last_activity_at?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          user_id?: string
+          value?: number
+        }
+        Relationships: []
+      }
       demo_bookings: {
         Row: {
           company: string | null
