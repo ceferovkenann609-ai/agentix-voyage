@@ -871,12 +871,24 @@ function Row({
   );
 }
 
-function Field({ label, placeholder }: { label: string; placeholder: string }) {
+function Field({
+  label,
+  placeholder,
+  value,
+  onChange,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
   return (
     <label className="block">
       <div className="text-[10px] uppercase tracking-[0.18em] text-white/40 mb-1.5">{label}</div>
       <input
         placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         className="h-10 w-full rounded-xl border border-white/8 bg-white/[0.03] px-3 text-sm placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 transition"
       />
     </label>
