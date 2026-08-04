@@ -37,6 +37,7 @@ import {
   Smartphone,
   Save,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile, useUpdateProfile } from "@/lib/profile";
@@ -693,7 +694,12 @@ function AppearanceSection() {
 }
 
 function LanguageSection() {
-  const [lang, setLang] = useState<"az" | "en">("az");
+  const { i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage === "en" ? "en" : "az";
+  const setLang = (code: "az" | "en") => {
+    void i18n.changeLanguage(code);
+    if (typeof window !== "undefined") localStorage.setItem("agentix-lang", code);
+  };
   const languages = [
     { code: "az", label: "Azerbaijani", flag: "🇦🇿" },
     { code: "en", label: "English", flag: "🇬🇧" },
@@ -702,10 +708,10 @@ function LanguageSection() {
     { code: "ar", label: "العربية", flag: "🇦🇪" },
   ] as const;
   return (
-    <Card title="Language & Region" desc="Set your preferred language, timezone and formats." footer={<SaveButton />}>
+    <Card title="Dil və Region" desc="Interfeys dilini seçin — dəyişiklik dərhal tətbiq olunur.">
       <div className="space-y-6">
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Interface language</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Interfeys dili</div>
           <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
             {languages.map((l) => {
               const isActive = lang === (l.code as "az" | "en");
@@ -727,11 +733,9 @@ function LanguageSection() {
             })}
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field label="Timezone" defaultValue="(GMT+04:00) Baku" />
-          <Field label="Date format" defaultValue="DD / MM / YYYY" />
-          <Field label="Currency" defaultValue="USD ($)" />
-          <Field label="First day of week" defaultValue="Monday" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-white/70">
+          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">Saat qurşağı · (GMT+04:00) Bakı</div>
+          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">Tarix formatı · GG / AA / İİİİ</div>
         </div>
       </div>
     </Card>
