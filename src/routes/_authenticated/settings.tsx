@@ -743,11 +743,8 @@ function LanguageSection() {
 }
 
 function ApiKeysSection() {
-  const keys = [
-    { name: "Production", key: "sk_live_9f8•••••••••••••••3a21", created: "Jul 12, 2026", last: "2 min ago" },
-    { name: "Staging", key: "sk_test_2c4•••••••••••••••bd91", created: "Jun 04, 2026", last: "Yesterday" },
-    { name: "Analytics ingest", key: "sk_live_ae7•••••••••••••••4102", created: "Mar 22, 2026", last: "3 days ago" },
-  ];
+  const keys: { name: string; key: string; created: string; last: string }[] = [];
+
   return (
     <Card
       title="API Keys"
