@@ -347,7 +347,7 @@ function BillingPage() {
               </div>
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {usageMetrics.map((m, i) => {
-                  const pct = (m.used / m.total) * 100;
+                  const pct = m.total > 0 ? Math.min((m.used / m.total) * 100, 100) : 0;
                   return (
                     <div key={m.label} className="rounded-xl border border-white/5 bg-white/[0.02] p-4">
                       <div className="flex items-baseline justify-between">
@@ -455,35 +455,14 @@ function BillingPage() {
                   <Plus className="h-3.5 w-3.5" /> Add card
                 </button>
               </div>
-              <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-                {paymentMethods.map((c) => (
-                  <div
-                    key={c.last4}
-                    className={`relative overflow-hidden rounded-2xl border p-5 ${
-                      c.primary
-                        ? "border-cyan-400/30 bg-gradient-to-br from-cyan-500/[0.08] to-blue-500/[0.04]"
-                        : "border-white/8 bg-white/[0.02]"
-                    }`}
-                  >
-                    <div className="pointer-events-none absolute -top-10 -right-6 h-32 w-32 rounded-full bg-cyan-500/10 blur-[60px]" />
-                    <div className="relative flex items-center justify-between">
-                      <div className="text-xs font-semibold uppercase tracking-wider text-white/60">{c.brand}</div>
-                      {c.primary && (
-                        <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
-                          Primary
-                        </span>
-                      )}
-                    </div>
-                    <div className="relative mt-6 text-lg font-mono tracking-widest">•••• •••• •••• {c.last4}</div>
-                    <div className="relative mt-4 flex items-center justify-between text-xs text-white/50">
-                      <span>Expires {c.exp}</span>
-                      <div className="flex items-center gap-3">
-                        {!c.primary && <button className="text-cyan-300 hover:text-cyan-200 transition">Make primary</button>}
-                        <button className="text-white/60 hover:text-white transition">Remove</button>
-                      </div>
-                    </div>
+              <div className="mt-5">
+                <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02] p-8 text-center">
+                  <div className="pointer-events-none absolute -top-10 -right-6 h-32 w-32 rounded-full bg-cyan-500/10 blur-[60px]" />
+                  <div className="relative mx-auto grid h-12 w-12 place-items-center rounded-xl bg-white/[0.05] border border-white/10">
+                    <CreditCard className="h-5 w-5 text-white/40" />
                   </div>
-                ))}
+                  <div className="relative mt-4 text-sm text-white/60">Ödəniş metodu əlavə edilməyib</div>
+                </div>
               </div>
             </motion.section>
 
