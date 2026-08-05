@@ -480,39 +480,11 @@ function BillingPage() {
                 </div>
                 <button className="text-xs text-white/50 hover:text-white transition">View all</button>
               </div>
-              <div className="mt-4 overflow-x-auto">
-                <table className="w-full min-w-[640px] text-sm">
-                  <thead>
-                    <tr className="text-left text-[11px] uppercase tracking-wider text-white/40">
-                      <th className="py-2 pr-3 font-medium">Invoice</th>
-                      <th className="py-2 pr-3 font-medium">Date</th>
-                      <th className="py-2 pr-3 font-medium">Plan</th>
-                      <th className="py-2 pr-3 font-medium">Amount</th>
-                      <th className="py-2 pr-3 font-medium">Status</th>
-                      <th className="py-2 pr-3 font-medium text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {invoices.map((inv) => (
-                      <tr key={inv.id} className="border-t border-white/5 hover:bg-white/[0.02] transition">
-                        <td className="py-3 pr-3 font-semibold text-cyan-300">{inv.id}</td>
-                        <td className="py-3 pr-3 text-xs text-white/70">{inv.date}</td>
-                        <td className="py-3 pr-3 text-xs text-white/70">{inv.plan}</td>
-                        <td className="py-3 pr-3 font-semibold">{inv.amount}</td>
-                        <td className="py-3 pr-3">
-                          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
-                            <CheckCircle2 className="h-3 w-3" /> {inv.status}
-                          </span>
-                        </td>
-                        <td className="py-3 pr-3 text-right">
-                          <button className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[11px] font-semibold hover:bg-white/[0.06] hover:border-cyan-400/30 transition">
-                            <Download className="h-3 w-3" /> PDF
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="mt-4">
+                <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.01] py-10 text-center">
+                  <Receipt className="h-6 w-6 text-white/30" />
+                  <div className="text-sm text-white/50">Hələ hesab-faktura yoxdur</div>
+                </div>
               </div>
             </motion.section>
 
@@ -530,23 +502,10 @@ function BillingPage() {
                 </div>
                 <div className="text-[11px] text-white/40">Last 12 months</div>
               </div>
-              <ul className="mt-4 divide-y divide-white/5">
-                {payments.map((p) => (
-                  <li key={p.date + p.method} className="flex items-center gap-4 py-3">
-                    <div className="grid h-9 w-9 place-items-center rounded-lg bg-white/[0.04] border border-white/10">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-300" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold truncate">{p.method}</div>
-                      <div className="text-[11px] text-white/50">{p.date}</div>
-                    </div>
-                    <div className="text-sm font-bold">{p.amount}</div>
-                    <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
-                      {p.status}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-4 flex flex-col items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.01] py-10 text-center">
+                <Calendar className="h-6 w-6 text-white/30" />
+                <div className="text-sm text-white/50">Hələ ödəniş yoxdur</div>
+              </div>
             </motion.section>
 
             <div className="h-4" />
