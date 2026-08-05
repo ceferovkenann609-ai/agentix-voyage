@@ -475,18 +475,15 @@ function DashboardPreview() {
                     </div>
                     <BarChart3 className="h-4 w-4 text-muted-foreground" />
                   </div>
-                  <div className="flex items-end gap-1.5 h-28">
-                    {[40, 55, 35, 70, 50, 85, 65, 95, 75, 88, 60, 92, 70, 100, 82].map((h, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ height: 0 }}
-                        whileInView={{ height: `${h}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: i * 0.05 }}
-                        className="flex-1 rounded-t bg-gradient-to-t from-purple-600/80 to-blue-500/60"
-                      />
+                  <div className="relative flex items-end gap-1.5 h-28">
+                    {Array.from({ length: 15 }).map((_, i) => (
+                      <div key={i} className="flex-1 rounded-t bg-white/5" style={{ height: "18%" }} />
                     ))}
+                    <div className="absolute inset-0 flex items-center justify-center text-xs text-muted-foreground">
+                      {t("home.dashboard.noData")}
+                    </div>
                   </div>
+
                 </div>
               </div>
 
