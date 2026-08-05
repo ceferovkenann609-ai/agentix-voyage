@@ -847,26 +847,6 @@ function Stats() {
 /* ---------------- Testimonials ---------------- */
 function Testimonials() {
   const { t } = useTranslation();
-  const items = [
-    {
-      n: t("home.testimonials.items.1.n"),
-      r: t("home.testimonials.items.1.r"),
-      q: t("home.testimonials.items.1.q"),
-      avatar: "linear-gradient(135deg,#a855f7,#3b82f6)",
-    },
-    {
-      n: t("home.testimonials.items.2.n"),
-      r: t("home.testimonials.items.2.r"),
-      q: t("home.testimonials.items.2.q"),
-      avatar: "linear-gradient(135deg,#3b82f6,#06b6d4)",
-    },
-    {
-      n: t("home.testimonials.items.3.n"),
-      r: t("home.testimonials.items.3.r"),
-      q: t("home.testimonials.items.3.q"),
-      avatar: "linear-gradient(135deg,#ec4899,#a855f7)",
-    },
-  ];
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -876,39 +856,32 @@ function Testimonials() {
             {t("home.testimonials.subtitle")}
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-5">
-          {items.map((x, i) => (
-            <motion.div
-              key={x.n}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="gradient-border rounded-2xl p-6 flex flex-col"
-            >
-              <div className="flex gap-0.5 mb-4">
-                {Array.from({ length: 5 }).map((_, k) => (
-                  <Star key={k} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed flex-1">"{x.q}"</p>
-              <div className="mt-6 flex items-center gap-3 pt-4 border-t border-white/5">
-                <div
-                  className="h-10 w-10 rounded-full shrink-0"
-                  style={{ background: x.avatar }}
-                />
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold truncate">{x.n}</div>
-                  <div className="text-xs text-muted-foreground truncate">{x.r}</div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="gradient-border rounded-2xl p-10 text-center max-w-2xl mx-auto"
+        >
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full glass">
+            <Star className="h-5 w-5 text-cyan-300" />
+          </div>
+          <div className="mt-5 text-lg font-semibold">{t("home.testimonials.emptyTitle")}</div>
+          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+            {t("home.testimonials.emptyBody")}
+          </p>
+          <Link
+            to="/book-demo"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3 text-sm font-semibold text-white"
+          >
+            {t("common.bookDemo")}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
 }
+
 
 
 /* ---------------- FAQ ---------------- */
