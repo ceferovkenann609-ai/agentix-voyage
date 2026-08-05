@@ -57,7 +57,7 @@ const navItems = [
   { key: "support", label: "Dəstək", icon: LifeBuoy, to: "/support" as const },
 ];
 
-const plans = [
+const plans: { name: string; price: number; icon: typeof Zap; current?: boolean; features: string[]; tone: string }[] = [
   {
     name: "Starter",
     price: 49,
