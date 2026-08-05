@@ -496,46 +496,14 @@ function DashboardPreview() {
                   <div className="text-sm font-semibold">{t("home.dashboard.liveMessages")}</div>
                   <MessageSquare className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <div className="space-y-3">
-                  {messages.map((m, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: 10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.2 }}
-                      className="space-y-2"
-                    >
-                      <div className="flex items-start gap-2">
-                        <div className="h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-[10px] font-bold">
-                          {m.user[0]}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-semibold truncate">{m.user}</span>
-                            <span className="text-[10px] text-muted-foreground">{m.time}</span>
-                          </div>
-                          <div className="mt-1 text-xs text-muted-foreground bg-white/5 rounded-lg px-2 py-1.5">
-                            {m.msg}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-2 pl-6">
-                        <div className="h-6 w-6 shrink-0 rounded-full bg-brand-gradient flex items-center justify-center">
-                          <Bot className="h-3 w-3 text-white" />
-                        </div>
-                        <div className="flex-1 text-xs bg-brand-gradient/10 rounded-lg px-2 py-1.5 border border-purple-500/20">
-                          <span className="inline-flex gap-1">
-                            <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-pulse" />
-                            <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-pulse [animation-delay:0.2s]" />
-                            <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-pulse [animation-delay:0.4s]" />
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
+                <div className="flex h-40 flex-col items-center justify-center gap-3 text-center">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full glass">
+                    <Bot className="h-4 w-4 text-cyan-300" />
+                  </div>
+                  <div className="text-xs text-muted-foreground">{t("home.dashboard.noMessages")}</div>
                 </div>
               </div>
+
             </div>
           </div>
         </motion.div>
