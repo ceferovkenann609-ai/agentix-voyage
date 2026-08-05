@@ -794,87 +794,67 @@ function ApiKeysSection() {
 }
 
 function SecuritySection() {
-  const sessions = [
-    { device: "MacBook Pro · Safari", location: "Baku, Azerbaijan", ip: "89.147.•••.42", last: "Active now", current: true, icon: Monitor },
-    { device: "iPhone 15 · Agentix iOS", location: "Baku, Azerbaijan", ip: "89.147.•••.42", last: "12 min ago", current: false, icon: Smartphone },
-    { device: "Chrome · Windows", location: "Istanbul, Türkiye", ip: "78.180.•••.11", last: "3 days ago", current: false, icon: Monitor },
-  ];
+  const { user, signOut } = useAuth();
+  const lastSignIn = user?.last_sign_in_at
+    ? new Date(user.last_sign_in_at).toLocaleString("az-AZ")
+    : "Məlumat yoxdur";
+
   return (
     <div className="space-y-6">
-      <Card title="Two-factor authentication" desc="Add an extra layer of security to your account.">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <div className="text-sm font-semibold flex items-center gap-2">
-              Authenticator app
-              <span className="rounded-full border border-emerald-400/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">Enabled</span>
-            </div>
-            <div className="mt-1 text-xs text-white/50">Use an app like 1Password or Authy to generate codes.</div>
-          </div>
-          <button className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold hover:bg-white/[0.06] transition">
-            Reconfigure
-          </button>
-        </div>
-        <div className="mt-4 flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-          <div>
-            <div className="text-sm font-semibold">SMS verification</div>
-            <div className="mt-1 text-xs text-white/50">Backup codes sent to +994 55 ••• 55 55.</div>
-          </div>
-          <Toggle defaultOn={false} />
-        </div>
-        <div className="mt-4 flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-          <div>
-            <div className="text-sm font-semibold">Passkey / Biometric</div>
-            <div className="mt-1 text-xs text-white/50">Sign in with Face ID, Touch ID or Windows Hello.</div>
-          </div>
-          <Toggle defaultOn={true} />
+      <Card title="İki faktorlu autentifikasiya" desc="Hesabınıza əlavə təhlükəsizlik qatı əlavə edin.">
+        <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-6">
+          <div className="text-sm font-semibold text-white/80">Hələ aktivləşdirilməyib</div>
+          <p className="mt-2 text-xs text-white/50">
+            İki faktorlu autentifikasiya hazırda hesabınız üçün konfiqurasiya edilməyib. Aktivləşdirmə tələb
+            edirsinizsə dəstək komandası ilə əlaqə saxlayın.
+          </p>
         </div>
       </Card>
 
-      <Card title="Active sessions" desc="Devices currently signed in to your Agentix account.">
+      <Card title="Aktiv sessiya" desc="Agentix hesabınızda hazırda açıq olan sessiya.">
         <ul className="space-y-2">
-          {sessions.map((s) => {
-            const Icon = s.icon;
-            return (
-              <li key={s.device} className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-3">
-                <div className="grid h-9 w-9 place-items-center rounded-lg bg-white/[0.04] border border-white/10">
-                  <Icon className="h-4 w-4 text-cyan-300" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 text-sm font-semibold">
-                    {s.device}
-                    {s.current && (
-                      <span className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
-                        This device
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-[11px] text-white/50">{s.location} · {s.ip} · {s.last}</div>
-                </div>
-                {!s.current && (
-                  <button className="text-xs font-semibold text-rose-300 hover:text-rose-200 transition">Sign out</button>
-                )}
-              </li>
-            );
-          })}
+          <li className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-3">
+            <div className="grid h-9 w-9 place-items-center rounded-lg bg-white/[0.04] border border-white/10">
+              <Monitor className="h-4 w-4 text-cyan-300" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 text-sm font-semibold">
+                {user?.email ?? "Cari sessiya"}
+                <span className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
+                  Bu cihaz
+                </span>
+              </div>
+              <div className="text-[11px] text-white/50">Son giriş: {lastSignIn}</div>
+            </div>
+          </li>
         </ul>
         <div className="mt-4 flex items-center justify-end">
-          <button className="inline-flex items-center gap-2 rounded-xl border border-rose-400/25 bg-rose-500/10 px-4 py-2 text-sm font-semibold text-rose-200 hover:bg-rose-500/15 transition">
-            <LogOut className="h-4 w-4" /> Sign out of all other sessions
+          <button
+            onClick={() => void signOut()}
+            className="inline-flex items-center gap-2 rounded-xl border border-rose-400/25 bg-rose-500/10 px-4 py-2 text-sm font-semibold text-rose-200 hover:bg-rose-500/15 transition"
+          >
+            <LogOut className="h-4 w-4" /> Sessiyadan çıx
           </button>
         </div>
       </Card>
 
-      <Card title="Danger zone" desc="Irreversible actions that affect your account.">
+      <Card title="Təhlükəli zona" desc="Hesabınıza təsir edən geri qaytarılmayan əməliyyatlar.">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-rose-400/20 bg-rose-500/[0.04] p-4">
           <div>
-            <div className="text-sm font-semibold text-rose-200">Delete account</div>
-            <div className="mt-1 text-xs text-white/50">Permanently delete your Agentix account and all associated data.</div>
+            <div className="text-sm font-semibold text-rose-200">Hesabın silinməsi</div>
+            <div className="mt-1 text-xs text-white/50">
+              Hesabın və bütən əlaqəli məlumatların silinməsi dəstək komandası tərəfindən təsdiqlə həyata keçirilir.
+            </div>
           </div>
-          <button className="inline-flex items-center gap-2 rounded-xl border border-rose-400/30 bg-rose-500/15 px-4 py-2 text-sm font-semibold text-rose-200 hover:bg-rose-500/25 transition">
-            <Trash2 className="h-4 w-4" /> Delete account
-          </button>
+          <Link
+            to="/support"
+            className="inline-flex items-center gap-2 rounded-xl border border-rose-400/30 bg-rose-500/15 px-4 py-2 text-sm font-semibold text-rose-200 hover:bg-rose-500/25 transition"
+          >
+            <Trash2 className="h-4 w-4" /> Silinmə tələbi göndər
+          </Link>
         </div>
       </Card>
     </div>
   );
 }
+
