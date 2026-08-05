@@ -45,6 +45,14 @@ export default function AIChatWidget() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
 
+  // Lets any page (e.g. /support) open the chat in place via openSupportChat().
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener(AGENTIX_CHAT_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(AGENTIX_CHAT_OPEN_EVENT, onOpen);
+  }, []);
+
+
   const persist = (sender: "user" | "ai", text: string) => {
     void supabase
       .from("ai_chat_messages")
