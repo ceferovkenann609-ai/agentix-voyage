@@ -46,9 +46,15 @@ export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
       { title: "Settings — Agentix" },
-      { name: "description", content: "Manage your profile, company, security, appearance and API keys." },
+      {
+        name: "description",
+        content: "Manage your profile, company, security, appearance and API keys.",
+      },
       { property: "og:title", content: "Settings — Agentix" },
-      { property: "og:description", content: "Manage your profile, company, security, appearance and API keys." },
+      {
+        property: "og:description",
+        content: "Manage your profile, company, security, appearance and API keys.",
+      },
     ],
   }),
   component: SettingsPage,
@@ -62,7 +68,13 @@ const navItems = [
   { key: "demos", label: "Demo Sorğuları", icon: CalendarCheck, to: "/demo-requests" as const },
   { key: "analytics", label: "Analitika", icon: BarChart3, to: "/analytics" as const },
   { key: "billing", label: "Ödənişlər", icon: CreditCard, to: "/billing" as const },
-  { key: "settings", label: "Tənzimləmələr", icon: SettingsIcon, to: "/settings" as const, active: true },
+  {
+    key: "settings",
+    label: "Tənzimləmələr",
+    icon: SettingsIcon,
+    to: "/settings" as const,
+    active: true,
+  },
   { key: "support", label: "Dəstək", icon: LifeBuoy, to: "/support" as const },
 ];
 
@@ -133,10 +145,15 @@ function SettingsPage() {
                 </div>
                 <div>
                   <div className="text-sm font-bold tracking-tight">Agentix</div>
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">İş Sahəsi</div>
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">
+                    İş Sahəsi
+                  </div>
                 </div>
               </div>
-              <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white/60 hover:text-white">
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden text-white/60 hover:text-white"
+              >
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -165,7 +182,12 @@ function SettingsPage() {
                   isActive ? "text-white" : "text-white/60 hover:text-white hover:bg-white/5"
                 }`;
                 return (
-                  <Link key={item.key} to={item.to} onClick={() => setSidebarOpen(false)} className={cls}>
+                  <Link
+                    key={item.key}
+                    to={item.to}
+                    onClick={() => setSidebarOpen(false)}
+                    className={cls}
+                  >
                     {content}
                   </Link>
                 );
@@ -237,7 +259,9 @@ function SettingsPage() {
                   <SettingsIcon className="h-3 w-3" /> Workspace Settings
                 </div>
                 <h1 className="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">
-                  <span className="bg-gradient-to-r from-white via-cyan-100 to-blue-300 bg-clip-text text-transparent">Settings</span>
+                  <span className="bg-gradient-to-r from-white via-cyan-100 to-blue-300 bg-clip-text text-transparent">
+                    Settings
+                  </span>
                 </h1>
                 <p className="mt-2 text-white/60 max-w-xl">
                   Configure your workspace, personal preferences and security.
@@ -265,7 +289,9 @@ function SettingsPage() {
                         >
                           <Icon className={`h-4.5 w-4.5 ${isActive ? "text-cyan-300" : ""}`} />
                           <span className="flex-1 text-left">{s.label}</span>
-                          {isActive && <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />}
+                          {isActive && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          )}
                         </button>
                       </li>
                     );
@@ -284,7 +310,9 @@ function SettingsPage() {
                     transition={{ duration: 0.25 }}
                     className="space-y-6"
                   >
-                    {active === "profile" && <ProfileSection name={name} email={user?.email || ""} />}
+                    {active === "profile" && (
+                      <ProfileSection name={name} email={user?.email || ""} />
+                    )}
                     {active === "company" && <CompanySection />}
                     {active === "password" && <PasswordSection />}
                     {active === "notifications" && <NotificationsSection />}
@@ -307,7 +335,17 @@ function SettingsPage() {
 
 /* ---------- Sections ---------- */
 
-function Card({ title, desc, children, footer }: { title: string; desc?: string; children: React.ReactNode; footer?: React.ReactNode }) {
+function Card({
+  title,
+  desc,
+  children,
+  footer,
+}: {
+  title: string;
+  desc?: string;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+}) {
   return (
     <section className="rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden">
       <div className="px-6 py-5 border-b border-white/5">
@@ -315,7 +353,11 @@ function Card({ title, desc, children, footer }: { title: string; desc?: string;
         {desc && <div className="mt-0.5 text-xs text-white/50">{desc}</div>}
       </div>
       <div className="px-6 py-5">{children}</div>
-      {footer && <div className="px-6 py-4 border-t border-white/5 bg-white/[0.02] flex items-center justify-end gap-2">{footer}</div>}
+      {footer && (
+        <div className="px-6 py-4 border-t border-white/5 bg-white/[0.02] flex items-center justify-end gap-2">
+          {footer}
+        </div>
+      )}
     </section>
   );
 }
@@ -341,12 +383,16 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50">{label}</span>
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+        {label}
+      </span>
       <div className="mt-1.5 relative">
         <input
           type={type}
           placeholder={placeholder}
-          {...(value !== undefined ? { value, onChange: (e) => onChange?.(e.target.value) } : { defaultValue })}
+          {...(value !== undefined
+            ? { value, onChange: (e) => onChange?.(e.target.value) }
+            : { defaultValue })}
           disabled={disabled}
           className="h-10 w-full rounded-xl border border-white/8 bg-white/[0.03] px-3 pr-10 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
         />
@@ -370,7 +416,9 @@ function SaveButton({
   return (
     <>
       {message && (
-        <span className={`mr-auto text-xs ${message.tone === "ok" ? "text-emerald-300" : "text-rose-300"}`}>
+        <span
+          className={`mr-auto text-xs ${message.tone === "ok" ? "text-emerald-300" : "text-rose-300"}`}
+        >
           {message.text}
         </span>
       )}
@@ -397,7 +445,9 @@ function Toggle({ defaultOn = false }: { defaultOn?: boolean }) {
     <button
       onClick={() => setOn(!on)}
       className={`relative h-6 w-11 rounded-full border transition ${
-        on ? "bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-400/40 shadow-[0_0_15px_-3px_rgba(34,211,238,0.6)]" : "bg-white/5 border-white/10"
+        on
+          ? "bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-400/40 shadow-[0_0_15px_-3px_rgba(34,211,238,0.6)]"
+          : "bg-white/5 border-white/10"
       }`}
     >
       <span
@@ -451,7 +501,14 @@ function ProfileSection({ name, email }: { name: string; email: string }) {
     <Card
       title="Profil"
       desc="Agentix daxilində görünən şəxsi məlumatlarınız."
-      footer={<SaveButton onSave={() => void save()} onCancel={reset} saving={updateProfile.isPending} message={message} />}
+      footer={
+        <SaveButton
+          onSave={() => void save()}
+          onCancel={reset}
+          saving={updateProfile.isPending}
+          message={message}
+        />
+      }
     >
       <div className="flex flex-col sm:flex-row items-start gap-6">
         <div className="relative">
@@ -461,10 +518,20 @@ function ProfileSection({ name, email }: { name: string; email: string }) {
         </div>
         <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <Field label="Ad Soyad" value={fullName} onChange={setFullName} placeholder="Aylin Mehdiyeva" />
+            <Field
+              label="Ad Soyad"
+              value={fullName}
+              onChange={setFullName}
+              placeholder="Aylin Mehdiyeva"
+            />
           </div>
           <Field label="E-poçt" value={email} onChange={() => {}} type="email" disabled />
-          <Field label="Telefon" value={phone} onChange={setPhone} placeholder="+994 55 555 55 55" />
+          <Field
+            label="Telefon"
+            value={phone}
+            onChange={setPhone}
+            placeholder="+994 55 555 55 55"
+          />
         </div>
       </div>
     </Card>
@@ -511,7 +578,12 @@ function CompanySection() {
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
-          <Field label="Şirkət adı" value={company} onChange={setCompany} placeholder="Agentix Labs" />
+          <Field
+            label="Şirkət adı"
+            value={company}
+            onChange={setCompany}
+            placeholder="Agentix Labs"
+          />
         </div>
       </div>
     </Card>
@@ -575,12 +647,21 @@ function PasswordSection() {
           onChange={setPassword}
           placeholder="Ən azı 12 simvol"
           suffix={
-            <button onClick={() => setShow(!show)} className="text-white/50 hover:text-white transition">
+            <button
+              onClick={() => setShow(!show)}
+              className="text-white/50 hover:text-white transition"
+            >
               {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           }
         />
-        <Field label="Yeni şifrəni təkrarlayın" type="password" value={confirm} onChange={setConfirm} placeholder="Şifrəni təkrar yazın" />
+        <Field
+          label="Yeni şifrəni təkrarlayın"
+          type="password"
+          value={confirm}
+          onChange={setConfirm}
+          placeholder="Şifrəni təkrar yazın"
+        />
         <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs text-white/60">
           <div className="font-semibold text-white/80 mb-2">Şifrə tələbləri</div>
           <ul className="space-y-1">
@@ -606,7 +687,11 @@ function NotificationsSection() {
     { label: "Security alerts", desc: "Sign-ins from new devices or locations.", on: true },
   ];
   return (
-    <Card title="Bildirişlər" desc="Choose how you want to hear from Agentix." footer={<SaveButton />}>
+    <Card
+      title="Bildirişlər"
+      desc="Choose how you want to hear from Agentix."
+      footer={<SaveButton />}
+    >
       <ul className="divide-y divide-white/5">
         {rows.map((r) => (
           <li key={r.label} className="flex items-center gap-4 py-3">
@@ -632,10 +717,16 @@ function AppearanceSection() {
   ] as const;
   const accents = ["#22d3ee", "#60a5fa", "#34d399", "#a78bfa", "#f472b6"];
   return (
-    <Card title="Appearance" desc="Customize the look and feel of your workspace." footer={<SaveButton />}>
+    <Card
+      title="Appearance"
+      desc="Customize the look and feel of your workspace."
+      footer={<SaveButton />}
+    >
       <div className="space-y-6">
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Theme</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+            Theme
+          </div>
           <div className="mt-2 grid grid-cols-3 gap-3 max-w-md">
             {themes.map((t) => {
               const Icon = t.icon;
@@ -658,7 +749,9 @@ function AppearanceSection() {
           </div>
         </div>
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Accent color</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+            Accent color
+          </div>
           <div className="mt-2 flex items-center gap-3">
             {accents.map((c, i) => (
               <button
@@ -671,7 +764,9 @@ function AppearanceSection() {
           </div>
         </div>
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Density</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+            Density
+          </div>
           <div className="mt-2 inline-flex items-center rounded-xl border border-white/10 bg-white/[0.03] p-1">
             {(["cozy", "compact"] as const).map((d) => (
               <button
@@ -711,14 +806,18 @@ function LanguageSection() {
     <Card title="Dil və Region" desc="Interfeys dilini seçin — dəyişiklik dərhal tətbiq olunur.">
       <div className="space-y-6">
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Interfeys dili</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+            Interfeys dili
+          </div>
           <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
             {languages.map((l) => {
               const isActive = lang === (l.code as "az" | "en");
               return (
                 <button
                   key={l.code}
-                  onClick={() => (l.code === "az" || l.code === "en") && setLang(l.code as "az" | "en")}
+                  onClick={() =>
+                    (l.code === "az" || l.code === "en") && setLang(l.code as "az" | "en")
+                  }
                   className={`flex items-center gap-3 rounded-xl border p-3 text-left transition ${
                     isActive
                       ? "border-cyan-400/40 bg-gradient-to-r from-cyan-500/10 to-blue-500/5"
@@ -734,8 +833,12 @@ function LanguageSection() {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-white/70">
-          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">Saat qurşağı · (GMT+04:00) Bakı</div>
-          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">Tarix formatı · GG / AA / İİİİ</div>
+          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">
+            Saat qurşağı · (GMT+04:00) Bakı
+          </div>
+          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">
+            Tarix formatı · GG / AA / İİİİ
+          </div>
         </div>
       </div>
     </Card>
@@ -743,131 +846,130 @@ function LanguageSection() {
 }
 
 function ApiKeysSection() {
-  const keys = [
-    { name: "Production", key: "sk_live_9f8•••••••••••••••3a21", created: "Jul 12, 2026", last: "2 min ago" },
-    { name: "Staging", key: "sk_test_2c4•••••••••••••••bd91", created: "Jun 04, 2026", last: "Yesterday" },
-    { name: "Analytics ingest", key: "sk_live_ae7•••••••••••••••4102", created: "Mar 22, 2026", last: "3 days ago" },
-  ];
+  const keys: { name: string; key: string; created: string; last: string }[] = [];
+
   return (
     <Card
-      title="API Keys"
-      desc="Use these keys to authenticate requests to the Agentix API."
-      footer={
-        <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:scale-[1.02] active:scale-[0.98] transition">
-          <Plus className="h-4 w-4" /> Create new key
-        </button>
-      }
+      title="API açarları"
+      desc="Agentix API-a sorğuları autentifikasiya etmək üçün açarlardan istifadə olunur."
     >
       <div className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-3 text-xs text-cyan-200 mb-4 flex items-start gap-2">
         <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0" />
-        <span>Treat API keys like passwords. Never share them or expose them in client-side code.</span>
+        <span>API açarına şifrə kimi yanaşın. Onu paylaşmayın və brauzer kodunda saxlamayın.</span>
       </div>
-      <ul className="space-y-2">
-        {keys.map((k) => (
-          <li key={k.name} className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-4">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
+      {keys.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-center">
+          <div className="text-sm font-semibold text-white/80">Hələ API açarı yoxdur</div>
+          <p className="mt-2 text-xs text-white/50">
+            API girişi hesabınız üçün hələ aktivləşdirilməyib. Açar tələb etmək üçün dəstək
+            komandası ilə əlaqə saxlayın.
+          </p>
+          <Link
+            to="/support"
+            className="mt-4 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold hover:bg-white/[0.06] transition"
+          >
+            Dəstəyə müraciət et
+          </Link>
+        </div>
+      ) : (
+        <ul className="space-y-2">
+          {keys.map((k) => (
+            <li
+              key={k.name}
+              className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-4"
+            >
+              <div className="flex-1 min-w-0">
                 <div className="text-sm font-semibold">{k.name}</div>
-                <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] text-white/60">Live</span>
+                <div className="mt-1 font-mono text-xs text-white/70 truncate">{k.key}</div>
+                <div className="mt-1 text-[10px] text-white/40">
+                  Yaradıldı {k.created} · Son istifadə {k.last}
+                </div>
               </div>
-              <div className="mt-1 font-mono text-xs text-white/70 truncate">{k.key}</div>
-              <div className="mt-1 text-[10px] text-white/40">Created {k.created} · Last used {k.last}</div>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-cyan-400/30 transition" aria-label="Kopyala">
-                <Copy className="h-3.5 w-3.5" />
-              </button>
-              <button className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-rose-300 hover:border-rose-400/30 transition" aria-label="Ləğv et">
-                <Trash2 className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+              <div className="flex items-center gap-2">
+                <button
+                  className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-cyan-400/30 transition"
+                  aria-label="Kopyala"
+                >
+                  <Copy className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-rose-300 hover:border-rose-400/30 transition"
+                  aria-label="Ləğv et"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </Card>
   );
 }
 
 function SecuritySection() {
-  const sessions = [
-    { device: "MacBook Pro · Safari", location: "Baku, Azerbaijan", ip: "89.147.•••.42", last: "Active now", current: true, icon: Monitor },
-    { device: "iPhone 15 · Agentix iOS", location: "Baku, Azerbaijan", ip: "89.147.•••.42", last: "12 min ago", current: false, icon: Smartphone },
-    { device: "Chrome · Windows", location: "Istanbul, Türkiye", ip: "78.180.•••.11", last: "3 days ago", current: false, icon: Monitor },
-  ];
+  const { user, signOut } = useAuth();
+  const lastSignIn = user?.last_sign_in_at
+    ? new Date(user.last_sign_in_at).toLocaleString("az-AZ")
+    : "Məlumat yoxdur";
+
   return (
     <div className="space-y-6">
-      <Card title="Two-factor authentication" desc="Add an extra layer of security to your account.">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <div className="text-sm font-semibold flex items-center gap-2">
-              Authenticator app
-              <span className="rounded-full border border-emerald-400/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">Enabled</span>
-            </div>
-            <div className="mt-1 text-xs text-white/50">Use an app like 1Password or Authy to generate codes.</div>
-          </div>
-          <button className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold hover:bg-white/[0.06] transition">
-            Reconfigure
-          </button>
-        </div>
-        <div className="mt-4 flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-          <div>
-            <div className="text-sm font-semibold">SMS verification</div>
-            <div className="mt-1 text-xs text-white/50">Backup codes sent to +994 55 ••• 55 55.</div>
-          </div>
-          <Toggle defaultOn={false} />
-        </div>
-        <div className="mt-4 flex items-center justify-between gap-4 border-t border-white/5 pt-4">
-          <div>
-            <div className="text-sm font-semibold">Passkey / Biometric</div>
-            <div className="mt-1 text-xs text-white/50">Sign in with Face ID, Touch ID or Windows Hello.</div>
-          </div>
-          <Toggle defaultOn={true} />
+      <Card
+        title="İki faktorlu autentifikasiya"
+        desc="Hesabınıza əlavə təhlükəsizlik qatı əlavə edin."
+      >
+        <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-6">
+          <div className="text-sm font-semibold text-white/80">Hələ aktivləşdirilməyib</div>
+          <p className="mt-2 text-xs text-white/50">
+            İki faktorlu autentifikasiya hazırda hesabınız üçün konfiqurasiya edilməyib.
+            Aktivləşdirmə tələb edirsinizsə dəstək komandası ilə əlaqə saxlayın.
+          </p>
         </div>
       </Card>
 
-      <Card title="Active sessions" desc="Devices currently signed in to your Agentix account.">
+      <Card title="Aktiv sessiya" desc="Agentix hesabınızda hazırda açıq olan sessiya.">
         <ul className="space-y-2">
-          {sessions.map((s) => {
-            const Icon = s.icon;
-            return (
-              <li key={s.device} className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-3">
-                <div className="grid h-9 w-9 place-items-center rounded-lg bg-white/[0.04] border border-white/10">
-                  <Icon className="h-4 w-4 text-cyan-300" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 text-sm font-semibold">
-                    {s.device}
-                    {s.current && (
-                      <span className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
-                        This device
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-[11px] text-white/50">{s.location} · {s.ip} · {s.last}</div>
-                </div>
-                {!s.current && (
-                  <button className="text-xs font-semibold text-rose-300 hover:text-rose-200 transition">Sign out</button>
-                )}
-              </li>
-            );
-          })}
+          <li className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-3">
+            <div className="grid h-9 w-9 place-items-center rounded-lg bg-white/[0.04] border border-white/10">
+              <Monitor className="h-4 w-4 text-cyan-300" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 text-sm font-semibold">
+                {user?.email ?? "Cari sessiya"}
+                <span className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
+                  Bu cihaz
+                </span>
+              </div>
+              <div className="text-[11px] text-white/50">Son giriş: {lastSignIn}</div>
+            </div>
+          </li>
         </ul>
         <div className="mt-4 flex items-center justify-end">
-          <button className="inline-flex items-center gap-2 rounded-xl border border-rose-400/25 bg-rose-500/10 px-4 py-2 text-sm font-semibold text-rose-200 hover:bg-rose-500/15 transition">
-            <LogOut className="h-4 w-4" /> Sign out of all other sessions
+          <button
+            onClick={() => void signOut()}
+            className="inline-flex items-center gap-2 rounded-xl border border-rose-400/25 bg-rose-500/10 px-4 py-2 text-sm font-semibold text-rose-200 hover:bg-rose-500/15 transition"
+          >
+            <LogOut className="h-4 w-4" /> Sessiyadan çıx
           </button>
         </div>
       </Card>
 
-      <Card title="Danger zone" desc="Irreversible actions that affect your account.">
+      <Card title="Təhlükəli zona" desc="Hesabınıza təsir edən geri qaytarılmayan əməliyyatlar.">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-rose-400/20 bg-rose-500/[0.04] p-4">
           <div>
-            <div className="text-sm font-semibold text-rose-200">Delete account</div>
-            <div className="mt-1 text-xs text-white/50">Permanently delete your Agentix account and all associated data.</div>
+            <div className="text-sm font-semibold text-rose-200">Hesabın silinməsi</div>
+            <div className="mt-1 text-xs text-white/50">
+              Hesabın və bütün əlaqəli məlumatların silinməsi dəstək komandası tərəfindən təsdiqlə
+              həyata keçirilir.
+            </div>
           </div>
-          <button className="inline-flex items-center gap-2 rounded-xl border border-rose-400/30 bg-rose-500/15 px-4 py-2 text-sm font-semibold text-rose-200 hover:bg-rose-500/25 transition">
-            <Trash2 className="h-4 w-4" /> Delete account
-          </button>
+          <Link
+            to="/support"
+            className="inline-flex items-center gap-2 rounded-xl border border-rose-400/30 bg-rose-500/15 px-4 py-2 text-sm font-semibold text-rose-200 hover:bg-rose-500/25 transition"
+          >
+            <Trash2 className="h-4 w-4" /> Silinmə tələbi göndər
+          </Link>
         </div>
       </Card>
     </div>

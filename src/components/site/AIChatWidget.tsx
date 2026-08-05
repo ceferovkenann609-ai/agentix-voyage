@@ -3,6 +3,8 @@ import { Bot, X, Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { AGENTIX_CHAT_OPEN_EVENT } from "@/lib/support-chat";
+
 
 type Msg = { sender: "ai" | "user"; text: string };
 
@@ -44,6 +46,14 @@ export default function AIChatWidget() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
+
+  // Lets any page (e.g. /support) open the chat in place via openSupportChat().
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener(AGENTIX_CHAT_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(AGENTIX_CHAT_OPEN_EVENT, onOpen);
+  }, []);
+
 
   const persist = (sender: "user" | "ai", text: string) => {
     void supabase

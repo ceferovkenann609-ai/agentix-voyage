@@ -148,9 +148,17 @@ export function ServiceHero({
           </div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.2 }}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
+        >
           {demo}
+          <p className="mt-3 text-center text-[11px] text-muted-foreground">
+            İnteraktiv simulyasiya — nümunə məlumatlarla agentin iş prinsipini göstərir.
+          </p>
         </motion.div>
+
       </div>
     </section>
   );

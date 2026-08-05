@@ -31,6 +31,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAgentixMetrics } from "@/lib/metrics";
 
 export const Route = createFileRoute("/_authenticated/billing")({
   head: () => ({
@@ -56,7 +57,7 @@ const navItems = [
   { key: "support", label: "Dəstək", icon: LifeBuoy, to: "/support" as const },
 ];
 
-const plans = [
+const plans: { name: string; price: number; icon: typeof Zap; current?: boolean; features: string[]; tone: string }[] = [
   {
     name: "Starter",
     price: 49,
@@ -68,7 +69,6 @@ const plans = [
     name: "Growth",
     price: 199,
     icon: Rocket,
-    current: true,
     features: ["12 AI Agents", "50,000 conversations", "Priority support", "Advanced analytics", "Custom integrations"],
     tone: "from-cyan-500/10 to-blue-500/5",
   },
@@ -81,34 +81,6 @@ const plans = [
   },
 ];
 
-const usageMetrics = [
-  { label: "Söhbətlər", used: 32480, total: 50000, unit: "" },
-  { label: "AI Agentləri", used: 8, total: 12, unit: "" },
-  { label: "Automations", used: 47, total: 100, unit: "" },
-  { label: "Storage", used: 6.2, total: 20, unit: " GB" },
-];
-
-const invoices = [
-  { id: "INV-2048", date: "Aug 01, 2026", plan: "Growth · Monthly", amount: "$199.00", status: "Paid" },
-  { id: "INV-2032", date: "Jul 01, 2026", plan: "Growth · Monthly", amount: "$199.00", status: "Paid" },
-  { id: "INV-2011", date: "Jun 01, 2026", plan: "Growth · Monthly", amount: "$199.00", status: "Paid" },
-  { id: "INV-1994", date: "May 01, 2026", plan: "Starter · Monthly", amount: "$49.00", status: "Paid" },
-  { id: "INV-1968", date: "Apr 01, 2026", plan: "Starter · Monthly", amount: "$49.00", status: "Paid" },
-];
-
-const payments = [
-  { date: "Aug 01, 2026", method: "Visa •••• 4242", amount: "$199.00", status: "Success" },
-  { date: "Jul 01, 2026", method: "Visa •••• 4242", amount: "$199.00", status: "Success" },
-  { date: "Jun 15, 2026", method: "Top-up · 5,000 credits", amount: "$40.00", status: "Success" },
-  { date: "Jun 01, 2026", method: "Visa •••• 4242", amount: "$199.00", status: "Success" },
-  { date: "May 01, 2026", method: "Visa •••• 4242", amount: "$49.00", status: "Success" },
-];
-
-const paymentMethods = [
-  { brand: "Visa", last4: "4242", exp: "08/28", primary: true },
-  { brand: "Mastercard", last4: "8121", exp: "11/27", primary: false },
-];
-
 function BillingPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -116,15 +88,25 @@ function BillingPage() {
   const [addCardOpen, setAddCardOpen] = useState(false);
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
+  const { data: metrics } = useAgentixMetrics(user?.id);
 
   const handleLogout = async () => {
     await signOut();
     navigate({ to: "/" });
   };
 
-  const creditsUsed = 3240;
-  const creditsTotal = 5000;
-  const creditsPct = (creditsUsed / creditsTotal) * 100;
+  const chatMessagesUsed = metrics?.chatMessages ?? 0;
+  const leadsUsed = metrics?.leadsTotal ?? 0;
+  const conversationsLimit = 5000;
+  const leadsLimit = 500;
+  const conversationsPct = Math.min((chatMessagesUsed / conversationsLimit) * 100, 100);
+
+  const usageMetrics = [
+    { label: "Söhbətlər", used: chatMessagesUsed, total: conversationsLimit, unit: "" },
+    { label: "Müştəri Namizədləri", used: leadsUsed, total: leadsLimit, unit: "" },
+    { label: "AI Agentləri", used: 0, total: 0, unit: "" },
+    { label: "Storage", used: 0, total: 0, unit: " GB" },
+  ];
 
   return (
     <div className="min-h-screen bg-[#07090C] text-white pt-20">
@@ -296,12 +278,12 @@ function BillingPage() {
                       <Crown className="h-3.5 w-3.5" /> Current Plan
                     </div>
                     <div className="mt-3 flex items-baseline gap-3">
-                      <div className="text-3xl font-bold">Growth</div>
-                      <div className="text-sm text-white/60">$199 <span className="text-white/40">/month</span></div>
+                      <div className="text-3xl font-bold">Free</div>
+                      <div className="text-sm text-white/60">Aktivləşdirilməyib</div>
                     </div>
-                    <div className="mt-2 text-xs text-white/60">Renews on <span className="text-white">Sep 01, 2026</span></div>
+                    <div className="mt-2 text-xs text-white/60">Hələ aktiv abunəlik yoxdur</div>
                     <div className="mt-4 flex flex-wrap gap-2">
-                      {["12 Agents", "50k conv./mo", "Priority support", "Advanced analytics"].map((f) => (
+                      {["Əsas funksionallıq"].map((f) => (
                         <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/70">
                           <CheckCircle2 className="h-3 w-3 text-cyan-300" /> {f}
                         </span>
@@ -312,7 +294,6 @@ function BillingPage() {
                     <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] transition hover:scale-[1.02] active:scale-[0.98]">
                       <ArrowUpRight className="h-4 w-4" /> Change plan
                     </button>
-                    <button className="text-xs text-white/50 hover:text-white transition">Cancel subscription</button>
                   </div>
                 </div>
               </motion.section>
@@ -332,20 +313,20 @@ function BillingPage() {
                   </button>
                 </div>
                 <div className="mt-4 flex items-baseline gap-2">
-                  <div className="text-3xl font-bold">{(creditsTotal - creditsUsed).toLocaleString()}</div>
-                  <div className="text-xs text-white/50">of {creditsTotal.toLocaleString()} remaining</div>
+                  <div className="text-3xl font-bold">{Math.max(conversationsLimit - chatMessagesUsed, 0).toLocaleString()}</div>
+                  <div className="text-xs text-white/50">of {conversationsLimit.toLocaleString()} remaining</div>
                 </div>
                 <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/5">
                   <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: `${creditsPct}%` }}
+                    animate={{ width: `${conversationsPct}%` }}
                     transition={{ duration: 0.9, ease: "easeOut" }}
                     className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
                   />
                 </div>
                 <div className="mt-3 flex items-center justify-between text-[11px] text-white/50">
-                  <span>{creditsUsed.toLocaleString()} used</span>
-                  <span>Resets Sep 01</span>
+                  <span>{chatMessagesUsed.toLocaleString()} istifadə edilib</span>
+                  <span>Plan aktivləşdirilməyib</span>
                 </div>
               </motion.section>
             </div>
@@ -366,7 +347,7 @@ function BillingPage() {
               </div>
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {usageMetrics.map((m, i) => {
-                  const pct = (m.used / m.total) * 100;
+                  const pct = m.total > 0 ? Math.min((m.used / m.total) * 100, 100) : 0;
                   return (
                     <div key={m.label} className="rounded-xl border border-white/5 bg-white/[0.02] p-4">
                       <div className="flex items-baseline justify-between">
@@ -474,35 +455,14 @@ function BillingPage() {
                   <Plus className="h-3.5 w-3.5" /> Add card
                 </button>
               </div>
-              <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-                {paymentMethods.map((c) => (
-                  <div
-                    key={c.last4}
-                    className={`relative overflow-hidden rounded-2xl border p-5 ${
-                      c.primary
-                        ? "border-cyan-400/30 bg-gradient-to-br from-cyan-500/[0.08] to-blue-500/[0.04]"
-                        : "border-white/8 bg-white/[0.02]"
-                    }`}
-                  >
-                    <div className="pointer-events-none absolute -top-10 -right-6 h-32 w-32 rounded-full bg-cyan-500/10 blur-[60px]" />
-                    <div className="relative flex items-center justify-between">
-                      <div className="text-xs font-semibold uppercase tracking-wider text-white/60">{c.brand}</div>
-                      {c.primary && (
-                        <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
-                          Primary
-                        </span>
-                      )}
-                    </div>
-                    <div className="relative mt-6 text-lg font-mono tracking-widest">•••• •••• •••• {c.last4}</div>
-                    <div className="relative mt-4 flex items-center justify-between text-xs text-white/50">
-                      <span>Expires {c.exp}</span>
-                      <div className="flex items-center gap-3">
-                        {!c.primary && <button className="text-cyan-300 hover:text-cyan-200 transition">Make primary</button>}
-                        <button className="text-white/60 hover:text-white transition">Remove</button>
-                      </div>
-                    </div>
+              <div className="mt-5">
+                <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02] p-8 text-center">
+                  <div className="pointer-events-none absolute -top-10 -right-6 h-32 w-32 rounded-full bg-cyan-500/10 blur-[60px]" />
+                  <div className="relative mx-auto grid h-12 w-12 place-items-center rounded-xl bg-white/[0.05] border border-white/10">
+                    <CreditCard className="h-5 w-5 text-white/40" />
                   </div>
-                ))}
+                  <div className="relative mt-4 text-sm text-white/60">Ödəniş metodu əlavə edilməyib</div>
+                </div>
               </div>
             </motion.section>
 
@@ -520,39 +480,11 @@ function BillingPage() {
                 </div>
                 <button className="text-xs text-white/50 hover:text-white transition">View all</button>
               </div>
-              <div className="mt-4 overflow-x-auto">
-                <table className="w-full min-w-[640px] text-sm">
-                  <thead>
-                    <tr className="text-left text-[11px] uppercase tracking-wider text-white/40">
-                      <th className="py-2 pr-3 font-medium">Invoice</th>
-                      <th className="py-2 pr-3 font-medium">Date</th>
-                      <th className="py-2 pr-3 font-medium">Plan</th>
-                      <th className="py-2 pr-3 font-medium">Amount</th>
-                      <th className="py-2 pr-3 font-medium">Status</th>
-                      <th className="py-2 pr-3 font-medium text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {invoices.map((inv) => (
-                      <tr key={inv.id} className="border-t border-white/5 hover:bg-white/[0.02] transition">
-                        <td className="py-3 pr-3 font-semibold text-cyan-300">{inv.id}</td>
-                        <td className="py-3 pr-3 text-xs text-white/70">{inv.date}</td>
-                        <td className="py-3 pr-3 text-xs text-white/70">{inv.plan}</td>
-                        <td className="py-3 pr-3 font-semibold">{inv.amount}</td>
-                        <td className="py-3 pr-3">
-                          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
-                            <CheckCircle2 className="h-3 w-3" /> {inv.status}
-                          </span>
-                        </td>
-                        <td className="py-3 pr-3 text-right">
-                          <button className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[11px] font-semibold hover:bg-white/[0.06] hover:border-cyan-400/30 transition">
-                            <Download className="h-3 w-3" /> PDF
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="mt-4">
+                <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.01] py-10 text-center">
+                  <Receipt className="h-6 w-6 text-white/30" />
+                  <div className="text-sm text-white/50">Hələ hesab-faktura yoxdur</div>
+                </div>
               </div>
             </motion.section>
 
@@ -570,23 +502,10 @@ function BillingPage() {
                 </div>
                 <div className="text-[11px] text-white/40">Last 12 months</div>
               </div>
-              <ul className="mt-4 divide-y divide-white/5">
-                {payments.map((p) => (
-                  <li key={p.date + p.method} className="flex items-center gap-4 py-3">
-                    <div className="grid h-9 w-9 place-items-center rounded-lg bg-white/[0.04] border border-white/10">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-300" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold truncate">{p.method}</div>
-                      <div className="text-[11px] text-white/50">{p.date}</div>
-                    </div>
-                    <div className="text-sm font-bold">{p.amount}</div>
-                    <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
-                      {p.status}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-4 flex flex-col items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.01] py-10 text-center">
+                <Calendar className="h-6 w-6 text-white/30" />
+                <div className="text-sm text-white/50">Hələ ödəniş yoxdur</div>
+              </div>
             </motion.section>
 
             <div className="h-4" />

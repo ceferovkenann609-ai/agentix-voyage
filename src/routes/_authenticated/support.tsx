@@ -1,41 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { LifeBuoy, Mail, MessageSquare, BookOpen, ExternalLink } from "lucide-react";
+import { LifeBuoy, Mail, MessageSquare, BookOpen, ExternalLink, Clock } from "lucide-react";
+import { openSupportChat } from "@/lib/support-chat";
 
 export const Route = createFileRoute("/_authenticated/support")({
   head: () => ({
     meta: [
-      { title: "Support — Agentix" },
-      { name: "description", content: "Get help from the Agentix team." },
+      { title: "Dəstək — Agentix" },
+      {
+        name: "description",
+        content:
+          "Agentix dəstək komandası ilə canlı çat, e-poçt və sənədləşmə vasitəsilə əlaqə saxlayın.",
+      },
+      { property: "og:title", content: "Dəstək — Agentix" },
+      {
+        property: "og:description",
+        content: "Agentix müştəriləri üçün canlı çat, e-poçt dəstəyi və texniki sənədləşmə.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SupportPage,
 });
 
 function SupportPage() {
-  const cards = [
-    {
-      icon: MessageSquare,
-      title: "Live chat",
-      desc: "Chat with our team in real time from the Agentix widget.",
-      cta: "Open chat",
-      to: "/" as const,
-    },
-    {
-      icon: Mail,
-      title: "Email support",
-      desc: "Reach us at support@agentix.ai — we reply within a few hours.",
-      cta: "Contact us",
-      to: "/contact" as const,
-    },
-    {
-      icon: BookOpen,
-      title: "Documentation",
-      desc: "Guides, API references and playbooks for every service.",
-      cta: "Browse services",
-      to: "/services" as const,
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-[#07090C] text-white pt-28 pb-24">
       <div className="max-w-5xl mx-auto px-6">
@@ -44,36 +32,89 @@ function SupportPage() {
             <LifeBuoy className="h-5 w-5 text-white" />
           </div>
           <div>
-            <p className="uppercase tracking-[6px] text-cyan-400 font-semibold text-xs">SUPPORT</p>
-            <h1 className="text-3xl font-bold">How can we help?</h1>
+            <p className="uppercase tracking-[6px] text-cyan-400 font-semibold text-xs">DƏSTƏK</p>
+            <h1 className="text-3xl font-bold">Necə köməklik göstərə bilərik?</h1>
           </div>
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {cards.map((c) => (
-            <div key={c.title} className="glass rounded-2xl p-6 flex flex-col">
-              <div className="h-11 w-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-                <c.icon className="h-5 w-5 text-cyan-300" />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold">{c.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground flex-1">{c.desc}</p>
-              <Link
-                to={c.to}
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-300 hover:text-cyan-200"
-              >
-                {c.cta} <ExternalLink className="h-3.5 w-3.5" />
-              </Link>
+          {/* Live chat — opens the Agentix chat widget in place, no redirect */}
+          <div className="glass rounded-2xl p-6 flex flex-col">
+            <div className="h-11 w-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+              <MessageSquare className="h-5 w-5 text-cyan-300" />
             </div>
-          ))}
+            <h3 className="mt-4 text-lg font-semibold">Canlı çat</h3>
+            <p className="mt-2 text-sm text-muted-foreground flex-1">
+              Agentix AI köməkçisi sualınızı dərhal cavablandırır və ehtiyac olduqda müraciətinizi
+              dəstək komandasına yönləndirir.
+            </p>
+            <button
+              type="button"
+              onClick={openSupportChat}
+              className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-300 hover:text-cyan-200"
+            >
+              Çatı aç <MessageSquare className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="glass rounded-2xl p-6 flex flex-col">
+            <div className="h-11 w-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+              <Mail className="h-5 w-5 text-cyan-300" />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold">E-poçt dəstəyi</h3>
+            <p className="mt-2 text-sm text-muted-foreground flex-1">
+              Müraciətinizi əlaqə formu ilə göndərin. Hər müraciət qeydə alınır və hesabınıza
+              bağlanır.
+            </p>
+            <Link
+              to="/contact"
+              className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-300 hover:text-cyan-200"
+            >
+              Əlaqə formu <ExternalLink className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          <div className="glass rounded-2xl p-6 flex flex-col">
+            <div className="h-11 w-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+              <BookOpen className="h-5 w-5 text-cyan-300" />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold">Xidmət məlumatları</h3>
+            <p className="mt-2 text-sm text-muted-foreground flex-1">
+              Hər AI xidmətinin imkanları, inteqrasiyaları və tətbiq mərhələləri xidmət
+              səhifələrində izah olunur.
+            </p>
+            <Link
+              to="/services"
+              className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-300 hover:text-cyan-200"
+            >
+              Xidmətlərə keç <ExternalLink className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
 
         <div className="mt-10 glass rounded-2xl p-6">
-          <h2 className="text-lg font-semibold">Frequently asked</h2>
+          <div className="flex items-center gap-2">
+            <Clock className="h-4 w-4 text-cyan-300" />
+            <h2 className="text-lg font-semibold">Dəstək qaydaları</h2>
+          </div>
           <div className="mt-4 divide-y divide-white/5">
             {[
-              { q: "How fast do you respond?", a: "Live chat within minutes during business hours, email under 4 hours." },
-              { q: "Can I request a custom integration?", a: "Yes — book a demo and our team will scope it with you." },
-              { q: "Do you offer enterprise SLAs?", a: "Enterprise plans include 24/7 support and a 99.9% uptime SLA." },
+              {
+                q: "Dəstək hansı saatlarda işləyir?",
+                a: "İş günləri 09:00–19:00 (Bakı vaxtı). Bu saatlardan kənarda göndərilən müraciətlər növbəti iş günü sıraya alınır.",
+              },
+              {
+                q: "Müraciətimə necə cavab verilir?",
+                a: "Canlı çat AI köməkçisi ilə dərhal başlayır. İnsan mütəxəssis tələb olunan hallarda müraciət e-poçt üzərindən davam edir.",
+              },
+              {
+                q: "Fərdi inteqrasiya tələb edə bilərəmmi?",
+                a: "Bəli. Demo sifariş edin — komanda tələbi qiymətləndirir və tətbiq planını sizinlə birlikdə hazırlayır.",
+              },
+              {
+                q: "Texniki problemi necə bildirim?",
+                a: "Çatda və ya əlaqə formunda problemin baş verdiyi səhifəni, vaxtı və gördüyünüz mesajı qeyd edin — bu, araşdırmanı sürətləndirir.",
+              },
             ].map((f) => (
               <div key={f.q} className="py-4">
                 <p className="font-medium">{f.q}</p>

@@ -26,7 +26,6 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-
 /* ---------------- Cursor Glow ---------------- */
 function CursorGlow() {
   const x = useMotionValue(-500);
@@ -51,8 +50,7 @@ function CursorGlow() {
         y: sy,
         translateX: "-50%",
         translateY: "-50%",
-        background:
-          "radial-gradient(circle, oklch(0.65 0.26 295 / 0.5) 0%, transparent 60%)",
+        background: "radial-gradient(circle, oklch(0.65 0.26 295 / 0.5) 0%, transparent 60%)",
       }}
     />
   );
@@ -61,7 +59,16 @@ function CursorGlow() {
 /* ---------------- Particles ---------------- */
 function Particles({ count = 30 }: { count?: number }) {
   const [particles, setParticles] = useState<
-    { id: number; x: number; y: number; dx: number; dy: number; size: number; delay: number; duration: number }[]
+    {
+      id: number;
+      x: number;
+      y: number;
+      dx: number;
+      dy: number;
+      size: number;
+      delay: number;
+      duration: number;
+    }[]
   >([]);
   useEffect(() => {
     setParticles(
@@ -99,7 +106,6 @@ function Particles({ count = 30 }: { count?: number }) {
     </div>
   );
 }
-
 
 /* ---------------- AI Visualization ---------------- */
 function AIVisualization() {
@@ -147,7 +153,11 @@ function AIVisualization() {
       <div className="absolute inset-24 rounded-full border border-cyan-500/20 animate-spin-slow" />
 
       {/* Connection lines */}
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
         <defs>
           <linearGradient id="line-grad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="oklch(0.65 0.26 295)" stopOpacity="0.6" />
@@ -210,9 +220,7 @@ function AIVisualization() {
         className="absolute top-6 -left-6 glass-strong rounded-xl px-3 py-2 shadow-lg hidden sm:block"
       >
         <div className="flex items-center gap-2">
-          <div className
-          
-          ="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-[10px] font-mono text-muted-foreground">98.4% uptime</span>
         </div>
       </motion.div>
@@ -358,11 +366,20 @@ function Hero() {
   );
 }
 
-
 /* ---------------- Trusted By ---------------- */
 function TrustedBy() {
   const { t } = useTranslation();
-  const companies = ["Nebula", "Orbit", "Quantum", "Vertex", "Lumen", "Pulse", "Axiom", "Zenith"];
+  const companies = [
+    "WhatsApp",
+    "Slack",
+    "HubSpot",
+    "Salesforce",
+    "Zendesk",
+    "Shopify",
+    "Twilio",
+    "Google",
+  ];
+
   return (
     <section className="relative py-20 border-y border-white/5">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -386,15 +403,10 @@ function TrustedBy() {
   );
 }
 
-
 /* ---------------- Dashboard Preview ---------------- */
 function DashboardPreview() {
   const { t } = useTranslation();
-  const messages = [
-    { user: "Sarah K.", msg: "What's your return policy?", time: "2s ago" },
-    { user: "Marcus D.", msg: "Can I upgrade my plan?", time: "5s ago" },
-    { user: "Priya R.", msg: "Do you ship internationally?", time: "8s ago" },
-  ];
+
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -412,10 +424,7 @@ function DashboardPreview() {
           <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
             {t("home.dashboard.title")}
           </h2>
-          <p className="mt-4 text-muted-foreground">
-            {t("home.dashboard.subtitle")}
-          </p>
-
+          <p className="mt-4 text-muted-foreground">{t("home.dashboard.subtitle")}</p>
         </motion.div>
 
         <motion.div
@@ -446,11 +455,10 @@ function DashboardPreview() {
               <div className="lg:col-span-2 space-y-4">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[
-                    { l: t("home.dashboard.stats.activeChats"), v: "1,248", d: "+12%", i: Users },
-                    { l: t("home.dashboard.stats.response"), v: "0.8s", d: "-24%", i: Clock },
-                    { l: t("home.dashboard.stats.automation"), v: "94%", d: "+8%", i: Bot },
-                    { l: t("home.dashboard.stats.csat"), v: "4.9", d: "+0.2", i: Star },
-
+                    { l: t("home.dashboard.stats.activeChats"), v: "—", d: "", i: Users },
+                    { l: t("home.dashboard.stats.response"), v: "—", d: "", i: Clock },
+                    { l: t("home.dashboard.stats.automation"), v: "—", d: "", i: Bot },
+                    { l: t("home.dashboard.stats.csat"), v: "—", d: "", i: Star },
                   ].map((s) => (
                     <div key={s.l} className="gradient-border rounded-xl p-3">
                       <div className="flex items-center justify-between mb-2">
@@ -467,23 +475,26 @@ function DashboardPreview() {
                 <div className="gradient-border rounded-xl p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <div className="text-sm font-semibold">{t("home.dashboard.conversations")}</div>
-                      <div className="text-xs text-muted-foreground">{t("home.dashboard.last24")}</div>
-
+                      <div className="text-sm font-semibold">
+                        {t("home.dashboard.conversations")}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {t("home.dashboard.last24")}
+                      </div>
                     </div>
                     <BarChart3 className="h-4 w-4 text-muted-foreground" />
                   </div>
-                  <div className="flex items-end gap-1.5 h-28">
-                    {[40, 55, 35, 70, 50, 85, 65, 95, 75, 88, 60, 92, 70, 100, 82].map((h, i) => (
-                      <motion.div
+                  <div className="relative flex items-end gap-1.5 h-28">
+                    {Array.from({ length: 15 }).map((_, i) => (
+                      <div
                         key={i}
-                        initial={{ height: 0 }}
-                        whileInView={{ height: `${h}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: i * 0.05 }}
-                        className="flex-1 rounded-t bg-gradient-to-t from-purple-600/80 to-blue-500/60"
+                        className="flex-1 rounded-t bg-white/5"
+                        style={{ height: "18%" }}
                       />
                     ))}
+                    <div className="absolute inset-0 flex items-center justify-center text-xs text-muted-foreground">
+                      {t("home.dashboard.noData")}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -494,44 +505,13 @@ function DashboardPreview() {
                   <div className="text-sm font-semibold">{t("home.dashboard.liveMessages")}</div>
                   <MessageSquare className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <div className="space-y-3">
-                  {messages.map((m, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: 10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.2 }}
-                      className="space-y-2"
-                    >
-                      <div className="flex items-start gap-2">
-                        <div className="h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-[10px] font-bold">
-                          {m.user[0]}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-semibold truncate">{m.user}</span>
-                            <span className="text-[10px] text-muted-foreground">{m.time}</span>
-                          </div>
-                          <div className="mt-1 text-xs text-muted-foreground bg-white/5 rounded-lg px-2 py-1.5">
-                            {m.msg}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-2 pl-6">
-                        <div className="h-6 w-6 shrink-0 rounded-full bg-brand-gradient flex items-center justify-center">
-                          <Bot className="h-3 w-3 text-white" />
-                        </div>
-                        <div className="flex-1 text-xs bg-brand-gradient/10 rounded-lg px-2 py-1.5 border border-purple-500/20">
-                          <span className="inline-flex gap-1">
-                            <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-pulse" />
-                            <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-pulse [animation-delay:0.2s]" />
-                            <span className="h-1.5 w-1.5 rounded-full bg-purple-400 animate-pulse [animation-delay:0.4s]" />
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
+                <div className="flex h-40 flex-col items-center justify-center gap-3 text-center">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full glass">
+                    <Bot className="h-4 w-4 text-cyan-300" />
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {t("home.dashboard.noMessages")}
+                  </div>
                 </div>
               </div>
             </div>
@@ -606,12 +586,42 @@ function ServiceCard({
 function Services() {
   const { t } = useTranslation();
   const services = [
-    { i: MessageSquare, t: t("home.services.items.chatbots.t"), d: t("home.services.items.chatbots.d"), slug: "ai-chatbots" },
-    { i: Phone, t: t("home.services.items.voice.t"), d: t("home.services.items.voice.d"), slug: "voice-ai" },
-    { i: Target, t: t("home.services.items.leads.t"), d: t("home.services.items.leads.d"), slug: "lead-generation" },
-    { i: Headphones, t: t("home.services.items.support.t"), d: t("home.services.items.support.d"), slug: "customer-support" },
-    { i: Workflow, t: t("home.services.items.workflow.t"), d: t("home.services.items.workflow.d"), slug: "workflow-automation" },
-    { i: Database, t: t("home.services.items.crm.t"), d: t("home.services.items.crm.d"), slug: "crm-integration" },
+    {
+      i: MessageSquare,
+      t: t("home.services.items.chatbots.t"),
+      d: t("home.services.items.chatbots.d"),
+      slug: "ai-chatbots",
+    },
+    {
+      i: Phone,
+      t: t("home.services.items.voice.t"),
+      d: t("home.services.items.voice.d"),
+      slug: "voice-ai",
+    },
+    {
+      i: Target,
+      t: t("home.services.items.leads.t"),
+      d: t("home.services.items.leads.d"),
+      slug: "lead-generation",
+    },
+    {
+      i: Headphones,
+      t: t("home.services.items.support.t"),
+      d: t("home.services.items.support.d"),
+      slug: "customer-support",
+    },
+    {
+      i: Workflow,
+      t: t("home.services.items.workflow.t"),
+      d: t("home.services.items.workflow.d"),
+      slug: "workflow-automation",
+    },
+    {
+      i: Database,
+      t: t("home.services.items.crm.t"),
+      d: t("home.services.items.crm.d"),
+      slug: "crm-integration",
+    },
   ];
 
   return (
@@ -636,8 +646,6 @@ function Services() {
     </section>
   );
 }
-
-
 
 /* ---------------- How It Works ---------------- */
 function HowItWorks() {
@@ -687,7 +695,6 @@ function HowItWorks() {
   );
 }
 
-
 /* ---------------- Features ---------------- */
 function Features() {
   const { t } = useTranslation();
@@ -709,12 +716,13 @@ function Features() {
           <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
             {t("home.features.title")}
           </h2>
-          <p className="mt-4 text-muted-foreground">
-            {t("home.features.subtitle")}
-          </p>
+          <p className="mt-4 text-muted-foreground">{t("home.features.subtitle")}</p>
           <div className="mt-8 grid sm:grid-cols-2 gap-3">
             {features.map((f) => (
-              <div key={f.t} className="flex items-center gap-3 gradient-border rounded-xl px-4 py-3">
+              <div
+                key={f.t}
+                className="flex items-center gap-3 gradient-border rounded-xl px-4 py-3"
+              >
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient/20 border border-purple-500/30">
                   <f.i className="h-4 w-4 text-purple-300" />
                 </div>
@@ -735,7 +743,8 @@ function Features() {
               <div>
                 <div className="text-sm font-semibold">{t("home.features.chat.assistant")}</div>
                 <div className="text-xs text-emerald-400 flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> {t("home.features.chat.online")}
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />{" "}
+                  {t("home.features.chat.online")}
                 </div>
               </div>
             </div>
@@ -768,11 +777,13 @@ function Features() {
                 placeholder={t("home.features.chat.placeholder")}
                 aria-label={t("home.features.chat.placeholder")}
               />
-              <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient" aria-label="Send">
+              <button
+                className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient"
+                aria-label="Send"
+              >
                 <ArrowRight className="h-4 w-4 text-white" />
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -781,7 +792,15 @@ function Features() {
 }
 
 /* ---------------- Stats ---------------- */
-function Counter({ end, suffix = "", prefix = "" }: { end: number; suffix?: string; prefix?: string }) {
+function Counter({
+  end,
+  suffix = "",
+  prefix = "",
+}: {
+  end: number;
+  suffix?: string;
+  prefix?: string;
+}) {
   const [v, setV] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -818,10 +837,10 @@ function Counter({ end, suffix = "", prefix = "" }: { end: number; suffix?: stri
 function Stats() {
   const { t } = useTranslation();
   const stats = [
-    { n: 100, s: "+", l: t("home.stats.businesses") },
-    { n: 500, s: "K+", l: t("home.stats.messages") },
-    { n: 98, s: "%", l: t("home.stats.csat") },
     { n: 24, s: "/7", l: t("home.stats.availability") },
+    { n: 95, s: "+", l: t("home.stats.languages") },
+    { n: 50, s: "+", l: t("home.stats.integrations") },
+    { n: 4, s: t("home.stats.weeksSuffix"), l: t("home.stats.deployment") },
   ];
 
   return (
@@ -847,69 +866,40 @@ function Stats() {
 /* ---------------- Testimonials ---------------- */
 function Testimonials() {
   const { t } = useTranslation();
-  const items = [
-    {
-      n: t("home.testimonials.items.1.n"),
-      r: t("home.testimonials.items.1.r"),
-      q: t("home.testimonials.items.1.q"),
-      avatar: "linear-gradient(135deg,#a855f7,#3b82f6)",
-    },
-    {
-      n: t("home.testimonials.items.2.n"),
-      r: t("home.testimonials.items.2.r"),
-      q: t("home.testimonials.items.2.q"),
-      avatar: "linear-gradient(135deg,#3b82f6,#06b6d4)",
-    },
-    {
-      n: t("home.testimonials.items.3.n"),
-      r: t("home.testimonials.items.3.r"),
-      q: t("home.testimonials.items.3.q"),
-      avatar: "linear-gradient(135deg,#ec4899,#a855f7)",
-    },
-  ];
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">{t("home.testimonials.title")}</h2>
-          <p className="mt-4 text-muted-foreground">
-            {t("home.testimonials.subtitle")}
+          <h2 className="text-4xl sm:text-5xl font-bold text-gradient">
+            {t("home.testimonials.title")}
+          </h2>
+          <p className="mt-4 text-muted-foreground">{t("home.testimonials.subtitle")}</p>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="gradient-border rounded-2xl p-10 text-center max-w-2xl mx-auto"
+        >
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full glass">
+            <Star className="h-5 w-5 text-cyan-300" />
+          </div>
+          <div className="mt-5 text-lg font-semibold">{t("home.testimonials.emptyTitle")}</div>
+          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+            {t("home.testimonials.emptyBody")}
           </p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-5">
-          {items.map((x, i) => (
-            <motion.div
-              key={x.n}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="gradient-border rounded-2xl p-6 flex flex-col"
-            >
-              <div className="flex gap-0.5 mb-4">
-                {Array.from({ length: 5 }).map((_, k) => (
-                  <Star key={k} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed flex-1">"{x.q}"</p>
-              <div className="mt-6 flex items-center gap-3 pt-4 border-t border-white/5">
-                <div
-                  className="h-10 w-10 rounded-full shrink-0"
-                  style={{ background: x.avatar }}
-                />
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold truncate">{x.n}</div>
-                  <div className="text-xs text-muted-foreground truncate">{x.r}</div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+          <Link
+            to="/book-demo"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-3 text-sm font-semibold text-white"
+          >
+            {t("common.bookDemo")}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
 }
-
 
 /* ---------------- FAQ ---------------- */
 function FAQ() {
@@ -977,9 +967,7 @@ function FinalCTA() {
             <h2 className="text-4xl sm:text-6xl font-bold text-gradient max-w-3xl mx-auto leading-[1.1]">
               {t("home.cta.title")}
             </h2>
-            <p className="mt-6 text-muted-foreground max-w-xl mx-auto">
-              {t("home.cta.subtitle")}
-            </p>
+            <p className="mt-6 text-muted-foreground max-w-xl mx-auto">{t("home.cta.subtitle")}</p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link
                 to="/book-demo"
@@ -995,7 +983,6 @@ function FinalCTA() {
                 {t("common.contactSales")}
               </Link>
             </div>
-
           </div>
         </div>
       </div>
