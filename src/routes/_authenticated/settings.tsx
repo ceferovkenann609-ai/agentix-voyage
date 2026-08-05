@@ -46,9 +46,15 @@ export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
       { title: "Settings — Agentix" },
-      { name: "description", content: "Manage your profile, company, security, appearance and API keys." },
+      {
+        name: "description",
+        content: "Manage your profile, company, security, appearance and API keys.",
+      },
       { property: "og:title", content: "Settings — Agentix" },
-      { property: "og:description", content: "Manage your profile, company, security, appearance and API keys." },
+      {
+        property: "og:description",
+        content: "Manage your profile, company, security, appearance and API keys.",
+      },
     ],
   }),
   component: SettingsPage,
@@ -62,7 +68,13 @@ const navItems = [
   { key: "demos", label: "Demo Sorğuları", icon: CalendarCheck, to: "/demo-requests" as const },
   { key: "analytics", label: "Analitika", icon: BarChart3, to: "/analytics" as const },
   { key: "billing", label: "Ödənişlər", icon: CreditCard, to: "/billing" as const },
-  { key: "settings", label: "Tənzimləmələr", icon: SettingsIcon, to: "/settings" as const, active: true },
+  {
+    key: "settings",
+    label: "Tənzimləmələr",
+    icon: SettingsIcon,
+    to: "/settings" as const,
+    active: true,
+  },
   { key: "support", label: "Dəstək", icon: LifeBuoy, to: "/support" as const },
 ];
 
@@ -133,10 +145,15 @@ function SettingsPage() {
                 </div>
                 <div>
                   <div className="text-sm font-bold tracking-tight">Agentix</div>
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">İş Sahəsi</div>
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">
+                    İş Sahəsi
+                  </div>
                 </div>
               </div>
-              <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white/60 hover:text-white">
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden text-white/60 hover:text-white"
+              >
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -165,7 +182,12 @@ function SettingsPage() {
                   isActive ? "text-white" : "text-white/60 hover:text-white hover:bg-white/5"
                 }`;
                 return (
-                  <Link key={item.key} to={item.to} onClick={() => setSidebarOpen(false)} className={cls}>
+                  <Link
+                    key={item.key}
+                    to={item.to}
+                    onClick={() => setSidebarOpen(false)}
+                    className={cls}
+                  >
                     {content}
                   </Link>
                 );
@@ -237,7 +259,9 @@ function SettingsPage() {
                   <SettingsIcon className="h-3 w-3" /> Workspace Settings
                 </div>
                 <h1 className="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">
-                  <span className="bg-gradient-to-r from-white via-cyan-100 to-blue-300 bg-clip-text text-transparent">Settings</span>
+                  <span className="bg-gradient-to-r from-white via-cyan-100 to-blue-300 bg-clip-text text-transparent">
+                    Settings
+                  </span>
                 </h1>
                 <p className="mt-2 text-white/60 max-w-xl">
                   Configure your workspace, personal preferences and security.
@@ -265,7 +289,9 @@ function SettingsPage() {
                         >
                           <Icon className={`h-4.5 w-4.5 ${isActive ? "text-cyan-300" : ""}`} />
                           <span className="flex-1 text-left">{s.label}</span>
-                          {isActive && <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />}
+                          {isActive && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          )}
                         </button>
                       </li>
                     );
@@ -284,7 +310,9 @@ function SettingsPage() {
                     transition={{ duration: 0.25 }}
                     className="space-y-6"
                   >
-                    {active === "profile" && <ProfileSection name={name} email={user?.email || ""} />}
+                    {active === "profile" && (
+                      <ProfileSection name={name} email={user?.email || ""} />
+                    )}
                     {active === "company" && <CompanySection />}
                     {active === "password" && <PasswordSection />}
                     {active === "notifications" && <NotificationsSection />}
@@ -307,7 +335,17 @@ function SettingsPage() {
 
 /* ---------- Sections ---------- */
 
-function Card({ title, desc, children, footer }: { title: string; desc?: string; children: React.ReactNode; footer?: React.ReactNode }) {
+function Card({
+  title,
+  desc,
+  children,
+  footer,
+}: {
+  title: string;
+  desc?: string;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+}) {
   return (
     <section className="rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden">
       <div className="px-6 py-5 border-b border-white/5">
@@ -315,7 +353,11 @@ function Card({ title, desc, children, footer }: { title: string; desc?: string;
         {desc && <div className="mt-0.5 text-xs text-white/50">{desc}</div>}
       </div>
       <div className="px-6 py-5">{children}</div>
-      {footer && <div className="px-6 py-4 border-t border-white/5 bg-white/[0.02] flex items-center justify-end gap-2">{footer}</div>}
+      {footer && (
+        <div className="px-6 py-4 border-t border-white/5 bg-white/[0.02] flex items-center justify-end gap-2">
+          {footer}
+        </div>
+      )}
     </section>
   );
 }
@@ -341,12 +383,16 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50">{label}</span>
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+        {label}
+      </span>
       <div className="mt-1.5 relative">
         <input
           type={type}
           placeholder={placeholder}
-          {...(value !== undefined ? { value, onChange: (e) => onChange?.(e.target.value) } : { defaultValue })}
+          {...(value !== undefined
+            ? { value, onChange: (e) => onChange?.(e.target.value) }
+            : { defaultValue })}
           disabled={disabled}
           className="h-10 w-full rounded-xl border border-white/8 bg-white/[0.03] px-3 pr-10 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
         />
@@ -370,7 +416,9 @@ function SaveButton({
   return (
     <>
       {message && (
-        <span className={`mr-auto text-xs ${message.tone === "ok" ? "text-emerald-300" : "text-rose-300"}`}>
+        <span
+          className={`mr-auto text-xs ${message.tone === "ok" ? "text-emerald-300" : "text-rose-300"}`}
+        >
           {message.text}
         </span>
       )}
@@ -397,7 +445,9 @@ function Toggle({ defaultOn = false }: { defaultOn?: boolean }) {
     <button
       onClick={() => setOn(!on)}
       className={`relative h-6 w-11 rounded-full border transition ${
-        on ? "bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-400/40 shadow-[0_0_15px_-3px_rgba(34,211,238,0.6)]" : "bg-white/5 border-white/10"
+        on
+          ? "bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-400/40 shadow-[0_0_15px_-3px_rgba(34,211,238,0.6)]"
+          : "bg-white/5 border-white/10"
       }`}
     >
       <span
@@ -451,7 +501,14 @@ function ProfileSection({ name, email }: { name: string; email: string }) {
     <Card
       title="Profil"
       desc="Agentix daxilində görünən şəxsi məlumatlarınız."
-      footer={<SaveButton onSave={() => void save()} onCancel={reset} saving={updateProfile.isPending} message={message} />}
+      footer={
+        <SaveButton
+          onSave={() => void save()}
+          onCancel={reset}
+          saving={updateProfile.isPending}
+          message={message}
+        />
+      }
     >
       <div className="flex flex-col sm:flex-row items-start gap-6">
         <div className="relative">
@@ -461,10 +518,20 @@ function ProfileSection({ name, email }: { name: string; email: string }) {
         </div>
         <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <Field label="Ad Soyad" value={fullName} onChange={setFullName} placeholder="Aylin Mehdiyeva" />
+            <Field
+              label="Ad Soyad"
+              value={fullName}
+              onChange={setFullName}
+              placeholder="Aylin Mehdiyeva"
+            />
           </div>
           <Field label="E-poçt" value={email} onChange={() => {}} type="email" disabled />
-          <Field label="Telefon" value={phone} onChange={setPhone} placeholder="+994 55 555 55 55" />
+          <Field
+            label="Telefon"
+            value={phone}
+            onChange={setPhone}
+            placeholder="+994 55 555 55 55"
+          />
         </div>
       </div>
     </Card>
@@ -511,7 +578,12 @@ function CompanySection() {
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
-          <Field label="Şirkət adı" value={company} onChange={setCompany} placeholder="Agentix Labs" />
+          <Field
+            label="Şirkət adı"
+            value={company}
+            onChange={setCompany}
+            placeholder="Agentix Labs"
+          />
         </div>
       </div>
     </Card>
@@ -575,12 +647,21 @@ function PasswordSection() {
           onChange={setPassword}
           placeholder="Ən azı 12 simvol"
           suffix={
-            <button onClick={() => setShow(!show)} className="text-white/50 hover:text-white transition">
+            <button
+              onClick={() => setShow(!show)}
+              className="text-white/50 hover:text-white transition"
+            >
               {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           }
         />
-        <Field label="Yeni şifrəni təkrarlayın" type="password" value={confirm} onChange={setConfirm} placeholder="Şifrəni təkrar yazın" />
+        <Field
+          label="Yeni şifrəni təkrarlayın"
+          type="password"
+          value={confirm}
+          onChange={setConfirm}
+          placeholder="Şifrəni təkrar yazın"
+        />
         <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs text-white/60">
           <div className="font-semibold text-white/80 mb-2">Şifrə tələbləri</div>
           <ul className="space-y-1">
@@ -606,7 +687,11 @@ function NotificationsSection() {
     { label: "Security alerts", desc: "Sign-ins from new devices or locations.", on: true },
   ];
   return (
-    <Card title="Bildirişlər" desc="Choose how you want to hear from Agentix." footer={<SaveButton />}>
+    <Card
+      title="Bildirişlər"
+      desc="Choose how you want to hear from Agentix."
+      footer={<SaveButton />}
+    >
       <ul className="divide-y divide-white/5">
         {rows.map((r) => (
           <li key={r.label} className="flex items-center gap-4 py-3">
@@ -632,10 +717,16 @@ function AppearanceSection() {
   ] as const;
   const accents = ["#22d3ee", "#60a5fa", "#34d399", "#a78bfa", "#f472b6"];
   return (
-    <Card title="Appearance" desc="Customize the look and feel of your workspace." footer={<SaveButton />}>
+    <Card
+      title="Appearance"
+      desc="Customize the look and feel of your workspace."
+      footer={<SaveButton />}
+    >
       <div className="space-y-6">
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Theme</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+            Theme
+          </div>
           <div className="mt-2 grid grid-cols-3 gap-3 max-w-md">
             {themes.map((t) => {
               const Icon = t.icon;
@@ -658,7 +749,9 @@ function AppearanceSection() {
           </div>
         </div>
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Accent color</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+            Accent color
+          </div>
           <div className="mt-2 flex items-center gap-3">
             {accents.map((c, i) => (
               <button
@@ -671,7 +764,9 @@ function AppearanceSection() {
           </div>
         </div>
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Density</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+            Density
+          </div>
           <div className="mt-2 inline-flex items-center rounded-xl border border-white/10 bg-white/[0.03] p-1">
             {(["cozy", "compact"] as const).map((d) => (
               <button
@@ -711,14 +806,18 @@ function LanguageSection() {
     <Card title="Dil və Region" desc="Interfeys dilini seçin — dəyişiklik dərhal tətbiq olunur.">
       <div className="space-y-6">
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">Interfeys dili</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+            Interfeys dili
+          </div>
           <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
             {languages.map((l) => {
               const isActive = lang === (l.code as "az" | "en");
               return (
                 <button
                   key={l.code}
-                  onClick={() => (l.code === "az" || l.code === "en") && setLang(l.code as "az" | "en")}
+                  onClick={() =>
+                    (l.code === "az" || l.code === "en") && setLang(l.code as "az" | "en")
+                  }
                   className={`flex items-center gap-3 rounded-xl border p-3 text-left transition ${
                     isActive
                       ? "border-cyan-400/40 bg-gradient-to-r from-cyan-500/10 to-blue-500/5"
@@ -734,8 +833,12 @@ function LanguageSection() {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-white/70">
-          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">Saat qurşağı · (GMT+04:00) Bakı</div>
-          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">Tarix formatı · GG / AA / İİİİ</div>
+          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">
+            Saat qurşağı · (GMT+04:00) Bakı
+          </div>
+          <div className="rounded-xl border border-white/8 bg-white/[0.02] p-3 text-xs">
+            Tarix formatı · GG / AA / İİİİ
+          </div>
         </div>
       </div>
     </Card>
@@ -758,7 +861,8 @@ function ApiKeysSection() {
         <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-center">
           <div className="text-sm font-semibold text-white/80">Hələ API açarı yoxdur</div>
           <p className="mt-2 text-xs text-white/50">
-            API girişi hesabınız üçün hələ aktivləşdirilməyib. Açar tələb etmək üçün dəstək komandası ilə əlaqə saxlayın.
+            API girişi hesabınız üçün hələ aktivləşdirilməyib. Açar tələb etmək üçün dəstək
+            komandası ilə əlaqə saxlayın.
           </p>
           <Link
             to="/support"
@@ -770,17 +874,28 @@ function ApiKeysSection() {
       ) : (
         <ul className="space-y-2">
           {keys.map((k) => (
-            <li key={k.name} className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-4">
+            <li
+              key={k.name}
+              className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-4"
+            >
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-semibold">{k.name}</div>
                 <div className="mt-1 font-mono text-xs text-white/70 truncate">{k.key}</div>
-                <div className="mt-1 text-[10px] text-white/40">Yaradıldı {k.created} · Son istifadə {k.last}</div>
+                <div className="mt-1 text-[10px] text-white/40">
+                  Yaradıldı {k.created} · Son istifadə {k.last}
+                </div>
               </div>
               <div className="flex items-center gap-2">
-                <button className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-cyan-400/30 transition" aria-label="Kopyala">
+                <button
+                  className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-cyan-400/30 transition"
+                  aria-label="Kopyala"
+                >
                   <Copy className="h-3.5 w-3.5" />
                 </button>
-                <button className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-rose-300 hover:border-rose-400/30 transition" aria-label="Ləğv et">
+                <button
+                  className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-rose-300 hover:border-rose-400/30 transition"
+                  aria-label="Ləğv et"
+                >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
               </div>
@@ -789,7 +904,6 @@ function ApiKeysSection() {
         </ul>
       )}
     </Card>
-
   );
 }
 
@@ -801,12 +915,15 @@ function SecuritySection() {
 
   return (
     <div className="space-y-6">
-      <Card title="İki faktorlu autentifikasiya" desc="Hesabınıza əlavə təhlükəsizlik qatı əlavə edin.">
+      <Card
+        title="İki faktorlu autentifikasiya"
+        desc="Hesabınıza əlavə təhlükəsizlik qatı əlavə edin."
+      >
         <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-6">
           <div className="text-sm font-semibold text-white/80">Hələ aktivləşdirilməyib</div>
           <p className="mt-2 text-xs text-white/50">
-            İki faktorlu autentifikasiya hazırda hesabınız üçün konfiqurasiya edilməyib. Aktivləşdirmə tələb
-            edirsinizsə dəstək komandası ilə əlaqə saxlayın.
+            İki faktorlu autentifikasiya hazırda hesabınız üçün konfiqurasiya edilməyib.
+            Aktivləşdirmə tələb edirsinizsə dəstək komandası ilə əlaqə saxlayın.
           </p>
         </div>
       </Card>
@@ -843,7 +960,8 @@ function SecuritySection() {
           <div>
             <div className="text-sm font-semibold text-rose-200">Hesabın silinməsi</div>
             <div className="mt-1 text-xs text-white/50">
-              Hesabın və bütün əlaqəli məlumatların silinməsi dəstək komandası tərəfindən təsdiqlə həyata keçirilir.
+              Hesabın və bütün əlaqəli məlumatların silinməsi dəstək komandası tərəfindən təsdiqlə
+              həyata keçirilir.
             </div>
           </div>
           <Link
@@ -857,4 +975,3 @@ function SecuritySection() {
     </div>
   );
 }
-

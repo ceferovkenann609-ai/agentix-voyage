@@ -8,7 +8,8 @@ export const Route = createFileRoute("/_authenticated/support")({
       { title: "Dəstək — Agentix" },
       {
         name: "description",
-        content: "Agentix dəstək komandası ilə canlı çat, e-poçt və sənədləşmə vasitəsilə əlaqə saxlayın.",
+        content:
+          "Agentix dəstək komandası ilə canlı çat, e-poçt və sənədləşmə vasitəsilə əlaqə saxlayın.",
       },
       { property: "og:title", content: "Dəstək — Agentix" },
       {
@@ -44,8 +45,8 @@ function SupportPage() {
             </div>
             <h3 className="mt-4 text-lg font-semibold">Canlı çat</h3>
             <p className="mt-2 text-sm text-muted-foreground flex-1">
-              Agentix AI köməkçisi sualınızı dərhal cavablandırır və ehtiyac olduqda müraciətinizi dəstək
-              komandasına yönləndirir.
+              Agentix AI köməkçisi sualınızı dərhal cavablandırır və ehtiyac olduqda müraciətinizi
+              dəstək komandasına yönləndirir.
             </p>
             <button
               type="button"
@@ -62,7 +63,8 @@ function SupportPage() {
             </div>
             <h3 className="mt-4 text-lg font-semibold">E-poçt dəstəyi</h3>
             <p className="mt-2 text-sm text-muted-foreground flex-1">
-              Müraciətinizi əlaqə formu ilə göndərin. Hər müraciət qeydə alınır və hesabınıza bağlanır.
+              Müraciətinizi əlaqə formu ilə göndərin. Hər müraciət qeydə alınır və hesabınıza
+              bağlanır.
             </p>
             <Link
               to="/contact"
@@ -78,8 +80,8 @@ function SupportPage() {
             </div>
             <h3 className="mt-4 text-lg font-semibold">Xidmət məlumatları</h3>
             <p className="mt-2 text-sm text-muted-foreground flex-1">
-              Hər AI xidmətinin imkanları, inteqrasiyaları və tətbiq mərhələləri xidmət səhifələrində
-              izah olunur.
+              Hər AI xidmətinin imkanları, inteqrasiyaları və tətbiq mərhələləri xidmət
+              səhifələrində izah olunur.
             </p>
             <Link
               to="/services"
