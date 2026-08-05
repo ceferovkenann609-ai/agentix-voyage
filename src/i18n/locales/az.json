@@ -48,7 +48,7 @@
         "integration": "Asan İnteqrasiya"
       }
     },
-    "trusted": "Yenilikçi şirkətlərin etibarı",
+    "trusted": "Artıq istifadə etdiyiniz platformalarla inteqrasiya",
     "dashboard": {
       "badge": "Canlı İdarə Paneli",
       "title": "Hər AI agent üçün vahid idarə mərkəzi",
@@ -62,28 +62,60 @@
       },
       "conversations": "Söhbətlər",
       "last24": "Son 24 saat",
-      "liveMessages": "Canlı Mesajlar"
+      "liveMessages": "Canlı Mesajlar",
+      "noMessages": "Hələ mesaj yoxdur — agent işə düşəndə söhbətlər burada canlı görünür.",
+      "noData": "Hələ məlumat yoxdur"
     },
     "services": {
       "badge": "Xidmətlər",
       "title": "AI Xidmətlərimiz",
       "items": {
-        "chatbots": { "t": "AI Çatbotlar", "d": "Bütün kanallarda insana bənzər söhbətlər." },
-        "voice": { "t": "Səsli AI Agentləri", "d": "Zəngləri real vaxtda idarə edən təbii səsli agentlər." },
-        "leads": { "t": "Lead Generasiyası", "d": "Leadləri 24/7 kvalifikasiya edin və satışa yönəldin." },
-        "support": { "t": "Müştəri Dəstəyi", "d": "80% müraciəti dərhal tier-1 AI ilə həll edin." },
-        "workflow": { "t": "İş Axını Avtomatlaşdırma", "d": "Çoxaddımlı prosesləri intellektual agentlərlə zəncirləyin." },
-        "crm": { "t": "CRM İnteqrasiyası", "d": "Salesforce, HubSpot, Zoho və 50+ alətlə sinxron." }
+        "chatbots": {
+          "t": "AI Çatbotlar",
+          "d": "Bütün kanallarda insana bənzər söhbətlər."
+        },
+        "voice": {
+          "t": "Səsli AI Agentləri",
+          "d": "Zəngləri real vaxtda idarə edən təbii səsli agentlər."
+        },
+        "leads": {
+          "t": "Lead Generasiyası",
+          "d": "Leadləri 24/7 kvalifikasiya edin və satışa yönəldin."
+        },
+        "support": {
+          "t": "Müştəri Dəstəyi",
+          "d": "80% müraciəti dərhal tier-1 AI ilə həll edin."
+        },
+        "workflow": {
+          "t": "İş Axını Avtomatlaşdırma",
+          "d": "Çoxaddımlı prosesləri intellektual agentlərlə zəncirləyin."
+        },
+        "crm": {
+          "t": "CRM İnteqrasiyası",
+          "d": "Salesforce, HubSpot, Zoho və 50+ alətlə sinxron."
+        }
       }
     },
     "how": {
       "title": "Necə işləyir",
       "subtitle": "Kəşfdən miqyaslamaya rüblər deyil, həftələr içində.",
       "steps": {
-        "1": { "t": "Kəşf", "d": "İş axınlarınızı auditdən keçirir və yüksək ROI-li avtomatlaşdırma imkanlarını müəyyən edirik." },
-        "2": { "t": "Qurma", "d": "Komandamız sizin dataya, tonlamaya və biznes məntiqinə uyğun fərdi agentləri öyrədir." },
-        "3": { "t": "Tətbiq", "d": "Mövcud sisteminizdə işə salırıq — kod dəyişikliyi yox, dayanma yox." },
-        "4": { "t": "Miqyaslama", "d": "Analitika ilə davamlı optimallaşdırma və yeni istifadə hallarına genişlənmə." }
+        "1": {
+          "t": "Kəşf",
+          "d": "İş axınlarınızı auditdən keçirir və yüksək ROI-li avtomatlaşdırma imkanlarını müəyyən edirik."
+        },
+        "2": {
+          "t": "Qurma",
+          "d": "Komandamız sizin dataya, tonlamaya və biznes məntiqinə uyğun fərdi agentləri öyrədir."
+        },
+        "3": {
+          "t": "Tətbiq",
+          "d": "Mövcud sisteminizdə işə salırıq — kod dəyişikliyi yox, dayanma yox."
+        },
+        "4": {
+          "t": "Miqyaslama",
+          "d": "Analitika ilə davamlı optimallaşdırma və yeni istifadə hallarına genişlənmə."
+        }
       }
     },
     "features": {
@@ -110,29 +142,45 @@
       }
     },
     "stats": {
-      "businesses": "Avtomatlaşdırılmış Biznes",
-      "messages": "İşlənmiş Mesaj",
-      "csat": "Müştəri Məmnuniyyəti",
-      "availability": "Əlçatanlıq"
+      "availability": "Əlçatanlıq",
+      "languages": "Dəstəklənən dil",
+      "integrations": "İnteqrasiya",
+      "deployment": "Tətbiq müddəti",
+      "weeksSuffix": " həftə"
     },
     "testimonials": {
-      "title": "Operatorların sevimlisi",
-      "subtitle": "Bütün sənayelərdən komandalar AI iş qüvvəsini idarə etmək üçün Agentix-ə etibar edir.",
-      "items": {
-        "1": { "n": "Elena Marchetti", "r": "COO, Nebula Retail", "q": "Agentix dəstək cavab müddətimizi 82% azaltdı. Komandamız artıq mürəkkəb hallara diqqət yetirir, qalanını AI qüsursuz idarə edir." },
-        "2": { "n": "David Okafor", "r": "Satış rəhbəri, Vertex Labs", "q": "Agentix-i tətbiq etdiyimiz ay 3 dəfə çox kvalifikasiyalı görüş rezerv etdik. Səsli agent ən yaxşı satıcılarımızdan fərqlənmir." },
-        "3": { "n": "Aiko Tanaka", "r": "Təsisçi, Lumen Studio", "q": "Quraşdırma çox rahat oldu. İki həftə ərzində bütün planlama və izləmə boru xəttini AI idarə edirdi." }
-      }
+      "title": "Müştəri rəyləri",
+      "subtitle": "Agentix yeni müştəriləri qəbul edir. İlk layihələr tamamlandıqca real rəyləri burada dərc edəcəyik.",
+      "emptyTitle": "Hələ rəy yoxdur",
+      "emptyBody": "Uydurma referans dərc etmirik. Komandanızla canlı demo keçirin — nəticələriniz ilk real keys-stadi ola bilər."
     },
     "faq": {
       "title": "Tez-tez verilən suallar",
       "items": {
-        "1": { "q": "AI agentini tətbiq etmək nə qədər çəkir?", "a": "Əksər agentlər 2-4 həftə ərzində işə düşür. Biz kəşfi, sizin data üzərində öyrətməni və mövcud sisteminizlə inteqrasiyanı həyata keçiririk." },
-        "2": { "q": "Mühəndislik resursları lazımdır?", "a": "Xeyr. Agentix tam idarə olunur. Komandamız agentləri qurur, tətbiq edir və dəstəkləyir — siz baxıb təsdiq edirsiniz." },
-        "3": { "q": "Hansı platformalarla inteqrasiya edirsiniz?", "a": "Salesforce, HubSpot, Zendesk, Intercom, Slack, Shopify, WhatsApp, Twilio və fərdi API-lar daxil olmaqla 50+ platforma." },
-        "4": { "q": "Datanın təhlükəsizliyini necə təmin edirsiniz?", "a": "SOC 2 Type II sertifikatlı, GDPR uyğun və uçdan-uca şifrələmə. Datanız heç vaxt təməl modelləri öyrətmək üçün istifadə olunmur." },
-        "5": { "q": "Agentlər bir neçə dili idarə edə bilər?", "a": "Bəli. Agentlər 95+ dili yerli olaraq dəstəkləyir və bir söhbət daxilində konteksti dəyişir." },
-        "6": { "q": "AI cavab verə bilməyəndə nə olur?", "a": "Konfiqurasiya oluna bilən eskalasiya. Agentlər tam söhbət konteksti və təklif olunan növbəti addımlarla insan komanda yoldaşlarına ötürür." }
+        "1": {
+          "q": "AI agentini tətbiq etmək nə qədər çəkir?",
+          "a": "Əksər agentlər 2-4 həftə ərzində işə düşür. Biz kəşfi, sizin data üzərində öyrətməni və mövcud sisteminizlə inteqrasiyanı həyata keçiririk."
+        },
+        "2": {
+          "q": "Mühəndislik resursları lazımdır?",
+          "a": "Xeyr. Agentix tam idarə olunur. Komandamız agentləri qurur, tətbiq edir və dəstəkləyir — siz baxıb təsdiq edirsiniz."
+        },
+        "3": {
+          "q": "Hansı platformalarla inteqrasiya edirsiniz?",
+          "a": "Salesforce, HubSpot, Zendesk, Intercom, Slack, Shopify, WhatsApp, Twilio və fərdi API-lar daxil olmaqla 50+ platforma."
+        },
+        "4": {
+          "q": "Datanın təhlükəsizliyini necə təmin edirsiniz?",
+          "a": "SOC 2 Type II sertifikatlı, GDPR uyğun və uçdan-uca şifrələmə. Datanız heç vaxt təməl modelləri öyrətmək üçün istifadə olunmur."
+        },
+        "5": {
+          "q": "Agentlər bir neçə dili idarə edə bilər?",
+          "a": "Bəli. Agentlər 95+ dili yerli olaraq dəstəkləyir və bir söhbət daxilində konteksti dəyişir."
+        },
+        "6": {
+          "q": "AI cavab verə bilməyəndə nə olur?",
+          "a": "Konfiqurasiya oluna bilən eskalasiya. Agentlər tam söhbət konteksti və təklif olunan növbəti addımlarla insan komanda yoldaşlarına ötürür."
+        }
       }
     },
     "cta": {

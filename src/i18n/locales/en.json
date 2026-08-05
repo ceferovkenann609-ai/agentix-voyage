@@ -48,7 +48,7 @@
         "integration": "Easy Integration"
       }
     },
-    "trusted": "Trusted by innovative companies",
+    "trusted": "Integrates with the platforms you already use",
     "dashboard": {
       "badge": "Live Dashboard",
       "title": "One command center for every AI agent",
@@ -62,28 +62,60 @@
       },
       "conversations": "Conversations",
       "last24": "Last 24 hours",
-      "liveMessages": "Live Messages"
+      "liveMessages": "Live Messages",
+      "noMessages": "No messages yet — live conversations appear here once your agent goes live.",
+      "noData": "No data yet"
     },
     "services": {
       "badge": "Services",
       "title": "Our AI Services",
       "items": {
-        "chatbots": { "t": "AI Chatbots", "d": "Human-like conversations across every channel." },
-        "voice": { "t": "Voice AI Agents", "d": "Natural voice agents that handle calls in real time." },
-        "leads": { "t": "Lead Generation", "d": "Qualify and route leads to your sales team 24/7." },
-        "support": { "t": "Customer Support", "d": "Resolve 80% of tickets instantly with tier-1 AI." },
-        "workflow": { "t": "Workflow Automation", "d": "Chain multi-step processes with intelligent agents." },
-        "crm": { "t": "CRM Integration", "d": "Sync with Salesforce, HubSpot, Zoho, and 50+ tools." }
+        "chatbots": {
+          "t": "AI Chatbots",
+          "d": "Human-like conversations across every channel."
+        },
+        "voice": {
+          "t": "Voice AI Agents",
+          "d": "Natural voice agents that handle calls in real time."
+        },
+        "leads": {
+          "t": "Lead Generation",
+          "d": "Qualify and route leads to your sales team 24/7."
+        },
+        "support": {
+          "t": "Customer Support",
+          "d": "Resolve 80% of tickets instantly with tier-1 AI."
+        },
+        "workflow": {
+          "t": "Workflow Automation",
+          "d": "Chain multi-step processes with intelligent agents."
+        },
+        "crm": {
+          "t": "CRM Integration",
+          "d": "Sync with Salesforce, HubSpot, Zoho, and 50+ tools."
+        }
       }
     },
     "how": {
       "title": "How it works",
       "subtitle": "From discovery to scale in weeks, not quarters.",
       "steps": {
-        "1": { "t": "Discover", "d": "We audit your workflows and identify high-ROI automation opportunities." },
-        "2": { "t": "Build", "d": "Our team trains custom agents on your data, tone, and business logic." },
-        "3": { "t": "Deploy", "d": "Launch across your existing stack — no code changes, no downtime." },
-        "4": { "t": "Scale", "d": "Continuously optimize with analytics and expand to new use cases." }
+        "1": {
+          "t": "Discover",
+          "d": "We audit your workflows and identify high-ROI automation opportunities."
+        },
+        "2": {
+          "t": "Build",
+          "d": "Our team trains custom agents on your data, tone, and business logic."
+        },
+        "3": {
+          "t": "Deploy",
+          "d": "Launch across your existing stack — no code changes, no downtime."
+        },
+        "4": {
+          "t": "Scale",
+          "d": "Continuously optimize with analytics and expand to new use cases."
+        }
       }
     },
     "features": {
@@ -110,29 +142,45 @@
       }
     },
     "stats": {
-      "businesses": "Businesses Automated",
-      "messages": "Messages Processed",
-      "csat": "Customer Satisfaction",
-      "availability": "Availability"
+      "availability": "Availability",
+      "languages": "Languages supported",
+      "integrations": "Integrations",
+      "deployment": "Deployment time",
+      "weeksSuffix": " weeks"
     },
     "testimonials": {
-      "title": "Loved by operators",
-      "subtitle": "Teams across industries trust Agentix to run their AI workforce.",
-      "items": {
-        "1": { "n": "Elena Marchetti", "r": "COO, Nebula Retail", "q": "Agentix cut our support response time by 82%. Our team now focuses on complex cases while AI handles the rest — flawlessly." },
-        "2": { "n": "David Okafor", "r": "Head of Sales, Vertex Labs", "q": "We booked 3x more qualified meetings the month we deployed Agentix. The voice agent sounds indistinguishable from our best reps." },
-        "3": { "n": "Aiko Tanaka", "r": "Founder, Lumen Studio", "q": "The setup was seamless. Within two weeks we had AI agents running our entire scheduling and follow-up pipeline." }
-      }
+      "title": "Customer reviews",
+      "subtitle": "Agentix is onboarding its first customers. Real reviews will be published here as projects go live.",
+      "emptyTitle": "No reviews yet",
+      "emptyBody": "We don't publish invented references. Book a live demo with your team — your results could be our first real case study."
     },
     "faq": {
       "title": "Frequently asked",
       "items": {
-        "1": { "q": "How long does it take to deploy an AI agent?", "a": "Most agents go live within 2-4 weeks. We handle discovery, training on your data, and integration with your existing stack." },
-        "2": { "q": "Do I need engineering resources?", "a": "No. Agentix is fully managed. Our team builds, deploys, and maintains your agents — you review and approve." },
-        "3": { "q": "Which platforms do you integrate with?", "a": "50+ platforms including Salesforce, HubSpot, Zendesk, Intercom, Slack, Shopify, WhatsApp, Twilio, and custom APIs." },
-        "4": { "q": "How do you ensure data security?", "a": "SOC 2 Type II certified, GDPR compliant, and end-to-end encryption. Your data is never used to train foundation models." },
-        "5": { "q": "Can agents handle multiple languages?", "a": "Yes. Agents support 95+ languages natively and switch context seamlessly within a single conversation." },
-        "6": { "q": "What if the AI can't answer a question?", "a": "Configurable escalation. Agents hand off to human teammates with full conversation context and suggested next steps." }
+        "1": {
+          "q": "How long does it take to deploy an AI agent?",
+          "a": "Most agents go live within 2-4 weeks. We handle discovery, training on your data, and integration with your existing stack."
+        },
+        "2": {
+          "q": "Do I need engineering resources?",
+          "a": "No. Agentix is fully managed. Our team builds, deploys, and maintains your agents — you review and approve."
+        },
+        "3": {
+          "q": "Which platforms do you integrate with?",
+          "a": "50+ platforms including Salesforce, HubSpot, Zendesk, Intercom, Slack, Shopify, WhatsApp, Twilio, and custom APIs."
+        },
+        "4": {
+          "q": "How do you ensure data security?",
+          "a": "SOC 2 Type II certified, GDPR compliant, and end-to-end encryption. Your data is never used to train foundation models."
+        },
+        "5": {
+          "q": "Can agents handle multiple languages?",
+          "a": "Yes. Agents support 95+ languages natively and switch context seamlessly within a single conversation."
+        },
+        "6": {
+          "q": "What if the AI can't answer a question?",
+          "a": "Configurable escalation. Agents hand off to human teammates with full conversation context and suggested next steps."
+        }
       }
     },
     "cta": {
