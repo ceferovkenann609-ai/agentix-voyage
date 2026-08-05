@@ -41,6 +41,7 @@ import {
   
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAgentixMetrics } from "@/lib/metrics";
 
 export const Route = createFileRoute("/_authenticated/ai-agents")({
   head: () => ({
@@ -64,53 +65,6 @@ const navItems = [
   { key: "billing", label: "Ödənişlər", icon: CreditCard, to: "/billing" as const },
   { key: "settings", label: "Tənzimləmələr", icon: Settings, to: "/settings" as const },
   { key: "support", label: "Dəstək", icon: LifeBuoy, to: "/support" as const },
-];
-
-const stats = [
-  { label: "Aktiv Agentlər", value: "12", growth: "+2 bu həftə", icon: Bot },
-  { label: "Bu günkü mesajlar", value: "3,842", growth: "+18.2%", icon: MessageSquare },
-  { label: "Avtomatlaşdırmalar", value: "47", growth: "+5 yeni", icon: Zap },
-  { label: "Orta cavab müddəti", value: "1.2s", growth: "-0.3s", icon: Clock },
-];
-
-type Agent = {
-  name: string;
-  role: string;
-  status: "online" | "training" | "paused";
-  description: string;
-  performance: number;
-  messages: string;
-  icon: typeof Bot;
-  tone: string;
-};
-
-const agents: Agent[] = [
-  { name: "Müştəri Dəstək AI", role: "Dəstək", status: "online", description: "24/7 tier-1 dəstək, geri qaytarma və tez-tez verilən sualları idarə edir.", performance: 96, messages: "12,482", icon: Headphones, tone: "from-cyan-500/20 to-blue-500/10" },
-  { name: "Satış Köməkçisi", role: "Satış", status: "online", description: "Namizədləri kvalifikasiya edir və kəşf zənglərini avtomatik təyin edir.", performance: 92, messages: "5,204", icon: ShoppingBag, tone: "from-emerald-500/20 to-cyan-500/10" },
-  { name: "Görüş Rezervasiyası AI", role: "Planlama", status: "online", description: "Real vaxtda görüşləri təyin edir, təxirə salır və təsdiqləyir.", performance: 98, messages: "3,910", icon: CalendarClock, tone: "from-blue-500/20 to-indigo-500/10" },
-  { name: "WhatsApp AI", role: "Mesajlaşma", status: "online", description: "WhatsApp Business gələnlər qutusu üçün söhbət agenti.", performance: 94, messages: "8,721", icon: MessageCircle, tone: "from-emerald-500/20 to-teal-500/10" },
-  { name: "Səsli Resepsiyonist", role: "Səs", status: "training", description: "Daxil olan zənglərə cavab verir, yönləndirir və mesajları qəbul edir.", performance: 88, messages: "1,204", icon: Phone, tone: "from-cyan-400/20 to-blue-500/10" },
-  { name: "Veb Çatbot", role: "Veb", status: "online", description: "Marketinq saytınız üçün quraşdırılmış köməkçi.", performance: 95, messages: "14,038", icon: Globe2, tone: "from-blue-500/20 to-cyan-500/10" },
-  { name: "E-poçt Köməkçisi", role: "E-poçt", status: "paused", description: "E-poçtları hazırlayır, sıralayır və cavab verir.", performance: 90, messages: "2,617", icon: Mail, tone: "from-indigo-500/20 to-blue-500/10" },
-  { name: "Namizəd Kvalifikasiya AI", role: "Böyümə", status: "online", description: "Daxil olan namizədləri anında qiymətləndirir və zənginləşdirir.", performance: 93, messages: "4,182", icon: Filter, tone: "from-cyan-500/20 to-emerald-500/10" },
-];
-
-const statusStyles: Record<Agent["status"], string> = {
-  online: "bg-emerald-400/10 text-emerald-300 border-emerald-400/20",
-  training: "bg-cyan-400/10 text-cyan-300 border-cyan-400/20",
-  paused: "bg-white/10 text-white/60 border-white/15",
-};
-
-const recentTraining = [
-  { name: "Customer Support AI", detail: "42 yeni FAQ üzərində öyrədildi", time: "5 dəq öncə" },
-  { name: "Sales Assistant", detail: "Playbook yeniləndi", time: "1 saat öncə" },
-  { name: "Voice Receptionist", detail: "Yeni səs modeli tətbiq edildi", time: "3 saat öncə" },
-];
-
-const knowledgeSources = [
-  { name: "Məhsul Sənədləri", items: "1,284 səhifə", status: "Sinxronlaşdı" },
-  { name: "Yardım Mərkəzi", items: "312 məqalə", status: "Sinxronlaşdı" },
-  { name: "CRM Qeydləri", items: "8,910 qeyd", status: "Sinxronlaşır" },
 ];
 
 const channels = [
