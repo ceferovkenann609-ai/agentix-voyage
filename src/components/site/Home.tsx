@@ -818,11 +818,12 @@ function Counter({ end, suffix = "", prefix = "" }: { end: number; suffix?: stri
 function Stats() {
   const { t } = useTranslation();
   const stats = [
-    { n: 100, s: "+", l: t("home.stats.businesses") },
-    { n: 500, s: "K+", l: t("home.stats.messages") },
-    { n: 98, s: "%", l: t("home.stats.csat") },
     { n: 24, s: "/7", l: t("home.stats.availability") },
+    { n: 95, s: "+", l: t("home.stats.languages") },
+    { n: 50, s: "+", l: t("home.stats.integrations") },
+    { n: 4, s: t("home.stats.weeksSuffix"), l: t("home.stats.deployment") },
   ];
+
 
   return (
     <section className="relative py-24">

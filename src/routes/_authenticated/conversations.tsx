@@ -99,7 +99,7 @@ function useConversations(userId: string | undefined) {
       const { data, error } = await supabase
         .from("ai_chat_messages")
         .select("id, session_id, sender, message, locale, created_at, user_id")
-        .eq("user_id", userId)
+        .eq("user_id", userId as string)
         .order("created_at", { ascending: true });
       if (error) throw error;
 
