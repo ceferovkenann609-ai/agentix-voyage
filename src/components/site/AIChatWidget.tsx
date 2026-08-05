@@ -3,6 +3,8 @@ import { Bot, X, Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { AGENTIX_CHAT_OPEN_EVENT } from "@/lib/support-chat";
+
 
 type Msg = { sender: "ai" | "user"; text: string };
 
