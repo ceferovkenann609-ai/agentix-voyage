@@ -31,6 +31,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAgentixMetrics } from "@/lib/metrics";
 
 export const Route = createFileRoute("/_authenticated/billing")({
   head: () => ({
@@ -68,7 +69,6 @@ const plans = [
     name: "Growth",
     price: 199,
     icon: Rocket,
-    current: true,
     features: ["12 AI Agents", "50,000 conversations", "Priority support", "Advanced analytics", "Custom integrations"],
     tone: "from-cyan-500/10 to-blue-500/5",
   },
@@ -81,34 +81,6 @@ const plans = [
   },
 ];
 
-const usageMetrics = [
-  { label: "Söhbətlər", used: 32480, total: 50000, unit: "" },
-  { label: "AI Agentləri", used: 8, total: 12, unit: "" },
-  { label: "Automations", used: 47, total: 100, unit: "" },
-  { label: "Storage", used: 6.2, total: 20, unit: " GB" },
-];
-
-const invoices = [
-  { id: "INV-2048", date: "Aug 01, 2026", plan: "Growth · Monthly", amount: "$199.00", status: "Paid" },
-  { id: "INV-2032", date: "Jul 01, 2026", plan: "Growth · Monthly", amount: "$199.00", status: "Paid" },
-  { id: "INV-2011", date: "Jun 01, 2026", plan: "Growth · Monthly", amount: "$199.00", status: "Paid" },
-  { id: "INV-1994", date: "May 01, 2026", plan: "Starter · Monthly", amount: "$49.00", status: "Paid" },
-  { id: "INV-1968", date: "Apr 01, 2026", plan: "Starter · Monthly", amount: "$49.00", status: "Paid" },
-];
-
-const payments = [
-  { date: "Aug 01, 2026", method: "Visa •••• 4242", amount: "$199.00", status: "Success" },
-  { date: "Jul 01, 2026", method: "Visa •••• 4242", amount: "$199.00", status: "Success" },
-  { date: "Jun 15, 2026", method: "Top-up · 5,000 credits", amount: "$40.00", status: "Success" },
-  { date: "Jun 01, 2026", method: "Visa •••• 4242", amount: "$199.00", status: "Success" },
-  { date: "May 01, 2026", method: "Visa •••• 4242", amount: "$49.00", status: "Success" },
-];
-
-const paymentMethods = [
-  { brand: "Visa", last4: "4242", exp: "08/28", primary: true },
-  { brand: "Mastercard", last4: "8121", exp: "11/27", primary: false },
-];
-
 function BillingPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -116,15 +88,25 @@ function BillingPage() {
   const [addCardOpen, setAddCardOpen] = useState(false);
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
+  const { data: metrics } = useAgentixMetrics(user?.id);
 
   const handleLogout = async () => {
     await signOut();
     navigate({ to: "/" });
   };
 
-  const creditsUsed = 3240;
-  const creditsTotal = 5000;
-  const creditsPct = (creditsUsed / creditsTotal) * 100;
+  const chatMessagesUsed = metrics?.chatMessages ?? 0;
+  const leadsUsed = metrics?.leadsTotal ?? 0;
+  const conversationsLimit = 5000;
+  const leadsLimit = 500;
+  const conversationsPct = Math.min((chatMessagesUsed / conversationsLimit) * 100, 100);
+
+  const usageMetrics = [
+    { label: "Söhbətlər", used: chatMessagesUsed, total: conversationsLimit, unit: "" },
+    { label: "Müştəri Namizədləri", used: leadsUsed, total: leadsLimit, unit: "" },
+    { label: "AI Agentləri", used: 0, total: 0, unit: "" },
+    { label: "Storage", used: 0, total: 0, unit: " GB" },
+  ];
 
   return (
     <div className="min-h-screen bg-[#07090C] text-white pt-20">

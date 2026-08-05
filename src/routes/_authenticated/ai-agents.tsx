@@ -80,6 +80,14 @@ function AIAgentsPage() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
+  const { data: metrics } = useAgentixMetrics(user?.id);
+
+  const stats = [
+    { label: "Aktiv Agentlər", value: "0", icon: Bot },
+    { label: "Bu günkü mesajlar", value: String(metrics?.chatMessages ?? 0), icon: MessageSquare },
+    { label: "Avtomatlaşdırmalar", value: "0", icon: Zap },
+    { label: "Orta cavab müddəti", value: "—", icon: Clock },
+  ];
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
 
@@ -262,9 +270,6 @@ function AIAgentsPage() {
                           <div className="grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-cyan-300">
                             <Icon className="h-4.5 w-4.5" />
                           </div>
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-2 py-0.5 text-[11px] font-medium text-emerald-300">
-                            {s.growth}
-                          </span>
                         </div>
                         <div className="mt-5 text-3xl font-bold tracking-tight">{s.value}</div>
                         <div className="mt-1 text-xs text-white/50">{s.label}</div>
@@ -284,67 +289,20 @@ function AIAgentsPage() {
                   <button className="text-xs font-medium text-cyan-300 hover:text-cyan-200">Rolları idarə et</button>
                 </div>
 
-                <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                  {agents.map((a, i) => {
-                    const Icon = a.icon;
-                    return (
-                      <motion.div
-                        key={a.name}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.35, delay: i * 0.04 }}
-                        whileHover={{ y: -3 }}
-                        className="group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02] p-5 hover:border-cyan-400/25 transition-all"
-                      >
-                        <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-br ${a.tone} transition-opacity`} />
-                        <div className="relative">
-                          <div className="flex items-start justify-between">
-                            <div className="grid h-11 w-11 place-items-center rounded-xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300 shadow-[0_0_20px_-6px_rgba(34,211,238,0.6)]">
-                              <Icon className="h-5 w-5" />
-                            </div>
-                            <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium capitalize ${statusStyles[a.status]}`}>
-                              <Circle className="h-1.5 w-1.5 fill-current" /> {a.status}
-                            </span>
-                          </div>
-
-                          <div className="mt-4">
-                            <div className="text-sm font-semibold tracking-tight">{a.name}</div>
-                            <div className="text-[11px] uppercase tracking-[0.18em] text-white/40 mt-0.5">{a.role}</div>
-                          </div>
-                          <p className="mt-3 text-xs text-white/60 leading-relaxed line-clamp-2">{a.description}</p>
-
-                          <div className="mt-4">
-                            <div className="flex items-center justify-between text-[11px] text-white/50">
-                              <span>Performans</span>
-                              <span className="text-cyan-300 font-medium">{a.performance}%</span>
-                            </div>
-                            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/5">
-                              <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${a.performance}%` }}
-                                transition={{ duration: 0.9, delay: 0.1 + i * 0.04 }}
-                                className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_10px_rgba(34,211,238,0.6)]"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="mt-4 flex items-center justify-between">
-                            <div className="text-[11px] text-white/50">
-                              <span className="text-white/80 font-medium">{a.messages}</span> mesaj
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <button className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-white/70 hover:text-white hover:border-white/20 transition">
-                                <Pencil className="h-3 w-3" /> Düzəlt
-                              </button>
-                              <button className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 px-2.5 py-1.5 text-[11px] font-semibold text-[#07090C] hover:shadow-[0_0_20px_-4px_rgba(34,211,238,0.7)] transition">
-                                Aç <ArrowUpRight className="h-3 w-3" />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
+                <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-10 flex flex-col items-center justify-center text-center">
+                  <div className="grid h-14 w-14 place-items-center rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300 shadow-[0_0_20px_-6px_rgba(34,211,238,0.6)]">
+                    <Bot className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-4 text-base font-semibold tracking-tight">Hələ AI agent yaradılmayıb</h3>
+                  <p className="mt-1.5 max-w-sm text-sm text-white/50">
+                    İş qüvvənizi qurmaq üçün ilk AI agentinizi yaradın və müştəri əlaqələrini avtomatlaşdırın.
+                  </p>
+                  <button
+                    onClick={() => setCreateOpen(true)}
+                    className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <Plus className="h-4 w-4" /> Agent Yarat
+                  </button>
                 </div>
               </section>
             </div>
@@ -354,18 +312,12 @@ function AIAgentsPage() {
               <div className="sticky top-40 space-y-6">
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold">Son öyrətmə</h3>
+                    <h3 className="text-sm font-semibold">Təlim</h3>
                     <Activity className="h-4 w-4 text-cyan-300" />
                   </div>
-                  <ul className="mt-4 space-y-3">
-                    {recentTraining.map((t) => (
-                      <li key={t.name} className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
-                        <div className="text-sm font-medium">{t.name}</div>
-                        <div className="mt-0.5 text-[11px] text-white/50">{t.detail}</div>
-                        <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-white/30">{t.time}</div>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center">
+                    <p className="text-xs text-white/50">Hələ məlumat yoxdur</p>
+                  </div>
                 </div>
 
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
@@ -373,31 +325,16 @@ function AIAgentsPage() {
                     <h3 className="text-sm font-semibold">Bilik bazası</h3>
                     <BookOpen className="h-4 w-4 text-cyan-300" />
                   </div>
-                  <ul className="mt-4 space-y-2">
-                    {knowledgeSources.map((k) => (
-                      <li key={k.name} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] px-3.5 py-2.5">
-                        <div className="flex items-center gap-2.5">
-                          <div className="grid h-7 w-7 place-items-center rounded-lg bg-white/[0.04] border border-white/10 text-cyan-300">
-                            <Database className="h-3.5 w-3.5" />
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium leading-tight">{k.name}</div>
-                            <div className="text-[10px] text-white/50">{k.items}</div>
-                          </div>
-                        </div>
-                        <span className={`text-[10px] font-medium ${k.status === "Sinxronlaşdı" ? "text-emerald-300" : "text-cyan-300"}`}>
-                          {k.status}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center">
+                    <p className="text-xs text-white/50">Hələ məlumat yoxdur</p>
+                  </div>
                 </div>
 
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-semibold">Qoşulmuş kanallar</h3>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
-                      <Circle className="h-1.5 w-1.5 fill-current" /> Hamısı onlayn
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/50">
+                      <Circle className="h-1.5 w-1.5 fill-current" /> Deaktiv
                     </span>
                   </div>
                   <ul className="mt-4 space-y-2">
@@ -406,14 +343,13 @@ function AIAgentsPage() {
                       return (
                         <li key={c.name} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] px-3.5 py-2.5">
                           <div className="flex items-center gap-2.5">
-                            <div className="grid h-7 w-7 place-items-center rounded-lg bg-white/[0.04] border border-white/10 text-cyan-300">
+                            <div className="grid h-7 w-7 place-items-center rounded-lg bg-white/[0.04] border border-white/10 text-white/40">
                               <Icon className="h-3.5 w-3.5" />
                             </div>
-                            <span className="text-sm font-medium">{c.name}</span>
+                            <span className="text-sm font-medium text-white/60">{c.name}</span>
                           </div>
                           <span className="relative flex h-2 w-2">
-                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/50" />
-                            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                            <span className="relative inline-flex h-2 w-2 rounded-full bg-white/20" />
                           </span>
                         </li>
                       );
