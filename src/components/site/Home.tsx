@@ -390,11 +390,7 @@ function TrustedBy() {
 /* ---------------- Dashboard Preview ---------------- */
 function DashboardPreview() {
   const { t } = useTranslation();
-  const messages = [
-    { user: "Sarah K.", msg: "What's your return policy?", time: "2s ago" },
-    { user: "Marcus D.", msg: "Can I upgrade my plan?", time: "5s ago" },
-    { user: "Priya R.", msg: "Do you ship internationally?", time: "8s ago" },
-  ];
+
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
