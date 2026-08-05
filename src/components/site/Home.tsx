@@ -362,7 +362,8 @@ function Hero() {
 /* ---------------- Trusted By ---------------- */
 function TrustedBy() {
   const { t } = useTranslation();
-  const companies = ["Nebula", "Orbit", "Quantum", "Vertex", "Lumen", "Pulse", "Axiom", "Zenith"];
+  const companies = ["WhatsApp", "Slack", "HubSpot", "Salesforce", "Zendesk", "Shopify", "Twilio", "Google"];
+
   return (
     <section className="relative py-20 border-y border-white/5">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
