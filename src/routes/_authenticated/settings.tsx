@@ -843,7 +843,7 @@ function SecuritySection() {
           <div>
             <div className="text-sm font-semibold text-rose-200">Hesabın silinməsi</div>
             <div className="mt-1 text-xs text-white/50">
-              Hesabın və bütən əlaqəli məlumatların silinməsi dəstək komandası tərəfindən təsdiqlə həyata keçirilir.
+              Hesabın və bütün əlaqəli məlumatların silinməsi dəstək komandası tərəfindən təsdiqlə həyata keçirilir.
             </div>
           </div>
           <Link
