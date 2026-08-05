@@ -747,41 +747,49 @@ function ApiKeysSection() {
 
   return (
     <Card
-      title="API Keys"
-      desc="Use these keys to authenticate requests to the Agentix API."
-      footer={
-        <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:scale-[1.02] active:scale-[0.98] transition">
-          <Plus className="h-4 w-4" /> Create new key
-        </button>
-      }
+      title="API açarları"
+      desc="Agentix API-a sorğuları autentifikasiya etmək üçün açarlardan istifadə olunur."
     >
       <div className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-3 text-xs text-cyan-200 mb-4 flex items-start gap-2">
         <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0" />
-        <span>Treat API keys like passwords. Never share them or expose them in client-side code.</span>
+        <span>API açarına şifrə kimi yanaşın. Onu paylaşmayın və brauzer kodunda saxlamayın.</span>
       </div>
-      <ul className="space-y-2">
-        {keys.map((k) => (
-          <li key={k.name} className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-4">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
+      {keys.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-center">
+          <div className="text-sm font-semibold text-white/80">Hələ API açarı yoxdur</div>
+          <p className="mt-2 text-xs text-white/50">
+            API girişi hesabınız üçün hələ aktivləşdirilməyib. Açar tələb etmək üçün dəstək komandası ilə əlaqə saxlayın.
+          </p>
+          <Link
+            to="/support"
+            className="mt-4 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold hover:bg-white/[0.06] transition"
+          >
+            Dəstəyə müraciət et
+          </Link>
+        </div>
+      ) : (
+        <ul className="space-y-2">
+          {keys.map((k) => (
+            <li key={k.name} className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-4">
+              <div className="flex-1 min-w-0">
                 <div className="text-sm font-semibold">{k.name}</div>
-                <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] text-white/60">Live</span>
+                <div className="mt-1 font-mono text-xs text-white/70 truncate">{k.key}</div>
+                <div className="mt-1 text-[10px] text-white/40">Yaradıldı {k.created} · Son istifadə {k.last}</div>
               </div>
-              <div className="mt-1 font-mono text-xs text-white/70 truncate">{k.key}</div>
-              <div className="mt-1 text-[10px] text-white/40">Created {k.created} · Last used {k.last}</div>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-cyan-400/30 transition" aria-label="Kopyala">
-                <Copy className="h-3.5 w-3.5" />
-              </button>
-              <button className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-rose-300 hover:border-rose-400/30 transition" aria-label="Ləğv et">
-                <Trash2 className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+              <div className="flex items-center gap-2">
+                <button className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-cyan-400/30 transition" aria-label="Kopyala">
+                  <Copy className="h-3.5 w-3.5" />
+                </button>
+                <button className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-rose-300 hover:border-rose-400/30 transition" aria-label="Ləğv et">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </Card>
+
   );
 }
 
