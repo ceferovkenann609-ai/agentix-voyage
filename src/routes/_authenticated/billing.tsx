@@ -278,12 +278,12 @@ function BillingPage() {
                       <Crown className="h-3.5 w-3.5" /> Current Plan
                     </div>
                     <div className="mt-3 flex items-baseline gap-3">
-                      <div className="text-3xl font-bold">Growth</div>
-                      <div className="text-sm text-white/60">$199 <span className="text-white/40">/month</span></div>
+                      <div className="text-3xl font-bold">Free</div>
+                      <div className="text-sm text-white/60">Aktivləşdirilməyib</div>
                     </div>
-                    <div className="mt-2 text-xs text-white/60">Renews on <span className="text-white">Sep 01, 2026</span></div>
+                    <div className="mt-2 text-xs text-white/60">Hələ aktiv abunəlik yoxdur</div>
                     <div className="mt-4 flex flex-wrap gap-2">
-                      {["12 Agents", "50k conv./mo", "Priority support", "Advanced analytics"].map((f) => (
+                      {["Əsas funksionallıq"].map((f) => (
                         <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/70">
                           <CheckCircle2 className="h-3 w-3 text-cyan-300" /> {f}
                         </span>
@@ -294,7 +294,6 @@ function BillingPage() {
                     <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] transition hover:scale-[1.02] active:scale-[0.98]">
                       <ArrowUpRight className="h-4 w-4" /> Change plan
                     </button>
-                    <button className="text-xs text-white/50 hover:text-white transition">Cancel subscription</button>
                   </div>
                 </div>
               </motion.section>
@@ -314,20 +313,20 @@ function BillingPage() {
                   </button>
                 </div>
                 <div className="mt-4 flex items-baseline gap-2">
-                  <div className="text-3xl font-bold">{(creditsTotal - creditsUsed).toLocaleString()}</div>
-                  <div className="text-xs text-white/50">of {creditsTotal.toLocaleString()} remaining</div>
+                  <div className="text-3xl font-bold">{Math.max(conversationsLimit - chatMessagesUsed, 0).toLocaleString()}</div>
+                  <div className="text-xs text-white/50">of {conversationsLimit.toLocaleString()} remaining</div>
                 </div>
                 <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/5">
                   <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: `${creditsPct}%` }}
+                    animate={{ width: `${conversationsPct}%` }}
                     transition={{ duration: 0.9, ease: "easeOut" }}
                     className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
                   />
                 </div>
                 <div className="mt-3 flex items-center justify-between text-[11px] text-white/50">
-                  <span>{creditsUsed.toLocaleString()} used</span>
-                  <span>Resets Sep 01</span>
+                  <span>{chatMessagesUsed.toLocaleString()} istifadə edilib</span>
+                  <span>Plan aktivləşdirilməyib</span>
                 </div>
               </motion.section>
             </div>
