@@ -725,6 +725,7 @@ export type Database = {
         Args: { _company_id: string; _user_id: string }
         Returns: boolean
       }
+      storage_company_id: { Args: { _name: string }; Returns: string }
     }
     Enums: {
       activity_priority: "low" | "normal" | "high" | "critical"
