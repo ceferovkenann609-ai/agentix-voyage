@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { unwrap, unwrapList } from "./errors";
+import { unwrap, unwrapList, unwrapRequired } from "./errors";
 
 export type AppRole = Database["public"]["Enums"]["app_role"];
 export type CompanyRow = Database["public"]["Tables"]["companies"]["Row"];
@@ -57,7 +57,7 @@ export async function updateCompany(companyId: string, patch: CompanyPatch): Pro
 
 /** Creates a company and makes the caller its owner. */
 export async function createCompany(userId: string, name: string): Promise<CompanyRow> {
-  const company = unwrap(
+  const company = unwrapRequired(
     await supabase.from("companies").insert({ name, owner_id: userId }).select("*").single(),
     "companies.createCompany",
   );

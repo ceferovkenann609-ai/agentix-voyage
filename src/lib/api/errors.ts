@@ -130,3 +130,12 @@ export async function bestEffort<T>(scope: string, fn: () => Promise<T>): Promis
     return null;
   }
 }
+
+/** Unwraps a single-row result and fails loudly when the row is missing. */
+export function unwrapRequired<T>(result: SupabaseResult<T>, scope: string): NonNullable<T> {
+  const data = unwrap(result, scope);
+  if (data === null || data === undefined) {
+    throw new AppError({ kind: "not_found", scope, message: "Məlumat tapılmadı." });
+  }
+  return data as NonNullable<T>;
+}
