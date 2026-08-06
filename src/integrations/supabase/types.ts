@@ -713,7 +713,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      current_company_ids: { Args: { _user_id: string }; Returns: string[] }
       has_company_role: {
         Args: {
           _company_id: string
