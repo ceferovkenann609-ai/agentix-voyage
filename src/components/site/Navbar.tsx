@@ -132,6 +132,7 @@ export function Navbar() {
             ) : (
               <Link
                 to="/auth"
+                search={{ mode: "signin" as const }}
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-3"
               >
                 {t("nav.login")}
@@ -185,7 +186,7 @@ export function Navbar() {
                     </button>
                   </>
                 ) : (
-                  <Link to="/auth" onClick={() => setOpen(false)} className="px-4 py-3 text-sm font-medium rounded-lg hover:bg-white/5">
+                  <Link to="/auth" search={{ mode: "signin" as const }} onClick={() => setOpen(false)} className="px-4 py-3 text-sm font-medium rounded-lg hover:bg-white/5">
                     {t("nav.login")}
                   </Link>
                 )}

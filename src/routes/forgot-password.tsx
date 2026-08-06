@@ -89,7 +89,7 @@ function ForgotPasswordPage() {
           )}
 
           <div className="mt-6 text-center">
-            <Link to="/auth" className="text-sm text-cyan-400 hover:text-cyan-300">
+            <Link to="/auth" search={{ mode: "signin" as const }} className="text-sm text-cyan-400 hover:text-cyan-300">
               {isAz ? "← Daxil olma səhifəsinə qayıt" : "← Back to sign in"}
             </Link>
           </div>
