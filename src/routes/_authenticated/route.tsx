@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { CompanyProvider } from "@/contexts/CompanyContext";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -26,5 +27,9 @@ function AuthenticatedLayout() {
     );
   }
 
-  return <Outlet />;
+  return (
+    <CompanyProvider>
+      <Outlet />
+    </CompanyProvider>
+  );
 }
