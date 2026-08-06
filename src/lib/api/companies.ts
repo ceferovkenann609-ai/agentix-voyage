@@ -57,7 +57,7 @@ export async function updateCompany(companyId: string, patch: CompanyPatch): Pro
 
 /** Creates a company and makes the caller its owner. */
 export async function createCompany(userId: string, name: string): Promise<CompanyRow> {
-  const company = unwrapRequired(
+  const company = unwrapRequired<CompanyRow>(
     await supabase.from("companies").insert({ name, owner_id: userId }).select("*").single(),
     "companies.createCompany",
   );
