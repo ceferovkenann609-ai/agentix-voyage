@@ -183,7 +183,7 @@ function FooterCol({
       | "/privacy"
       | "/terms"
       | "/demo"
-      | "/login";
+      | "/book-demo";
     label: string;
   }[];
 }) {
