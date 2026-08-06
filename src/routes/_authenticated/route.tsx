@@ -27,5 +27,9 @@ function AuthenticatedLayout() {
     );
   }
 
-  return <Outlet />;
+  return (
+    <CompanyProvider>
+      <Outlet />
+    </CompanyProvider>
+  );
 }
