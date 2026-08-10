@@ -28,11 +28,13 @@ i18n.use(initReactI18next).init({
 
 
 if (typeof window !== "undefined") {
+  // The server always renders the default locale ("az"). Keep the very first
+  // client render identical, then apply the stored preference after hydration.
+  if (i18n.language !== "az") void i18n.changeLanguage("az");
   i18n.on("languageChanged", (lng) => {
     window.localStorage.setItem("agentix-lang", lng);
     document.documentElement.lang = lng;
   });
-  document.documentElement.lang = i18n.language;
 }
 
 export default i18n;
