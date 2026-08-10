@@ -7,6 +7,10 @@ import * as notificationsApi from "@/lib/api/notifications";
 import * as workflowsApi from "@/lib/api/workflows";
 import * as agentsApi from "@/lib/api/agents";
 import * as storageApi from "@/lib/api/storage";
+import * as billingApi from "@/lib/api/billing";
+import * as apiKeysApi from "@/lib/api/apiKeys";
+import * as supportApi from "@/lib/api/support";
+import * as conversationsApi from "@/lib/api/conversations";
 
 /* ------------------------------- Activities ------------------------------- */
 
@@ -207,6 +211,115 @@ export function useFileRemove() {
     mutationFn: storageApi.removeFile,
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: queryKeys.files.all });
+    },
+  });
+}
+
+/* --------------------------------- Billing -------------------------------- */
+
+export function useBilling() {
+  const { companyId } = useCompany();
+  const enabled = !!companyId;
+
+  const subscription = useQuery({
+    queryKey: queryKeys.billing.subscription(companyId ?? undefined),
+    enabled,
+    queryFn: () => billingApi.fetchSubscription(companyId!),
+  });
+  const invoices = useQuery({
+    queryKey: queryKeys.billing.invoices(companyId ?? undefined),
+    enabled,
+    queryFn: () => billingApi.fetchInvoices(companyId!),
+  });
+  const payments = useQuery({
+    queryKey: queryKeys.billing.payments(companyId ?? undefined),
+    enabled,
+    queryFn: () => billingApi.fetchPayments(companyId!),
+  });
+  const usage = useQuery({
+    queryKey: queryKeys.billing.usage(companyId ?? undefined),
+    enabled,
+    queryFn: () => billingApi.fetchUsage(companyId!),
+  });
+
+  return { subscription, invoices, payments, usage };
+}
+
+/* -------------------------------- API keys -------------------------------- */
+
+export function useApiKeys() {
+  const { companyId } = useCompany();
+  return useQuery({
+    queryKey: queryKeys.apiKeys.list(companyId ?? undefined),
+    enabled: !!companyId,
+    queryFn: () => apiKeysApi.fetchApiKeys(companyId!),
+  });
+}
+
+export function useApiKeyMutations() {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  const { companyId } = useCompany();
+  const invalidate = () => {
+    void qc.invalidateQueries({ queryKey: queryKeys.apiKeys.all });
+  };
+
+  const create = useMutation({
+    mutationFn: async (name: string) => {
+      if (!companyId || !user?.id) throw new Error("Şirkət konteksti tapılmadı.");
+      const created = await apiKeysApi.createApiKey({ companyId, userId: user.id, name });
+      await activitiesApi.logActivity({
+        userId: user.id,
+        companyId,
+        type: activitiesApi.ACTIVITY_TYPES.settingsChanged,
+        title: `API açarı yaradıldı: ${created.record.name}`,
+        entityType: "api_key",
+        entityId: created.record.id,
+      });
+      return created;
+    },
+    onSuccess: invalidate,
+  });
+
+  const revoke = useMutation({ mutationFn: apiKeysApi.revokeApiKey, onSuccess: invalidate });
+  const remove = useMutation({ mutationFn: apiKeysApi.deleteApiKey, onSuccess: invalidate });
+
+  return { create, revoke, remove };
+}
+
+/* -------------------------------- Support --------------------------------- */
+
+export function useSupportRequests() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: queryKeys.support.requests(user?.id),
+    enabled: !!user?.id,
+    queryFn: () => supportApi.fetchSupportRequests(user!.id),
+  });
+}
+
+/* ------------------------------ Conversations ----------------------------- */
+
+export function useConversations() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: queryKeys.conversations.list(user?.id),
+    enabled: !!user?.id,
+    staleTime: 15_000,
+    queryFn: () => conversationsApi.fetchConversations(user!.id),
+  });
+}
+
+export function useSendOperatorReply() {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async (input: { sessionId: string; message: string; locale?: string | null }) => {
+      if (!user?.id) throw new Error("Sessiya tapılmadı — yenidən daxil olun.");
+      await conversationsApi.sendOperatorReply({ ...input, userId: user.id });
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.conversations.all });
     },
   });
 }

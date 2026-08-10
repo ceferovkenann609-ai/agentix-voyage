@@ -1,6 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { useCompany } from "@/contexts/CompanyContext";
+import { useApiKeys, useApiKeyMutations } from "@/lib/platform/hooks";
+import { userMessage } from "@/lib/api/errors";
+import type { ApiKeyRow } from "@/lib/api/apiKeys";
 import {
   LayoutDashboard,
   Bot,
@@ -846,7 +851,23 @@ function LanguageSection() {
 }
 
 function ApiKeysSection() {
-  const keys: { name: string; key: string; created: string; last: string }[] = [];
+  const { data: keys = [], isPending, error } = useApiKeys();
+  const { create, revoke } = useApiKeyMutations();
+  const { can } = useCompany();
+  const [name, setName] = useState("");
+  const [secret, setSecret] = useState<string | null>(null);
+  const mayManage = can("settings.manage") || can("agents.create");
+
+  const submit = async () => {
+    if (!name.trim()) return;
+    try {
+      const created = await create.mutateAsync(name.trim());
+      setSecret(created.secret);
+      setName("");
+    } catch (err) {
+      toast.error(userMessage(err));
+    }
+  };
 
   return (
     <Card
@@ -857,12 +878,63 @@ function ApiKeysSection() {
         <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0" />
         <span>API açarına şifrə kimi yanaşın. Onu paylaşmayın və brauzer kodunda saxlamayın.</span>
       </div>
-      {keys.length === 0 ? (
+
+      {secret && (
+        <div className="mb-4 rounded-xl border border-emerald-400/25 bg-emerald-400/5 p-4">
+          <div className="text-xs font-semibold text-emerald-200">
+            Açar yalnız bir dəfə göstərilir — indi kopyalayın.
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <code className="flex-1 truncate rounded-lg bg-black/40 px-3 py-2 font-mono text-xs text-white">
+              {secret}
+            </code>
+            <button
+              onClick={() => {
+                void navigator.clipboard.writeText(secret);
+                toast.success("Kopyalandı");
+              }}
+              className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white"
+              aria-label="Kopyala"
+            >
+              <Copy className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {mayManage && (
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Açarın adı (məs. Production)"
+            className="h-10 flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 text-sm text-white placeholder:text-white/40 focus:border-cyan-400/40 focus:outline-none"
+          />
+          <button
+            onClick={() => void submit()}
+            disabled={create.isPending || !name.trim()}
+            className="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] disabled:opacity-50"
+          >
+            {create.isPending ? "Yaradılır…" : "Açar yarat"}
+          </button>
+        </div>
+      )}
+
+      {isPending ? (
+        <div className="rounded-xl border border-white/8 bg-white/[0.02] p-8 text-center text-sm text-white/50">
+          Yüklənir…
+        </div>
+      ) : error ? (
+        <div className="rounded-xl border border-rose-400/20 bg-rose-400/5 p-6 text-center text-sm text-rose-200">
+          {userMessage(error)}
+        </div>
+      ) : keys.length === 0 ? (
         <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-center">
           <div className="text-sm font-semibold text-white/80">Hələ API açarı yoxdur</div>
           <p className="mt-2 text-xs text-white/50">
-            API girişi hesabınız üçün hələ aktivləşdirilməyib. Açar tələb etmək üçün dəstək
-            komandası ilə əlaqə saxlayın.
+            {mayManage
+              ? "İlk açarınızı yaratmaq üçün yuxarıdaki formadan istifadə edin."
+              : "Açar yaratmaq üçün şirkət administratoruna müraciət edin."}
           </p>
           <Link
             to="/support"
@@ -873,32 +945,35 @@ function ApiKeysSection() {
         </div>
       ) : (
         <ul className="space-y-2">
-          {keys.map((k) => (
+          {keys.map((k: ApiKeyRow) => (
             <li
-              key={k.name}
+              key={k.id}
               className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-4"
             >
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold">{k.name}</div>
-                <div className="mt-1 font-mono text-xs text-white/70 truncate">{k.key}</div>
+                <div className="text-sm font-semibold">
+                  {k.name}
+                  {k.revoked_at && (
+                    <span className="ml-2 rounded-full border border-rose-400/25 bg-rose-400/10 px-2 py-0.5 text-[10px] text-rose-200">
+                      Ləğv edilib
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1 font-mono text-xs text-white/70 truncate">{k.key_prefix}…</div>
                 <div className="mt-1 text-[10px] text-white/40">
-                  Yaradıldı {k.created} · Son istifadə {k.last}
+                  Yaradıldı {new Date(k.created_at).toLocaleDateString("az-AZ")} · Son istifadə{" "}
+                  {k.last_used_at ? new Date(k.last_used_at).toLocaleDateString("az-AZ") : "—"}
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              {mayManage && !k.revoked_at && (
                 <button
-                  className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-cyan-400/30 transition"
-                  aria-label="Kopyala"
-                >
-                  <Copy className="h-3.5 w-3.5" />
-                </button>
-                <button
+                  onClick={() => void revoke.mutateAsync(k.id).catch((e: unknown) => toast.error(userMessage(e)))}
                   className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-rose-300 hover:border-rose-400/30 transition"
                   aria-label="Ləğv et"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
-              </div>
+              )}
             </li>
           ))}
         </ul>
