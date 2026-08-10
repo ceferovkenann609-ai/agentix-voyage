@@ -856,7 +856,7 @@ function ApiKeysSection() {
   const { can } = useCompany();
   const [name, setName] = useState("");
   const [secret, setSecret] = useState<string | null>(null);
-  const mayManage = can("agents.write");
+  const mayManage = can("settings.manage") || can("agents.create");
 
   const submit = async () => {
     if (!name.trim()) return;
