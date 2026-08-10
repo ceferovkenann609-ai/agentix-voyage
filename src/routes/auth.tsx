@@ -6,9 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>) => ({
+  validateSearch: (s: Record<string, unknown>): { mode: "signin" | "signup"; redirect?: string } => ({
     mode: (s.mode as "signin" | "signup" | undefined) ?? "signin",
-    redirect: typeof s.redirect === "string" ? s.redirect : undefined,
+    ...(typeof s.redirect === "string" ? { redirect: s.redirect } : {}),
   }),
   head: () => ({
     meta: [
