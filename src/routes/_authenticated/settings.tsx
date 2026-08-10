@@ -1,6 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { useCompany } from "@/contexts/CompanyContext";
+import { useApiKeys, useApiKeyMutations } from "@/lib/platform/hooks";
+import { userMessage } from "@/lib/api/errors";
+import type { ApiKeyRow } from "@/lib/api/apiKeys";
 import {
   LayoutDashboard,
   Bot,
@@ -940,7 +945,7 @@ function ApiKeysSection() {
         </div>
       ) : (
         <ul className="space-y-2">
-          {keys.map((k) => (
+          {keys.map((k: ApiKeyRow) => (
             <li
               key={k.id}
               className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-4"
@@ -962,7 +967,7 @@ function ApiKeysSection() {
               </div>
               {mayManage && !k.revoked_at && (
                 <button
-                  onClick={() => void revoke.mutateAsync(k.id).catch((e) => toast.error(userMessage(e)))}
+                  onClick={() => void revoke.mutateAsync(k.id).catch((e: unknown) => toast.error(userMessage(e)))}
                   className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-rose-300 hover:border-rose-400/30 transition"
                   aria-label="Ləğv et"
                 >
