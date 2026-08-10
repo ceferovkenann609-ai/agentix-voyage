@@ -56,4 +56,28 @@ export const queryKeys = {
     demos: (userId?: string) => ["demo-bookings", userId ?? "anon"] as const,
     contacts: (userId?: string) => ["contact-submissions", userId ?? "anon"] as const,
   },
+  conversations: {
+    all: ["conversations"] as const,
+    list: (userId?: string) => ["conversations", "list", userId ?? "anon"] as const,
+  },
+  billing: {
+    all: ["billing"] as const,
+    subscription: (companyId?: string) => ["billing", "subscription", companyId ?? "none"] as const,
+    invoices: (companyId?: string) => ["billing", "invoices", companyId ?? "none"] as const,
+    payments: (companyId?: string) => ["billing", "payments", companyId ?? "none"] as const,
+    usage: (companyId?: string) => ["billing", "usage", companyId ?? "none"] as const,
+  },
+  apiKeys: {
+    all: ["api-keys"] as const,
+    list: (companyId?: string) => ["api-keys", "list", companyId ?? "none"] as const,
+  },
+  support: {
+    all: ["support"] as const,
+    requests: (userId?: string) => ["support", "requests", userId ?? "anon"] as const,
+  },
+  analytics: {
+    all: ["agentix-analytics"] as const,
+    series: (scopeId?: string, range?: string) =>
+      ["agentix-analytics", "series", scopeId ?? "none", range ?? "30d"] as const,
+  },
 } as const;
