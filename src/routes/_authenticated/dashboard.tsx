@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAgentixMetrics } from "@/lib/metrics";
+import { useRealtimeInvalidate } from "@/lib/realtime";
 import { useRecentActivities, formatMoney, formatRelative } from "@/lib/crm";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -75,6 +76,11 @@ function DashboardPage() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const metricsQuery = useAgentixMetrics(user?.id);
+
+  useRealtimeInvalidate(
+    ["crm_leads", "demo_bookings", "activities", "notifications", "ai_chat_messages", "ai_agents"],
+    [["agentix-metrics"], ["activities"], ["notifications"], ["crm-recent-activities"]],
+  );
   const activityQuery = useRecentActivities(user?.id);
   const m = metricsQuery.data;
   const activity = activityQuery.data ?? [];
