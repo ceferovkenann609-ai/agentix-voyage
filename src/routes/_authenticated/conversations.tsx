@@ -20,7 +20,6 @@ import {
   Filter,
   Download,
   Send,
-  Loader2,
   Paperclip,
   Smile,
   MoreHorizontal,
