@@ -438,6 +438,7 @@ function BillingPage() {
               <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-5">
                 {plans.map((p, i) => {
                   const Icon = p.icon;
+                  const isCurrent = planName?.toLowerCase() === p.name.toLowerCase();
                   return (
                     <motion.div
                       key={p.name}
@@ -446,10 +447,10 @@ function BillingPage() {
                       viewport={{ once: true }}
                       transition={{ duration: 0.4, delay: i * 0.05 }}
                       className={`relative overflow-hidden rounded-2xl border p-6 bg-gradient-to-br ${p.tone} ${
-                        p.current ? "border-cyan-400/40 shadow-[0_0_40px_-10px_rgba(34,211,238,0.4)]" : "border-white/8 hover:border-cyan-400/30"
+                        isCurrent ? "border-cyan-400/40 shadow-[0_0_40px_-10px_rgba(34,211,238,0.4)]" : "border-white/8 hover:border-cyan-400/30"
                       } transition`}
                     >
-                      {p.current && (
+                      {isCurrent && (
                         <span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
                           Current
                         </span>
