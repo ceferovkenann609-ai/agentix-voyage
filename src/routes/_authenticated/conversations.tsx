@@ -1,6 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -34,7 +33,10 @@ import {
   Hash,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
+import { useConversations, useSendOperatorReply } from "@/lib/platform/hooks";
+import { useRealtimeInvalidate } from "@/lib/realtime";
+import { queryKeys } from "@/lib/api/keys";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/conversations")({
   head: () => ({
@@ -60,84 +62,7 @@ const navItems = [
   { key: "support", label: "Dəstək", icon: LifeBuoy, to: "/support" as const },
 ];
 
-type ChatRow = {
-  id: string;
-  session_id: string;
-  sender: string;
-  message: string;
-  locale: string | null;
-  created_at: string;
-  user_id: string | null;
-};
-
-type ThreadMessage = {
-  id: string;
-  from: "user" | "ai";
-  text: string;
-  time: string;
-};
-
-type Conversation = {
-  id: string; // session_id
-  title: string;
-  preview: string;
-  locale: string;
-  messageCount: number;
-  firstContact: Date;
-  lastActivity: Date;
-  messages: ThreadMessage[];
-};
-
 const dateFilters = ["İstənilən vaxt", "Bu gün", "Son 7 gün", "Son 30 gün"] as const;
-
-function useConversations(userId: string | undefined) {
-  return useQuery({
-    queryKey: ["ai-chat-conversations", userId],
-    enabled: !!userId,
-    staleTime: 15_000,
-    queryFn: async (): Promise<Conversation[]> => {
-      const { data, error } = await supabase
-        .from("ai_chat_messages")
-        .select("id, session_id, sender, message, locale, created_at, user_id")
-        .eq("user_id", userId as string)
-        .order("created_at", { ascending: true });
-      if (error) throw error;
-
-      const rows = (data ?? []) as ChatRow[];
-      const bySession = new Map<string, ChatRow[]>();
-      for (const row of rows) {
-        const list = bySession.get(row.session_id) ?? [];
-        list.push(row);
-        bySession.set(row.session_id, list);
-      }
-
-      const conversations: Conversation[] = [];
-      for (const [sessionId, sessionRows] of bySession.entries()) {
-        const firstUserMsg = sessionRows.find((r) => r.sender === "user");
-        const lastMsg = sessionRows[sessionRows.length - 1];
-        const title = firstUserMsg?.message?.slice(0, 60) || "Naməlum söhbət";
-        conversations.push({
-          id: sessionId,
-          title,
-          preview: lastMsg?.message?.slice(0, 120) ?? "",
-          locale: sessionRows.find((r) => r.locale)?.locale ?? "—",
-          messageCount: sessionRows.length,
-          firstContact: new Date(sessionRows[0].created_at),
-          lastActivity: new Date(lastMsg.created_at),
-          messages: sessionRows.map((r) => ({
-            id: r.id,
-            from: r.sender === "user" ? "user" : "ai",
-            text: r.message,
-            time: new Date(r.created_at).toLocaleTimeString("az-AZ", { hour: "2-digit", minute: "2-digit" }),
-          })),
-        });
-      }
-
-      conversations.sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime());
-      return conversations;
-    },
-  });
-}
 
 function relativeTime(date: Date): string {
   const diffMs = Date.now() - date.getTime();
@@ -161,7 +86,10 @@ function ConversationsPage() {
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
 
-  const { data: conversations = [], isLoading } = useConversations(user?.id);
+  const { data: conversations = [], isLoading } = useConversations();
+  const sendReply = useSendOperatorReply();
+
+  useRealtimeInvalidate(["ai_chat_messages"], [queryKeys.conversations.all]);
 
   const filtered = useMemo(() => {
     const now = Date.now();
@@ -457,7 +385,12 @@ function ConversationsPage() {
                                   {m.text}
                                 </div>
                                 <div className={`mt-1 flex items-center gap-1 text-[10px] text-white/40 ${m.from === "user" ? "" : "justify-end"}`}>
-                                  <span>{m.time}</span>
+                                  <span>
+                                    {m.createdAt.toLocaleTimeString("az-AZ", {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })}
+                                  </span>
                                 </div>
                               </div>
                             </motion.div>
@@ -466,27 +399,39 @@ function ConversationsPage() {
                       </div>
 
                       <div className="border-t border-white/5 px-4 py-3">
-                        <div className="flex items-center gap-2 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2 opacity-50" title="Bu funksiya hələ mövcud deyil">
-                          <button disabled className="grid h-8 w-8 place-items-center rounded-lg text-white/50" aria-label="Əlavə et">
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            void handleSend();
+                          }}
+                          className="flex items-center gap-2 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2 focus-within:border-cyan-400/40 transition"
+                        >
+                          <button type="button" disabled className="grid h-8 w-8 place-items-center rounded-lg text-white/30" aria-label="Əlavə et">
                             <Paperclip className="h-4 w-4" />
                           </button>
                           <input
                             value={draft}
                             onChange={(e) => setDraft(e.target.value)}
-                            disabled
-                            placeholder="Cavab yazma funksiyası hələ qoşulmayıb…"
-                            className="flex-1 bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none cursor-not-allowed"
+                            placeholder="Cavabınızı yazın…"
+                            maxLength={2000}
+                            className="flex-1 bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none"
                           />
-                          <button disabled className="grid h-8 w-8 place-items-center rounded-lg text-white/50" aria-label="Emoji">
+                          <button type="button" disabled className="grid h-8 w-8 place-items-center rounded-lg text-white/30" aria-label="Emoji">
                             <Smile className="h-4 w-4" />
                           </button>
                           <button
-                            disabled
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 px-3 py-1.5 text-xs font-semibold text-[#07090C] opacity-60 cursor-not-allowed"
+                            type="submit"
+                            disabled={sendReply.isPending || !draft.trim()}
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 px-3 py-1.5 text-xs font-semibold text-[#07090C] transition disabled:opacity-50"
                           >
-                            <Send className="h-3.5 w-3.5" /> Göndər
+                            {sendReply.isPending ? (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            ) : (
+                              <Send className="h-3.5 w-3.5" />
+                            )}
+                            Göndər
                           </button>
-                        </div>
+                        </form>
                       </div>
                     </>
                   ) : (
