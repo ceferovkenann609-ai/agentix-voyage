@@ -606,7 +606,7 @@ function AIAgentsPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-            onClick={() => setCreateOpen(false)}
+            onClick={closeModal}
           >
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -622,13 +622,17 @@ function AIAgentsPage() {
               <div className="relative flex items-start justify-between px-6 pt-6 sm:px-8 sm:pt-8">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-1 text-[11px] font-medium text-cyan-300">
-                    <Sparkles className="h-3 w-3" /> Yeni agent
+                    <Sparkles className="h-3 w-3" /> {editing ? "Agenti redaktə et" : "Yeni agent"}
                   </div>
-                  <h2 className="mt-3 text-2xl font-bold tracking-tight">AI Agent Yarat</h2>
-                  <p className="mt-1 text-sm text-white/60">Configure a new AI employee for your workspace.</p>
+                  <h2 className="mt-3 text-2xl font-bold tracking-tight">
+                    {editing ? "AI Agenti Redaktə Et" : "AI Agent Yarat"}
+                  </h2>
+                  <p className="mt-1 text-sm text-white/60">
+                    İş sahəniz üçün AI işçisini konfiqurasiya edin.
+                  </p>
                 </div>
                 <button
-                  onClick={() => setCreateOpen(false)}
+                  onClick={closeModal}
                   className="grid h-9 w-9 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/60 hover:text-white"
                   aria-label="Bağla"
                 >
@@ -637,60 +641,102 @@ function AIAgentsPage() {
               </div>
 
               <div className="relative grid gap-4 px-6 py-6 sm:grid-cols-2 sm:px-8">
-                <Field label="Agent Adı" placeholder="məs. Nova Dəstək" />
-                <Field label="Rol" placeholder="məs. Müştəri Dəstəyi" />
-                <SelectField label="Dil" options={["Azerbaijani", "English", "Turkish", "Russian", "Arabic"]} />
-                <SelectField label="Model" options={["Agentix Pro", "Agentix Lite", "GPT-4o", "Claude 3.5 Sonnet"]} />
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Agent Adı</label>
+                  <input
+                    value={form.name}
+                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                    maxLength={80}
+                    placeholder="məs. Nova Dəstək"
+                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
+                  />
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Tip</label>
+                  <select
+                    value={form.kind}
+                    onChange={(e) => setForm((f) => ({ ...f, kind: e.target.value as AgentKind }))}
+                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400/40 transition"
+                  >
+                    {AGENT_KINDS.map((k) => (
+                      <option key={k.value} value={k.value} className="bg-[#0B0F14]">
+                        {k.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Dil</label>
+                  <select
+                    value={form.language}
+                    onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))}
+                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400/40 transition"
+                  >
+                    {LANGUAGES.map((l) => (
+                      <option key={l.value} value={l.value} className="bg-[#0B0F14]">
+                        {l.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Model</label>
+                  <select
+                    value={form.model}
+                    onChange={(e) => setForm((f) => ({ ...f, model: e.target.value }))}
+                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400/40 transition"
+                  >
+                    {MODELS.map((m) => (
+                      <option key={m} value={m} className="bg-[#0B0F14]">
+                        {m}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div className="sm:col-span-2">
                   <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Təsvir</label>
                   <textarea
                     rows={3}
+                    value={form.description}
+                    onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                    maxLength={500}
                     placeholder="Bu agentin nə edəcəyini təsvir edin…"
                     className="mt-1.5 w-full resize-none rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
                   />
                 </div>
-                <div className="sm:col-span-2">
-                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Bilik mənbəyi</label>
-                  <div className="mt-1.5 grid gap-2 sm:grid-cols-3">
-                    {[
-                      { label: "Faylları yüklə", icon: Upload },
-                      { label: "Sayt URL-i", icon: Globe2 },
-                      { label: "Mövcud baza", icon: Database },
-                    ].map((k) => {
-                      const Icon = k.icon;
-                      return (
-                        <button
-                          key={k.label}
-                          type="button"
-                          className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white/80 hover:border-cyan-400/30 hover:bg-white/[0.05] transition text-left"
-                        >
-                          <Icon className="h-4 w-4 text-cyan-300" /> {k.label}
-                        </button>
-                      );
-                    })}
+                {formError && (
+                  <div className="sm:col-span-2 flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-400/[0.06] px-3.5 py-2.5 text-xs text-red-200">
+                    <AlertTriangle className="h-3.5 w-3.5" /> {formError}
                   </div>
-                </div>
+                )}
               </div>
 
               <div className="relative flex items-center justify-between gap-3 border-t border-white/8 bg-white/[0.02] px-6 py-4 sm:px-8">
                 <div className="hidden sm:flex items-center gap-2 text-[11px] text-white/50">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" /> Bütün kanallara dərhal tətbiq olunur
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" /> Qaralama olaraq yaradılır, sonra aktivləşdirin
                 </div>
                 <div className="ml-auto flex items-center gap-2">
                   <button
-                    onClick={() => setCreateOpen(false)}
+                    onClick={closeModal}
                     className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/[0.06] transition"
                   >
                     Ləğv et
                   </button>
                   <button
-                    onClick={() => setCreateOpen(false)}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition"
+                    onClick={() => void submitForm()}
+                    disabled={create.isPending || update.isPending}
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition disabled:opacity-60"
                   >
-                    <Sparkles className="h-4 w-4" /> Agent Yarat
+                    {create.isPending || update.isPending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="h-4 w-4" />
+                    )}
+                    {editing ? "Yadda saxla" : "Agent Yarat"}
                   </button>
                 </div>
               </div>
+
             </motion.div>
           </motion.div>
         )}
