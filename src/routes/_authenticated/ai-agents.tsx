@@ -37,6 +37,12 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAgentixMetrics } from "@/lib/metrics";
+import { useAgents, useAgentMutations } from "@/lib/platform/hooks";
+import { useRealtimeInvalidate } from "@/lib/realtime";
+import { queryKeys } from "@/lib/api/keys";
+import type { AgentKind, AgentRow } from "@/lib/api/agents";
+import { toast } from "sonner";
+import { Loader2, Trash2, AlertTriangle } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/ai-agents")({
   head: () => ({
