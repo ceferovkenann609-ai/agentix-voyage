@@ -32,6 +32,8 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAgentixMetrics } from "@/lib/metrics";
+import { useBilling } from "@/lib/platform/hooks";
+import { formatBytes, formatInvoiceAmount } from "@/lib/api/billing";
 
 export const Route = createFileRoute("/_authenticated/billing")({
   head: () => ({
@@ -81,6 +83,12 @@ const plans: { name: string; price: number; icon: typeof Zap; current?: boolean;
   },
 ];
 
+const PLAN_LIMITS: Record<string, { conversations: number; leads: number; agents: number }> = {
+  starter: { conversations: 5000, leads: 500, agents: 3 },
+  growth: { conversations: 50000, leads: 5000, agents: 12 },
+  enterprise: { conversations: 0, leads: 0, agents: 0 },
+};
+
 function BillingPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -95,17 +103,43 @@ function BillingPage() {
     navigate({ to: "/" });
   };
 
-  const chatMessagesUsed = metrics?.chatMessages ?? 0;
-  const leadsUsed = metrics?.leadsTotal ?? 0;
-  const conversationsLimit = 5000;
-  const leadsLimit = 500;
-  const conversationsPct = Math.min((chatMessagesUsed / conversationsLimit) * 100, 100);
+  const billing = useBilling();
+  const subscription = billing.subscription.data ?? null;
+  const invoices = billing.invoices.data ?? [];
+  const payments = billing.payments.data ?? [];
+  const usage = billing.usage.data ?? null;
 
-  const usageMetrics = [
-    { label: "Söhbətlər", used: chatMessagesUsed, total: conversationsLimit, unit: "" },
-    { label: "Müştəri Namizədləri", used: leadsUsed, total: leadsLimit, unit: "" },
-    { label: "AI Agentləri", used: 0, total: 0, unit: "" },
-    { label: "Storage", used: 0, total: 0, unit: " GB" },
+  const chatMessagesUsed = usage?.chatMessages ?? metrics?.chatMessages ?? 0;
+  const leadsUsed = usage?.leads ?? metrics?.leadsTotal ?? 0;
+
+  const planName = subscription?.plan ?? null;
+  const planLimits = planName ? PLAN_LIMITS[planName.toLowerCase()] ?? null : null;
+
+  const dateFmt = (value: string | null | undefined) =>
+    value
+      ? new Date(value).toLocaleDateString("az-AZ", { day: "2-digit", month: "short", year: "numeric" })
+      : "—";
+
+  const cycleLabel =
+    subscription?.current_period_start && subscription?.current_period_end
+      ? `${dateFmt(subscription.current_period_start)} — ${dateFmt(subscription.current_period_end)}`
+      : "Aktiv dövr yoxdur";
+
+  const conversationsLimit = planLimits?.conversations ?? 0;
+  const conversationsPct =
+    conversationsLimit > 0 ? Math.min((chatMessagesUsed / conversationsLimit) * 100, 100) : 0;
+
+  const usageMetrics: { label: string; used: number; total: number; unit: string; note?: string }[] = [
+    { label: "Söhbətlər", used: chatMessagesUsed, total: planLimits?.conversations ?? 0, unit: "" },
+    { label: "Müştəri Namizədləri", used: leadsUsed, total: planLimits?.leads ?? 0, unit: "" },
+    { label: "AI Agentləri", used: usage?.agents ?? 0, total: planLimits?.agents ?? 0, unit: "" },
+    {
+      label: "Fayl yaddaşı",
+      used: usage?.files ?? 0,
+      total: 0,
+      unit: " fayl",
+      note: formatBytes(usage?.storageBytes ?? 0),
+    },
   ];
 
   return (
@@ -278,12 +312,20 @@ function BillingPage() {
                       <Crown className="h-3.5 w-3.5" /> Current Plan
                     </div>
                     <div className="mt-3 flex items-baseline gap-3">
-                      <div className="text-3xl font-bold">Free</div>
-                      <div className="text-sm text-white/60">Aktivləşdirilməyib</div>
+                      <div className="text-3xl font-bold capitalize">{planName ?? "Free"}</div>
+                      <div className="text-sm text-white/60">
+                        {subscription ? (subscription.status === "active" ? "Aktiv" : subscription.status) : "Aktivləşdirilməyib"}
+                      </div>
                     </div>
-                    <div className="mt-2 text-xs text-white/60">Hələ aktiv abunəlik yoxdur</div>
+                    <div className="mt-2 text-xs text-white/60">
+                      {billing.subscription.isLoading
+                        ? "Abunəlik yüklənir…"
+                        : subscription
+                          ? `Cari dövr: ${cycleLabel}${subscription.cancel_at_period_end ? " · dövrün sonunda ləğv olunur" : ""}`
+                          : "Hələ aktiv abunəlik yoxdur"}
+                    </div>
                     <div className="mt-4 flex flex-wrap gap-2">
-                      {["Əsas funksionallıq"].map((f) => (
+                      {(subscription ? [`Plan: ${planName}`, `Status: ${subscription.status}`] : ["Əsas funksionallıq"]).map((f) => (
                         <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/70">
                           <CheckCircle2 className="h-3 w-3 text-cyan-300" /> {f}
                         </span>
@@ -313,8 +355,12 @@ function BillingPage() {
                   </button>
                 </div>
                 <div className="mt-4 flex items-baseline gap-2">
-                  <div className="text-3xl font-bold">{Math.max(conversationsLimit - chatMessagesUsed, 0).toLocaleString()}</div>
-                  <div className="text-xs text-white/50">of {conversationsLimit.toLocaleString()} remaining</div>
+                  <div className="text-3xl font-bold">
+                    {conversationsLimit > 0 ? Math.max(conversationsLimit - chatMessagesUsed, 0).toLocaleString() : "—"}
+                  </div>
+                  <div className="text-xs text-white/50">
+                    {conversationsLimit > 0 ? `/ ${conversationsLimit.toLocaleString()} qalıq` : "Limit təyin edilməyib"}
+                  </div>
                 </div>
                 <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/5">
                   <motion.div
@@ -326,7 +372,7 @@ function BillingPage() {
                 </div>
                 <div className="mt-3 flex items-center justify-between text-[11px] text-white/50">
                   <span>{chatMessagesUsed.toLocaleString()} istifadə edilib</span>
-                  <span>Plan aktivləşdirilməyib</span>
+                  <span>{subscription ? `Plan: ${planName}` : "Plan aktivləşdirilməyib"}</span>
                 </div>
               </motion.section>
             </div>
@@ -343,7 +389,7 @@ function BillingPage() {
                 <div className="flex items-center gap-2 text-sm font-semibold">
                   <TrendingUp className="h-4 w-4 text-cyan-300" /> Usage this cycle
                 </div>
-                <div className="text-[11px] text-white/40">Aug 01 — Aug 31</div>
+                <div className="text-[11px] text-white/40">{cycleLabel}</div>
               </div>
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {usageMetrics.map((m, i) => {
@@ -356,8 +402,11 @@ function BillingPage() {
                       </div>
                       <div className="mt-1.5 text-lg font-bold">
                         {m.used.toLocaleString()}
-                        <span className="text-xs text-white/40 font-normal"> / {m.total.toLocaleString()}{m.unit}</span>
+                        <span className="text-xs text-white/40 font-normal">
+                          {m.total > 0 ? ` / ${m.total.toLocaleString()}${m.unit}` : m.unit || ""}
+                        </span>
                       </div>
+                      {m.note && <div className="mt-1 text-[10px] text-white/40">{m.note}</div>}
                       <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/5">
                         <motion.div
                           initial={{ width: 0 }}
@@ -389,6 +438,7 @@ function BillingPage() {
               <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-5">
                 {plans.map((p, i) => {
                   const Icon = p.icon;
+                  const isCurrent = planName?.toLowerCase() === p.name.toLowerCase();
                   return (
                     <motion.div
                       key={p.name}
@@ -397,10 +447,10 @@ function BillingPage() {
                       viewport={{ once: true }}
                       transition={{ duration: 0.4, delay: i * 0.05 }}
                       className={`relative overflow-hidden rounded-2xl border p-6 bg-gradient-to-br ${p.tone} ${
-                        p.current ? "border-cyan-400/40 shadow-[0_0_40px_-10px_rgba(34,211,238,0.4)]" : "border-white/8 hover:border-cyan-400/30"
+                        isCurrent ? "border-cyan-400/40 shadow-[0_0_40px_-10px_rgba(34,211,238,0.4)]" : "border-white/8 hover:border-cyan-400/30"
                       } transition`}
                     >
-                      {p.current && (
+                      {isCurrent && (
                         <span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
                           Current
                         </span>
@@ -481,10 +531,36 @@ function BillingPage() {
                 <button className="text-xs text-white/50 hover:text-white transition">View all</button>
               </div>
               <div className="mt-4">
-                <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.01] py-10 text-center">
-                  <Receipt className="h-6 w-6 text-white/30" />
-                  <div className="text-sm text-white/50">Hələ hesab-faktura yoxdur</div>
-                </div>
+                {invoices.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.01] py-10 text-center">
+                    <Receipt className="h-6 w-6 text-white/30" />
+                    <div className="text-sm text-white/50">
+                      {billing.invoices.isLoading ? "Hesab-fakturalar yüklənir…" : "Hələ hesab-faktura yoxdur"}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-white/5 rounded-xl border border-white/5 bg-white/[0.01]">
+                    {invoices.map((inv) => (
+                      <div key={inv.id} className="flex items-center justify-between gap-3 px-4 py-3">
+                        <div className="min-w-0">
+                          <div className="truncate text-sm font-semibold">{inv.number ?? inv.id.slice(0, 8)}</div>
+                          <div className="text-[11px] text-white/45">{dateFmt(inv.issued_at ?? inv.created_at)}</div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm font-semibold">{formatInvoiceAmount(Number(inv.amount), inv.currency)}</span>
+                          <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] text-white/60">
+                            {inv.status}
+                          </span>
+                          {inv.pdf_url && (
+                            <a href={inv.pdf_url} target="_blank" rel="noreferrer" className="text-cyan-300 hover:text-cyan-200">
+                              <Download className="h-4 w-4" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </motion.section>
 
@@ -502,10 +578,28 @@ function BillingPage() {
                 </div>
                 <div className="text-[11px] text-white/40">Last 12 months</div>
               </div>
-              <div className="mt-4 flex flex-col items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.01] py-10 text-center">
-                <Calendar className="h-6 w-6 text-white/30" />
-                <div className="text-sm text-white/50">Hələ ödəniş yoxdur</div>
-              </div>
+              {payments.length === 0 ? (
+                <div className="mt-4 flex flex-col items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.01] py-10 text-center">
+                  <Calendar className="h-6 w-6 text-white/30" />
+                  <div className="text-sm text-white/50">
+                    {billing.payments.isLoading ? "Ödənişlər yüklənir…" : "Hələ ödəniş yoxdur"}
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-4 divide-y divide-white/5 rounded-xl border border-white/5 bg-white/[0.01]">
+                  {payments.map((pay) => (
+                    <div key={pay.id} className="flex items-center justify-between gap-3 px-4 py-3">
+                      <div className="min-w-0">
+                        <div className="truncate text-sm font-semibold">{pay.number ?? pay.id.slice(0, 8)}</div>
+                        <div className="text-[11px] text-white/45">{dateFmt(pay.paid_at)}</div>
+                      </div>
+                      <span className="text-sm font-semibold text-emerald-300">
+                        {formatInvoiceAmount(Number(pay.amount), pay.currency)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </motion.section>
 
             <div className="h-4" />

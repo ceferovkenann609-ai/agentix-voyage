@@ -33,10 +33,17 @@ import {
   BookOpen,
   CheckCircle2,
   Pencil,
-  
+  Loader2,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAgentixMetrics } from "@/lib/metrics";
+import { useAgents, useAgentMutations } from "@/lib/platform/hooks";
+import { useRealtimeInvalidate } from "@/lib/realtime";
+import { queryKeys } from "@/lib/api/keys";
+import type { AgentKind, AgentRow } from "@/lib/api/agents";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/ai-agents")({
   head: () => ({
@@ -70,18 +77,77 @@ const channels = [
   { name: "Email", icon: Mail },
 ];
 
+const AGENT_KINDS: { value: AgentKind; label: string }[] = [
+  { value: "chat", label: "Çat" },
+  { value: "voice", label: "Səsli" },
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "instagram", label: "Instagram" },
+  { value: "email", label: "E-poçt" },
+  { value: "document", label: "Sənəd" },
+  { value: "scheduling", label: "Görüş planlama" },
+];
+
+const LANGUAGES: { value: string; label: string }[] = [
+  { value: "az", label: "Azərbaycan dili" },
+  { value: "en", label: "English" },
+  { value: "tr", label: "Türkçe" },
+  { value: "ru", label: "Русский" },
+  { value: "ar", label: "العربية" },
+];
+
+const MODELS = ["google/gemini-2.5-flash", "google/gemini-2.5-pro", "openai/gpt-5-mini", "openai/gpt-5"];
+
+const STATUS_LABEL: Record<string, string> = {
+  draft: "Qaralama",
+  training: "Təlimdə",
+  active: "Aktiv",
+  paused: "Dayandırılıb",
+  error: "Xəta",
+};
+
+type AgentFormState = {
+  name: string;
+  kind: AgentKind;
+  language: string;
+  model: string;
+  description: string;
+};
+
+const emptyForm: AgentFormState = {
+  name: "",
+  kind: "chat",
+  language: "az",
+  model: MODELS[0]!,
+  description: "",
+};
+
 function AIAgentsPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
+  const [editing, setEditing] = useState<AgentRow | null>(null);
+  const [form, setForm] = useState<AgentFormState>(emptyForm);
+  const [formError, setFormError] = useState<string | null>(null);
   const { data: metrics } = useAgentixMetrics(user?.id);
 
+  const agentsQuery = useAgents();
+  const agents = agentsQuery.data ?? [];
+  const { create, update, remove } = useAgentMutations();
+
+  useRealtimeInvalidate(["ai_agents", "ai_chat_messages"], [
+    queryKeys.agents.all,
+    queryKeys.metrics.all,
+  ]);
+
+  const activeAgents = agents.filter((a) => a.status === "active").length;
+  const automations = agents.filter((a) => a.kind !== "chat").length;
+
   const stats = [
-    { label: "Aktiv Agentlər", value: "0", icon: Bot },
-    { label: "Bu günkü mesajlar", value: String(metrics?.chatMessages ?? 0), icon: MessageSquare },
-    { label: "Avtomatlaşdırmalar", value: "0", icon: Zap },
-    { label: "Orta cavab müddəti", value: "—", icon: Clock },
+    { label: "Aktiv Agentlər", value: String(activeAgents), icon: Bot },
+    { label: "Mesajlar", value: String(metrics?.chatMessages ?? 0), icon: MessageSquare },
+    { label: "Avtomatlaşdırmalar", value: String(automations), icon: Zap },
+    { label: "Ümumi agentlər", value: String(agents.length), icon: Clock },
   ];
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
@@ -90,6 +156,93 @@ function AIAgentsPage() {
     await signOut();
     navigate({ to: "/" });
   };
+
+  const openCreate = () => {
+    setEditing(null);
+    setForm(emptyForm);
+    setFormError(null);
+    setCreateOpen(true);
+  };
+
+  const openEdit = (agent: AgentRow) => {
+    setEditing(agent);
+    setForm({
+      name: agent.name,
+      kind: agent.kind,
+      language: agent.language ?? "az",
+      model: agent.model ?? MODELS[0]!,
+      description: agent.description ?? "",
+    });
+    setFormError(null);
+    setCreateOpen(true);
+  };
+
+  const closeModal = () => {
+    if (create.isPending || update.isPending) return;
+    setCreateOpen(false);
+    setEditing(null);
+    setFormError(null);
+  };
+
+  const submitForm = async () => {
+    if (create.isPending || update.isPending) return;
+    const trimmed = form.name.trim();
+    if (!trimmed) {
+      setFormError("Agent adı zəruridir.");
+      return;
+    }
+    setFormError(null);
+    try {
+      if (editing) {
+        await update.mutateAsync({
+          id: editing.id,
+          patch: {
+            name: trimmed,
+            kind: form.kind,
+            language: form.language,
+            model: form.model,
+            description: form.description.trim() || null,
+          },
+        });
+        toast.success("Agent yeniləndi");
+      } else {
+        await create.mutateAsync({
+          name: trimmed,
+          kind: form.kind,
+          language: form.language,
+          model: form.model,
+          description: form.description.trim() || null,
+        });
+        toast.success("Agent yaradıldı");
+      }
+      setCreateOpen(false);
+      setEditing(null);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Əməliyyat alınmadı.";
+      setFormError(message);
+      toast.error(message);
+    }
+  };
+
+  const toggleStatus = async (agent: AgentRow) => {
+    const next = agent.status === "active" ? "paused" : "active";
+    try {
+      await update.mutateAsync({ id: agent.id, patch: { status: next } });
+      toast.success(next === "active" ? "Agent aktivləşdirildi" : "Agent dayandırıldı");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Status dəyişdirilə bilmədi.");
+    }
+  };
+
+  const archiveAgentRow = async (agent: AgentRow) => {
+    try {
+      await remove.mutateAsync(agent.id);
+      toast.success("Agent arxivləndi");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Agent arxivlənə bilmədi.");
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-[#07090C] text-white pt-20">
@@ -235,7 +388,7 @@ function AIAgentsPage() {
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <button
-                    onClick={() => setCreateOpen(true)}
+                    onClick={openCreate}
                     className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <Plus className="h-4 w-4" /> Agent Yarat
@@ -281,25 +434,114 @@ function AIAgentsPage() {
                     <h2 className="text-lg font-bold tracking-tight">Sizin agentləriniz</h2>
                     <p className="text-xs text-white/50">Hər AI işçinin canlı görünüşü</p>
                   </div>
-                  <button className="text-xs font-medium text-cyan-300 hover:text-cyan-200">Rolları idarə et</button>
+                  <span className="text-xs font-medium text-white/40">{agents.length} agent</span>
                 </div>
 
-                <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-10 flex flex-col items-center justify-center text-center">
-                  <div className="grid h-14 w-14 place-items-center rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300 shadow-[0_0_20px_-6px_rgba(34,211,238,0.6)]">
-                    <Bot className="h-6 w-6" />
+                {agentsQuery.isLoading ? (
+                  <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-10 flex flex-col items-center justify-center text-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-cyan-300" />
+                    <p className="mt-3 text-sm text-white/50">Agentlər yüklənir…</p>
                   </div>
-                  <h3 className="mt-4 text-base font-semibold tracking-tight">Hələ AI agent yaradılmayıb</h3>
-                  <p className="mt-1.5 max-w-sm text-sm text-white/50">
-                    İş qüvvənizi qurmaq üçün ilk AI agentinizi yaradın və müştəri əlaqələrini avtomatlaşdırın.
-                  </p>
-                  <button
-                    onClick={() => setCreateOpen(true)}
-                    className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    <Plus className="h-4 w-4" /> Agent Yarat
-                  </button>
-                </div>
+                ) : agentsQuery.isError ? (
+                  <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.05] p-10 flex flex-col items-center justify-center text-center">
+                    <AlertTriangle className="h-6 w-6 text-red-300" />
+                    <p className="mt-3 text-sm text-red-200">Agentləri yükləmək mümkün olmadı.</p>
+                    <button
+                      onClick={() => void agentsQuery.refetch()}
+                      className="mt-4 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white hover:bg-white/[0.08] transition"
+                    >
+                      Yenidən cəhd et
+                    </button>
+                  </div>
+                ) : agents.length === 0 ? (
+                  <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-10 flex flex-col items-center justify-center text-center">
+                    <div className="grid h-14 w-14 place-items-center rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300 shadow-[0_0_20px_-6px_rgba(34,211,238,0.6)]">
+                      <Bot className="h-6 w-6" />
+                    </div>
+                    <h3 className="mt-4 text-base font-semibold tracking-tight">Hələ AI agent yaradılmayıb</h3>
+                    <p className="mt-1.5 max-w-sm text-sm text-white/50">
+                      İş qüvvənizi qurmaq üçün ilk AI agentinizi yaradın və müştəri əlaqələrini avtomatlaşdırın.
+                    </p>
+                    <button
+                      onClick={openCreate}
+                      className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Plus className="h-4 w-4" /> Agent Yarat
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {agents.map((agent) => (
+                      <motion.div
+                        key={agent.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02] p-5 hover:border-cyan-400/25 transition-all"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300">
+                              <Bot className="h-5 w-5" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="truncate text-sm font-semibold">{agent.name}</div>
+                              <div className="text-[11px] text-white/50">
+                                {AGENT_KINDS.find((k) => k.value === agent.kind)?.label ?? agent.kind} ·{" "}
+                                {agent.language?.toUpperCase() ?? "—"}
+                              </div>
+                            </div>
+                          </div>
+                          <span
+                            className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                              agent.status === "active"
+                                ? "border border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
+                                : agent.status === "error"
+                                  ? "border border-red-400/30 bg-red-400/10 text-red-300"
+                                  : "border border-white/10 bg-white/[0.05] text-white/50"
+                            }`}
+                          >
+                            <Circle className="h-1.5 w-1.5 fill-current" />
+                            {STATUS_LABEL[agent.status] ?? agent.status}
+                          </span>
+                        </div>
+
+                        {agent.description && (
+                          <p className="mt-3 line-clamp-2 text-xs text-white/55">{agent.description}</p>
+                        )}
+                        <div className="mt-3 text-[11px] text-white/35">
+                          {agent.model ?? "Model təyin edilməyib"}
+                        </div>
+
+                        <div className="mt-4 flex items-center gap-2">
+                          <button
+                            onClick={() => void toggleStatus(agent)}
+                            disabled={update.isPending}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/[0.07] transition disabled:opacity-50"
+                          >
+                            <Zap className="h-3.5 w-3.5 text-cyan-300" />
+                            {agent.status === "active" ? "Dayandır" : "Aktivləşdir"}
+                          </button>
+                          <button
+                            onClick={() => openEdit(agent)}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/[0.07] transition"
+                          >
+                            <Pencil className="h-3.5 w-3.5 text-cyan-300" /> Redaktə
+                          </button>
+                          <button
+                            onClick={() => void archiveAgentRow(agent)}
+                            disabled={remove.isPending}
+                            className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-red-400/20 bg-red-400/[0.06] px-3 py-1.5 text-xs font-semibold text-red-200 hover:bg-red-400/[0.12] transition disabled:opacity-50"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" /> Arxivlə
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
               </section>
+
             </div>
 
             {/* Right panel */}
@@ -365,7 +607,7 @@ function AIAgentsPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-            onClick={() => setCreateOpen(false)}
+            onClick={closeModal}
           >
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -381,13 +623,17 @@ function AIAgentsPage() {
               <div className="relative flex items-start justify-between px-6 pt-6 sm:px-8 sm:pt-8">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-1 text-[11px] font-medium text-cyan-300">
-                    <Sparkles className="h-3 w-3" /> Yeni agent
+                    <Sparkles className="h-3 w-3" /> {editing ? "Agenti redaktə et" : "Yeni agent"}
                   </div>
-                  <h2 className="mt-3 text-2xl font-bold tracking-tight">AI Agent Yarat</h2>
-                  <p className="mt-1 text-sm text-white/60">Configure a new AI employee for your workspace.</p>
+                  <h2 className="mt-3 text-2xl font-bold tracking-tight">
+                    {editing ? "AI Agenti Redaktə Et" : "AI Agent Yarat"}
+                  </h2>
+                  <p className="mt-1 text-sm text-white/60">
+                    İş sahəniz üçün AI işçisini konfiqurasiya edin.
+                  </p>
                 </div>
                 <button
-                  onClick={() => setCreateOpen(false)}
+                  onClick={closeModal}
                   className="grid h-9 w-9 place-items-center rounded-lg border border-white/10 bg-white/5 text-white/60 hover:text-white"
                   aria-label="Bağla"
                 >
@@ -396,91 +642,106 @@ function AIAgentsPage() {
               </div>
 
               <div className="relative grid gap-4 px-6 py-6 sm:grid-cols-2 sm:px-8">
-                <Field label="Agent Adı" placeholder="məs. Nova Dəstək" />
-                <Field label="Rol" placeholder="məs. Müştəri Dəstəyi" />
-                <SelectField label="Dil" options={["Azerbaijani", "English", "Turkish", "Russian", "Arabic"]} />
-                <SelectField label="Model" options={["Agentix Pro", "Agentix Lite", "GPT-4o", "Claude 3.5 Sonnet"]} />
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Agent Adı</label>
+                  <input
+                    value={form.name}
+                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                    maxLength={80}
+                    placeholder="məs. Nova Dəstək"
+                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
+                  />
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Tip</label>
+                  <select
+                    value={form.kind}
+                    onChange={(e) => setForm((f) => ({ ...f, kind: e.target.value as AgentKind }))}
+                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400/40 transition"
+                  >
+                    {AGENT_KINDS.map((k) => (
+                      <option key={k.value} value={k.value} className="bg-[#0B0F14]">
+                        {k.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Dil</label>
+                  <select
+                    value={form.language}
+                    onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))}
+                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400/40 transition"
+                  >
+                    {LANGUAGES.map((l) => (
+                      <option key={l.value} value={l.value} className="bg-[#0B0F14]">
+                        {l.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Model</label>
+                  <select
+                    value={form.model}
+                    onChange={(e) => setForm((f) => ({ ...f, model: e.target.value }))}
+                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400/40 transition"
+                  >
+                    {MODELS.map((m) => (
+                      <option key={m} value={m} className="bg-[#0B0F14]">
+                        {m}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div className="sm:col-span-2">
                   <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Təsvir</label>
                   <textarea
                     rows={3}
+                    value={form.description}
+                    onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                    maxLength={500}
                     placeholder="Bu agentin nə edəcəyini təsvir edin…"
                     className="mt-1.5 w-full resize-none rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
                   />
                 </div>
-                <div className="sm:col-span-2">
-                  <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">Bilik mənbəyi</label>
-                  <div className="mt-1.5 grid gap-2 sm:grid-cols-3">
-                    {[
-                      { label: "Faylları yüklə", icon: Upload },
-                      { label: "Sayt URL-i", icon: Globe2 },
-                      { label: "Mövcud baza", icon: Database },
-                    ].map((k) => {
-                      const Icon = k.icon;
-                      return (
-                        <button
-                          key={k.label}
-                          type="button"
-                          className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white/80 hover:border-cyan-400/30 hover:bg-white/[0.05] transition text-left"
-                        >
-                          <Icon className="h-4 w-4 text-cyan-300" /> {k.label}
-                        </button>
-                      );
-                    })}
+                {formError && (
+                  <div className="sm:col-span-2 flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-400/[0.06] px-3.5 py-2.5 text-xs text-red-200">
+                    <AlertTriangle className="h-3.5 w-3.5" /> {formError}
                   </div>
-                </div>
+                )}
               </div>
 
               <div className="relative flex items-center justify-between gap-3 border-t border-white/8 bg-white/[0.02] px-6 py-4 sm:px-8">
                 <div className="hidden sm:flex items-center gap-2 text-[11px] text-white/50">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" /> Bütün kanallara dərhal tətbiq olunur
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" /> Qaralama olaraq yaradılır, sonra aktivləşdirin
                 </div>
                 <div className="ml-auto flex items-center gap-2">
                   <button
-                    onClick={() => setCreateOpen(false)}
+                    onClick={closeModal}
                     className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/[0.06] transition"
                   >
                     Ləğv et
                   </button>
                   <button
-                    onClick={() => setCreateOpen(false)}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition"
+                    onClick={() => void submitForm()}
+                    disabled={create.isPending || update.isPending}
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition disabled:opacity-60"
                   >
-                    <Sparkles className="h-4 w-4" /> Agent Yarat
+                    {create.isPending || update.isPending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="h-4 w-4" />
+                    )}
+                    {editing ? "Yadda saxla" : "Agent Yarat"}
                   </button>
                 </div>
               </div>
+
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
-  );
-}
-
-function Field({ label, placeholder }: { label: string; placeholder: string }) {
-  return (
-    <div>
-      <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">{label}</label>
-      <input
-        placeholder={placeholder}
-        className="mt-1.5 h-10 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
-      />
-    </div>
-  );
-}
-
-function SelectField({ label, options }: { label: string; options: string[] }) {
-  return (
-    <div>
-      <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">{label}</label>
-      <select className="mt-1.5 h-10 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3 text-sm text-white focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition">
-        {options.map((o) => (
-          <option key={o} value={o} className="bg-[#0B0F14]">
-            {o}
-          </option>
-        ))}
-      </select>
     </div>
   );
 }

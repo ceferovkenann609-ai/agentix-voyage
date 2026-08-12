@@ -39,6 +39,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRealtimeInvalidate } from "@/lib/realtime";
 import {
   LEAD_STATUSES,
   STATUS_LABEL,
@@ -98,6 +99,11 @@ function CRMPage() {
   const name = user?.email?.split("@")[0] || "İstifadəçi";
 
   const leadsQuery = useLeads(user?.id);
+
+  useRealtimeInvalidate(
+    ["crm_leads", "crm_lead_activities"],
+    [["crm-leads"], ["crm-lead-activities"], ["crm-recent-activities"], ["agentix-metrics"]],
+  );
   const leads = leadsQuery.data ?? [];
   const selected = leads.find((l) => l.id === selectedId) ?? null;
   const activitiesQuery = useLeadActivities(selectedId ?? undefined);
