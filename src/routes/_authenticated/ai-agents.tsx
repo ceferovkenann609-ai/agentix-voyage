@@ -745,30 +745,3 @@ function AIAgentsPage() {
     </div>
   );
 }
-
-function Field({ label, placeholder }: { label: string; placeholder: string }) {
-  return (
-    <div>
-      <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">{label}</label>
-      <input
-        placeholder={placeholder}
-        className="mt-1.5 h-10 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
-      />
-    </div>
-  );
-}
-
-function SelectField({ label, options }: { label: string; options: string[] }) {
-  return (
-    <div>
-      <label className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">{label}</label>
-      <select className="mt-1.5 h-10 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3 text-sm text-white focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition">
-        {options.map((o) => (
-          <option key={o} value={o} className="bg-[#0B0F14]">
-            {o}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
