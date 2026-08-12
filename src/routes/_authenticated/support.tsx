@@ -92,6 +92,64 @@ function SupportPage() {
           </div>
         </div>
 
+        {/* Real request history — user's own contact submissions + demo bookings */}
+        <div className="mt-10 glass rounded-2xl p-6">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Inbox className="h-4 w-4 text-cyan-300" />
+              <h2 className="text-lg font-semibold">Müraciət tarixçəniz</h2>
+            </div>
+            <span className="text-xs text-white/40">{requests.length} müraciət</span>
+          </div>
+
+          {requestsQuery.isLoading ? (
+            <div className="mt-6 flex items-center gap-2 text-sm text-white/50">
+              <Loader2 className="h-4 w-4 animate-spin text-cyan-300" /> Müraciətlər yüklənir…
+            </div>
+          ) : requestsQuery.isError ? (
+            <div className="mt-6 flex items-center gap-2 text-sm text-red-200">
+              <AlertTriangle className="h-4 w-4" /> Müraciət tarixçəsi yüklənə bilmədi.
+            </div>
+          ) : requests.length === 0 ? (
+            <p className="mt-4 text-sm text-muted-foreground">
+              Hələ müraciət göndərməmisiniz. Əlaqə formu və ya demo sorğusu göndərdikdən sonra
+              tarixçə burada görünəcək.
+            </p>
+          ) : (
+            <div className="mt-4 divide-y divide-white/5">
+              {requests.map((r) => (
+                <div key={`${r.kind}-${r.id}`} className="flex items-start justify-between gap-4 py-4">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${
+                          r.kind === "demo"
+                            ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-200"
+                            : "border-white/10 bg-white/[0.04] text-white/60"
+                        }`}
+                      >
+                        {r.kind === "demo" ? "Demo" : "Əlaqə"}
+                      </span>
+                      <p className="truncate font-medium">{r.subject}</p>
+                    </div>
+                    {r.message && (
+                      <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{r.message}</p>
+                    )}
+                  </div>
+                  <span className="shrink-0 text-xs text-white/40">
+                    {r.createdAt.toLocaleDateString("az-AZ", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+
         <div className="mt-10 glass rounded-2xl p-6">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-cyan-300" />
