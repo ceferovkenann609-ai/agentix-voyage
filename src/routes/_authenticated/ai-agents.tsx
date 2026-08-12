@@ -76,18 +76,77 @@ const channels = [
   { name: "Email", icon: Mail },
 ];
 
+const AGENT_KINDS: { value: AgentKind; label: string }[] = [
+  { value: "chat", label: "Çat" },
+  { value: "voice", label: "Səsli" },
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "instagram", label: "Instagram" },
+  { value: "email", label: "E-poçt" },
+  { value: "document", label: "Sənəd" },
+  { value: "scheduling", label: "Görüş planlama" },
+];
+
+const LANGUAGES: { value: string; label: string }[] = [
+  { value: "az", label: "Azərbaycan dili" },
+  { value: "en", label: "English" },
+  { value: "tr", label: "Türkçe" },
+  { value: "ru", label: "Русский" },
+  { value: "ar", label: "العربية" },
+];
+
+const MODELS = ["google/gemini-2.5-flash", "google/gemini-2.5-pro", "openai/gpt-5-mini", "openai/gpt-5"];
+
+const STATUS_LABEL: Record<string, string> = {
+  draft: "Qaralama",
+  training: "Təlimdə",
+  active: "Aktiv",
+  paused: "Dayandırılıb",
+  error: "Xəta",
+};
+
+type AgentFormState = {
+  name: string;
+  kind: AgentKind;
+  language: string;
+  model: string;
+  description: string;
+};
+
+const emptyForm: AgentFormState = {
+  name: "",
+  kind: "chat",
+  language: "az",
+  model: MODELS[0]!,
+  description: "",
+};
+
 function AIAgentsPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
+  const [editing, setEditing] = useState<AgentRow | null>(null);
+  const [form, setForm] = useState<AgentFormState>(emptyForm);
+  const [formError, setFormError] = useState<string | null>(null);
   const { data: metrics } = useAgentixMetrics(user?.id);
 
+  const agentsQuery = useAgents();
+  const agents = agentsQuery.data ?? [];
+  const { create, update, remove } = useAgentMutations();
+
+  useRealtimeInvalidate(["ai_agents", "ai_chat_messages"], [
+    queryKeys.agents.all,
+    queryKeys.metrics.all,
+  ]);
+
+  const activeAgents = agents.filter((a) => a.status === "active").length;
+  const automations = agents.filter((a) => a.kind !== "chat").length;
+
   const stats = [
-    { label: "Aktiv Agentlər", value: "0", icon: Bot },
-    { label: "Bu günkü mesajlar", value: String(metrics?.chatMessages ?? 0), icon: MessageSquare },
-    { label: "Avtomatlaşdırmalar", value: "0", icon: Zap },
-    { label: "Orta cavab müddəti", value: "—", icon: Clock },
+    { label: "Aktiv Agentlər", value: String(activeAgents), icon: Bot },
+    { label: "Mesajlar", value: String(metrics?.chatMessages ?? 0), icon: MessageSquare },
+    { label: "Avtomatlaşdırmalar", value: String(automations), icon: Zap },
+    { label: "Ümumi agentlər", value: String(agents.length), icon: Clock },
   ];
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
@@ -96,6 +155,93 @@ function AIAgentsPage() {
     await signOut();
     navigate({ to: "/" });
   };
+
+  const openCreate = () => {
+    setEditing(null);
+    setForm(emptyForm);
+    setFormError(null);
+    setCreateOpen(true);
+  };
+
+  const openEdit = (agent: AgentRow) => {
+    setEditing(agent);
+    setForm({
+      name: agent.name,
+      kind: agent.kind,
+      language: agent.language ?? "az",
+      model: agent.model ?? MODELS[0]!,
+      description: agent.description ?? "",
+    });
+    setFormError(null);
+    setCreateOpen(true);
+  };
+
+  const closeModal = () => {
+    if (create.isPending || update.isPending) return;
+    setCreateOpen(false);
+    setEditing(null);
+    setFormError(null);
+  };
+
+  const submitForm = async () => {
+    if (create.isPending || update.isPending) return;
+    const trimmed = form.name.trim();
+    if (!trimmed) {
+      setFormError("Agent adı zəruridir.");
+      return;
+    }
+    setFormError(null);
+    try {
+      if (editing) {
+        await update.mutateAsync({
+          id: editing.id,
+          patch: {
+            name: trimmed,
+            kind: form.kind,
+            language: form.language,
+            model: form.model,
+            description: form.description.trim() || null,
+          },
+        });
+        toast.success("Agent yeniləndi");
+      } else {
+        await create.mutateAsync({
+          name: trimmed,
+          kind: form.kind,
+          language: form.language,
+          model: form.model,
+          description: form.description.trim() || null,
+        });
+        toast.success("Agent yaradıldı");
+      }
+      setCreateOpen(false);
+      setEditing(null);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Əməliyyat alınmadı.";
+      setFormError(message);
+      toast.error(message);
+    }
+  };
+
+  const toggleStatus = async (agent: AgentRow) => {
+    const next = agent.status === "active" ? "paused" : "active";
+    try {
+      await update.mutateAsync({ id: agent.id, patch: { status: next } });
+      toast.success(next === "active" ? "Agent aktivləşdirildi" : "Agent dayandırıldı");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Status dəyişdirilə bilmədi.");
+    }
+  };
+
+  const archiveAgentRow = async (agent: AgentRow) => {
+    try {
+      await remove.mutateAsync(agent.id);
+      toast.success("Agent arxivləndi");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Agent arxivlənə bilmədi.");
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-[#07090C] text-white pt-20">
