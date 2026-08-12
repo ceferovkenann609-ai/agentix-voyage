@@ -433,25 +433,114 @@ function AIAgentsPage() {
                     <h2 className="text-lg font-bold tracking-tight">Sizin agentləriniz</h2>
                     <p className="text-xs text-white/50">Hər AI işçinin canlı görünüşü</p>
                   </div>
-                  <button className="text-xs font-medium text-cyan-300 hover:text-cyan-200">Rolları idarə et</button>
+                  <span className="text-xs font-medium text-white/40">{agents.length} agent</span>
                 </div>
 
-                <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-10 flex flex-col items-center justify-center text-center">
-                  <div className="grid h-14 w-14 place-items-center rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300 shadow-[0_0_20px_-6px_rgba(34,211,238,0.6)]">
-                    <Bot className="h-6 w-6" />
+                {agentsQuery.isLoading ? (
+                  <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-10 flex flex-col items-center justify-center text-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-cyan-300" />
+                    <p className="mt-3 text-sm text-white/50">Agentlər yüklənir…</p>
                   </div>
-                  <h3 className="mt-4 text-base font-semibold tracking-tight">Hələ AI agent yaradılmayıb</h3>
-                  <p className="mt-1.5 max-w-sm text-sm text-white/50">
-                    İş qüvvənizi qurmaq üçün ilk AI agentinizi yaradın və müştəri əlaqələrini avtomatlaşdırın.
-                  </p>
-                  <button
-                    onClick={() => setCreateOpen(true)}
-                    className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    <Plus className="h-4 w-4" /> Agent Yarat
-                  </button>
-                </div>
+                ) : agentsQuery.isError ? (
+                  <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.05] p-10 flex flex-col items-center justify-center text-center">
+                    <AlertTriangle className="h-6 w-6 text-red-300" />
+                    <p className="mt-3 text-sm text-red-200">Agentləri yükləmək mümkün olmadı.</p>
+                    <button
+                      onClick={() => void agentsQuery.refetch()}
+                      className="mt-4 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white hover:bg-white/[0.08] transition"
+                    >
+                      Yenidən cəhd et
+                    </button>
+                  </div>
+                ) : agents.length === 0 ? (
+                  <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-10 flex flex-col items-center justify-center text-center">
+                    <div className="grid h-14 w-14 place-items-center rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300 shadow-[0_0_20px_-6px_rgba(34,211,238,0.6)]">
+                      <Bot className="h-6 w-6" />
+                    </div>
+                    <h3 className="mt-4 text-base font-semibold tracking-tight">Hələ AI agent yaradılmayıb</h3>
+                    <p className="mt-1.5 max-w-sm text-sm text-white/50">
+                      İş qüvvənizi qurmaq üçün ilk AI agentinizi yaradın və müştəri əlaqələrini avtomatlaşdırın.
+                    </p>
+                    <button
+                      onClick={openCreate}
+                      className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Plus className="h-4 w-4" /> Agent Yarat
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {agents.map((agent) => (
+                      <motion.div
+                        key={agent.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02] p-5 hover:border-cyan-400/25 transition-all"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300">
+                              <Bot className="h-5 w-5" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="truncate text-sm font-semibold">{agent.name}</div>
+                              <div className="text-[11px] text-white/50">
+                                {AGENT_KINDS.find((k) => k.value === agent.kind)?.label ?? agent.kind} ·{" "}
+                                {agent.language?.toUpperCase() ?? "—"}
+                              </div>
+                            </div>
+                          </div>
+                          <span
+                            className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                              agent.status === "active"
+                                ? "border border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
+                                : agent.status === "error"
+                                  ? "border border-red-400/30 bg-red-400/10 text-red-300"
+                                  : "border border-white/10 bg-white/[0.05] text-white/50"
+                            }`}
+                          >
+                            <Circle className="h-1.5 w-1.5 fill-current" />
+                            {STATUS_LABEL[agent.status] ?? agent.status}
+                          </span>
+                        </div>
+
+                        {agent.description && (
+                          <p className="mt-3 line-clamp-2 text-xs text-white/55">{agent.description}</p>
+                        )}
+                        <div className="mt-3 text-[11px] text-white/35">
+                          {agent.model ?? "Model təyin edilməyib"}
+                        </div>
+
+                        <div className="mt-4 flex items-center gap-2">
+                          <button
+                            onClick={() => void toggleStatus(agent)}
+                            disabled={update.isPending}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/[0.07] transition disabled:opacity-50"
+                          >
+                            <Zap className="h-3.5 w-3.5 text-cyan-300" />
+                            {agent.status === "active" ? "Dayandır" : "Aktivləşdir"}
+                          </button>
+                          <button
+                            onClick={() => openEdit(agent)}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/[0.07] transition"
+                          >
+                            <Pencil className="h-3.5 w-3.5 text-cyan-300" /> Redaktə
+                          </button>
+                          <button
+                            onClick={() => void archiveAgentRow(agent)}
+                            disabled={remove.isPending}
+                            className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-red-400/20 bg-red-400/[0.06] px-3 py-1.5 text-xs font-semibold text-red-200 hover:bg-red-400/[0.12] transition disabled:opacity-50"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" /> Arxivlə
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
               </section>
+
             </div>
 
             {/* Right panel */}
