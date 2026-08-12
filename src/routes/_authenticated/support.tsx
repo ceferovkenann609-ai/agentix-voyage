@@ -1,6 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { LifeBuoy, Mail, MessageSquare, BookOpen, ExternalLink, Clock } from "lucide-react";
+import {
+  LifeBuoy,
+  Mail,
+  MessageSquare,
+  BookOpen,
+  ExternalLink,
+  Clock,
+  Inbox,
+  Loader2,
+  AlertTriangle,
+} from "lucide-react";
 import { openSupportChat } from "@/lib/support-chat";
+import { useSupportRequests } from "@/lib/platform/hooks";
 
 export const Route = createFileRoute("/_authenticated/support")({
   head: () => ({
@@ -24,6 +35,9 @@ export const Route = createFileRoute("/_authenticated/support")({
 });
 
 function SupportPage() {
+  const requestsQuery = useSupportRequests();
+  const requests = requestsQuery.data ?? [];
+
   return (
     <div className="min-h-screen bg-[#07090C] text-white pt-28 pb-24">
       <div className="max-w-5xl mx-auto px-6">
