@@ -20,6 +20,7 @@ import {
   Filter,
   Download,
   Send,
+  Loader2,
   Paperclip,
   Smile,
   MoreHorizontal,
@@ -109,6 +110,21 @@ function ConversationsPage() {
   }, [conversations, query, date]);
 
   const active = filtered.find((c) => c.id === activeId) ?? filtered[0] ?? null;
+
+  const handleSend = async () => {
+    const text = draft.trim();
+    if (!text || !active || sendReply.isPending) return;
+    try {
+      await sendReply.mutateAsync({
+        sessionId: active.id,
+        message: text,
+        locale: active.locale !== "—" ? active.locale : null,
+      });
+      setDraft("");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Mesaj göndərilə bilmədi.");
+    }
+  };
 
   const handleLogout = async () => {
     await signOut();
