@@ -655,15 +655,15 @@ function BillingPage() {
         </div>
       </div>
 
-      {/* Add card modal */}
+      {/* Real request modal — persists a contact submission, no fake card capture */}
       <AnimatePresence>
-        {addCardOpen && (
+        {requestOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 grid place-items-center bg-black/70 backdrop-blur-sm p-4"
-            onClick={() => setAddCardOpen(false)}
+            onClick={() => setRequestOpen(false)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -675,32 +675,59 @@ function BillingPage() {
               <div className="pointer-events-none absolute -top-16 -right-10 h-40 w-40 rounded-full bg-cyan-500/20 blur-[70px]" />
               <div className="relative">
                 <div className="flex items-center justify-between">
-                  <div className="text-base font-bold">Add payment method</div>
-                  <button onClick={() => setAddCardOpen(false)} className="text-white/60 hover:text-white">
+                  <div className="text-base font-bold">{requestSubject}</div>
+                  <button onClick={() => setRequestOpen(false)} className="text-white/60 hover:text-white">
                     <X className="h-4.5 w-4.5" />
                   </button>
                 </div>
-                <div className="mt-5 space-y-3">
-                  <Field label="Cardholder name" placeholder="Jane Doe" />
-                  <Field label="Card number" placeholder="1234 5678 9012 3456" />
-                  <div className="grid grid-cols-2 gap-3">
-                    <Field label="Expiry" placeholder="MM / YY" />
-                    <Field label="CVC" placeholder="•••" />
+
+                {requestSent ? (
+                  <div className="mt-5 rounded-xl border border-emerald-400/20 bg-emerald-400/5 p-4 text-sm text-emerald-200">
+                    Sorğunuz qeydə alındı. Komanda e-poçt vasitəsilə sizinlə əlaqə saxlayacaq — müraciət
+                    tarixçəsi Dəstək səhifəsində görünür.
                   </div>
-                </div>
+                ) : (
+                  <>
+                    <p className="mt-2 text-xs text-white/50">
+                      Sorğunuz hesabınıza bağlı müraciət kimi qeydə alınır. Kart məlumatı burada
+                      toplanmır.
+                    </p>
+                    <label className="mt-5 block">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+                        Qeydiniz
+                      </span>
+                      <textarea
+                        value={requestMessage}
+                        onChange={(e) => setRequestMessage(e.target.value)}
+                        rows={4}
+                        placeholder="Komanda ölçüsü, gözlənilən həcm və ya sual…"
+                        className="mt-1.5 w-full rounded-xl border border-white/8 bg-white/[0.03] p-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
+                      />
+                    </label>
+                    {submitRequest.isError && (
+                      <p className="mt-2 text-xs text-red-300">
+                        Sorğu göndərilə bilmədi. Yenidən cəhd edin.
+                      </p>
+                    )}
+                  </>
+                )}
+
                 <div className="mt-6 flex items-center justify-end gap-2">
                   <button
-                    onClick={() => setAddCardOpen(false)}
+                    onClick={() => setRequestOpen(false)}
                     className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold hover:bg-white/[0.06] transition"
                   >
-                    Cancel
+                    {requestSent ? "Bağla" : "Ləğv et"}
                   </button>
-                  <button
-                    onClick={() => setAddCardOpen(false)}
-                    className="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:scale-[1.02] active:scale-[0.98] transition"
-                  >
-                    Save card
-                  </button>
+                  {!requestSent && (
+                    <button
+                      onClick={sendRequest}
+                      disabled={submitRequest.isPending}
+                      className="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:scale-[1.02] active:scale-[0.98] transition disabled:opacity-60"
+                    >
+                      {submitRequest.isPending ? "Göndərilir…" : "Sorğu göndər"}
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>
