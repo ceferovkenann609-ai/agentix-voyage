@@ -298,6 +298,26 @@ export function useSupportRequests() {
   });
 }
 
+export function useSubmitSupportRequest() {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async (input: { subject: string; message: string }) => {
+      if (!user?.id || !user.email) throw new Error("Sessiya tapılmadı — yenidən daxil olun.");
+      await supportApi.submitSupportRequest({
+        userId: user.id,
+        name: (user.user_metadata?.["full_name"] as string | undefined) ?? user.email,
+        email: user.email,
+        subject: input.subject,
+        message: input.message,
+      });
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.support.all });
+    },
+  });
+}
+
 /* ------------------------------ Conversations ----------------------------- */
 
 export function useConversations() {

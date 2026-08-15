@@ -62,3 +62,30 @@ export async function fetchSupportRequests(userId: string): Promise<SupportReque
   requests.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   return requests;
 }
+
+export type SubmitSupportRequestInput = {
+  userId: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  company?: string | null;
+  locale?: string | null;
+};
+
+/**
+ * Creates a real contact submission (used by in-app request flows such as plan
+ * upgrades and payment-method requests). It shows up in support history.
+ */
+export async function submitSupportRequest(input: SubmitSupportRequestInput): Promise<void> {
+  const { error } = await supabase.from("contact_submissions").insert({
+    user_id: input.userId,
+    name: input.name,
+    email: input.email,
+    subject: input.subject,
+    message: input.message,
+    company: input.company ?? null,
+    locale: input.locale ?? null,
+  });
+  if (error) throw error;
+}
