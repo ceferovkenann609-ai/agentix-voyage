@@ -17,7 +17,7 @@ import {
   Menu,
   X,
   Plus,
-  Upload,
+  Download,
   Sparkles,
   TrendingUp,
   Target,
@@ -144,6 +144,23 @@ function CRMPage() {
       { label: "Konversiya nisbəti", value: `${rate}%`, growth: `${wonLeads.length}/${total}`, icon: Percent },
     ];
   }, [leads]);
+
+  const exportLeads = () => {
+    downloadCsv(
+      `agentix-namizedler-${timestampSlug()}.csv`,
+      ["Ad", "Şirkət", "E-poçt", "Telefon", "Status", "Dəyər", "Etiketlər", "Son fəaliyyət"],
+      filteredLeads.map((l) => [
+        l.name,
+        l.company ?? "",
+        l.email ?? "",
+        l.phone ?? "",
+        l.status,
+        l.value,
+        (l.tags ?? []).join(" | "),
+        l.last_activity_at,
+      ]),
+    );
+  };
 
   const filteredLeads = useMemo(() => {
     const now = Date.now();
