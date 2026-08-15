@@ -17,7 +17,6 @@ import {
   Menu,
   X,
   Plus,
-  Upload,
   Sparkles,
   Zap,
   Clock,
