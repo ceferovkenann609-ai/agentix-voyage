@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent, type MouseEvent } from "react";
+import { useRef, useState, type ChangeEvent, type FormEvent, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -63,6 +63,7 @@ export default function BookDemo() {
   const [errors, setErrors] = useState<Partial<Record<keyof DemoForm, string>>>({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const submitting = useRef(false);
 
   const update = (key: keyof DemoForm) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((current) => ({ ...current, [key]: event.target.value }));
@@ -115,6 +116,7 @@ export default function BookDemo() {
       console.error("[book-demo] insert failed", err);
       setErrors({ message: i18n.resolvedLanguage === "en" ? "Something went wrong. Please try again." : "Xəta baş verdi. Yenidən cəhd edin." });
     } finally {
+      submitting.current = false;
       setLoading(false);
     }
   };
