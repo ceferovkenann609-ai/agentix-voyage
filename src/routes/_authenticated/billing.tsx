@@ -34,6 +34,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useAgentixMetrics } from "@/lib/metrics";
 import { useBilling, useSubmitSupportRequest } from "@/lib/platform/hooks";
 import { formatBytes, formatInvoiceAmount } from "@/lib/api/billing";
+import { downloadCsv, timestampSlug } from "@/lib/download";
 
 export const Route = createFileRoute("/_authenticated/billing")({
   head: () => ({
@@ -93,7 +94,10 @@ function BillingPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [addCardOpen, setAddCardOpen] = useState(false);
+  const [requestOpen, setRequestOpen] = useState(false);
+  const [requestSubject, setRequestSubject] = useState("");
+  const [requestMessage, setRequestMessage] = useState("");
+  const [requestSent, setRequestSent] = useState(false);
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
   const { data: metrics } = useAgentixMetrics(user?.id);
@@ -104,6 +108,27 @@ function BillingPage() {
   };
 
   const billing = useBilling();
+  const submitRequest = useSubmitSupportRequest();
+
+  const openRequest = (subject: string) => {
+    setRequestSubject(subject);
+    setRequestMessage("");
+    setRequestSent(false);
+    submitRequest.reset();
+    setRequestOpen(true);
+  };
+
+  const sendRequest = async () => {
+    try {
+      await submitRequest.mutateAsync({
+        subject: requestSubject,
+        message: requestMessage.trim() || requestSubject,
+      });
+      setRequestSent(true);
+    } catch {
+      /* error surfaced through submitRequest.isError */
+    }
+  };
   const subscription = billing.subscription.data ?? null;
   const invoices = billing.invoices.data ?? [];
   const payments = billing.payments.data ?? [];
