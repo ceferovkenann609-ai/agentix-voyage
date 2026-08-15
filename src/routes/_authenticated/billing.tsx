@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAgentixMetrics } from "@/lib/metrics";
-import { useBilling } from "@/lib/platform/hooks";
+import { useBilling, useSubmitSupportRequest } from "@/lib/platform/hooks";
 import { formatBytes, formatInvoiceAmount } from "@/lib/api/billing";
 
 export const Route = createFileRoute("/_authenticated/billing")({
