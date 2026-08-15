@@ -85,9 +85,11 @@ export default function BookDemo() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (loading || success || submitting.current) return;
     if (!validate()) return;
-    if (loading || success) return;
+    submitting.current = true;
     setLoading(true);
+
     try {
       const { error } = await supabase.from("demo_bookings").insert({
         name: form.name.trim(),
