@@ -17,8 +17,6 @@ import {
   Menu,
   X,
   Plus,
-  Upload,
-  Globe,
   UserPlus,
   Sparkles,
   TrendingUp,
