@@ -17,8 +17,6 @@ import {
   Menu,
   X,
   Plus,
-  Upload,
-  Globe,
   UserPlus,
   Sparkles,
   TrendingUp,
@@ -58,17 +56,10 @@ const navItems = [
 ];
 
 const quickActions = [
-  { label: "AI Agent Yarat", desc: "Yeni agenti dəqiqələr ərzində tətbiq et", icon: Plus },
-  { label: "Bilik Bazası Yüklə", desc: "Sənədləri, PDF-ləri və ya URL-ləri əlavə et", icon: Upload },
-  { label: "Veb saytı Qoş", desc: "Vidgeti saytınıza yerləşdirin", icon: Globe },
-  { label: "Komanda Üzvü Dəvət Et", desc: "Komandanızla əməkdaşlıq edin", icon: UserPlus },
-];
-
-const systems = [
-  { name: "OpenAI", status: "İşləyir" },
-  { name: "Supabase", status: "İşləyir" },
-  { name: "Website", status: "İşləyir" },
-  { name: "Automation", status: "İşləyir" },
+  { label: "AI Agent Yarat", desc: "Yeni agenti dəqiqələr ərzində tətbiq et", icon: Plus, to: "/ai-agents" as const },
+  { label: "Söhbətlərə bax", desc: "Canlı yazışmaları izlə və cavabla", icon: MessageSquare, to: "/conversations" as const },
+  { label: "Müştəri namizədləri", desc: "CRM boru kəmərini idarə et", icon: Users, to: "/crm" as const },
+  { label: "Profil və hesab", desc: "Hesab məlumatlarını yenilə", icon: UserPlus, to: "/settings" as const },
 ];
 
 function DashboardPage() {
@@ -83,6 +74,20 @@ function DashboardPage() {
   );
   const activityQuery = useRecentActivities(user?.id);
   const m = metricsQuery.data;
+  const systems = [
+    {
+      name: "Verilənlər bazası",
+      ok: metricsQuery.isSuccess,
+      status: metricsQuery.isLoading ? "Yoxlanılır" : metricsQuery.isError ? "Əlçatmaz" : "İşləyir",
+    },
+    {
+      name: "Fəaliyyət axını",
+      ok: activityQuery.isSuccess,
+      status: activityQuery.isLoading ? "Yoxlanılır" : activityQuery.isError ? "Əlçatmaz" : "İşləyir",
+    },
+    { name: "Veb tətbiq", ok: true, status: "İşləyir" },
+  ];
+  const allOnline = systems.every((x) => x.ok);
   const activity = activityQuery.data ?? [];
   const stats = [
     { label: "Müştəri Namizədləri", value: String(m?.leadsTotal ?? 0), growth: `${m?.leadsQualified ?? 0} kvalifikasiyalı`, icon: Users, tone: "from-cyan-500/20 to-blue-500/10" },
@@ -307,21 +312,25 @@ function DashboardPage() {
                   {quickActions.map((a, i) => {
                     const Icon = a.icon;
                     return (
-                      <motion.button
+                      <motion.div
                         key={a.label}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: i * 0.04 }}
                         whileHover={{ y: -2 }}
-                        className="group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02] p-5 text-left hover:border-cyan-400/30 transition-all"
                       >
+                        <Link
+                          to={a.to}
+                          className="group relative block overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02] p-5 text-left hover:border-cyan-400/30 transition-all"
+                        >
                         <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-400/20 text-cyan-300 group-hover:shadow-[0_0_20px_-2px_rgba(34,211,238,0.5)] transition-shadow">
                           <Icon className="h-4.5 w-4.5" />
                         </div>
                         <div className="mt-4 font-semibold text-sm">{a.label}</div>
                         <div className="mt-1 text-xs text-white/50">{a.desc}</div>
                         <ArrowUpRight className="absolute top-5 right-5 h-4 w-4 text-white/30 group-hover:text-cyan-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" />
-                      </motion.button>
+                        </Link>
+                      </motion.div>
                     );
                   })}
                 </div>
@@ -334,7 +343,7 @@ function DashboardPage() {
                     <h2 className="text-lg font-bold tracking-tight">Son fəaliyyət</h2>
                     <p className="text-xs text-white/50">Bütün agentləriniz üzrə canlı axın</p>
                   </div>
-                  <button className="text-xs font-medium text-cyan-300 hover:text-cyan-200">Hamısına bax</button>
+                  <Link to="/history" className="text-xs font-medium text-cyan-300 hover:text-cyan-200">Hamısına bax</Link>
                 </div>
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-2">
                   <ol className="relative">
@@ -381,8 +390,12 @@ function DashboardPage() {
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-semibold">Sistem statusu</h3>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
-                      <Circle className="h-1.5 w-1.5 fill-current" /> All online
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                        allOnline ? "bg-emerald-400/10 text-emerald-300" : "bg-amber-400/10 text-amber-300"
+                      }`}
+                    >
+                      <Circle className="h-1.5 w-1.5 fill-current" /> {allOnline ? "Hamısı işləyir" : "Yoxlanılır"}
                     </span>
                   </div>
                   <ul className="mt-4 space-y-2">
@@ -390,12 +403,18 @@ function DashboardPage() {
                       <li key={s.name} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] px-3.5 py-2.5">
                         <div className="flex items-center gap-2.5">
                           <span className="relative flex h-2 w-2">
-                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/50" />
-                            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                            {s.ok && (
+                              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/50" />
+                            )}
+                            <span
+                              className={`relative inline-flex h-2 w-2 rounded-full ${
+                                s.ok ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" : "bg-amber-400"
+                              }`}
+                            />
                           </span>
                           <span className="text-sm font-medium">{s.name}</span>
                         </div>
-                        <span className="text-[11px] text-emerald-300">{s.status}</span>
+                        <span className={`text-[11px] ${s.ok ? "text-emerald-300" : "text-amber-300"}`}>{s.status}</span>
                       </li>
                     ))}
                   </ul>
@@ -405,13 +424,20 @@ function DashboardPage() {
                   <div className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
                   <div className="relative">
                     <CheckCircle2 className="h-5 w-5 text-cyan-300" />
-                    <h3 className="mt-3 text-sm font-semibold">Performans 24% artıb</h3>
+                    <h3 className="mt-3 text-sm font-semibold">
+                      Konversiya: {m?.conversionRate ?? 0}%
+                    </h3>
                     <p className="mt-1 text-xs text-white/60">
-                      Agentləriniz bu həftə söhbətləri 2.3× daha sürətli həll etdi. Bu tempi saxlayın.
+                      {m
+                        ? `${m.leadsTotal} müştəri namizədi, ${m.leadsQualified} kvalifikasiyalı, ${m.chatMessages} AI mesajı qeydə alınıb.`
+                        : "Göstəricilər yüklənir…"}
                     </p>
-                    <button className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-cyan-300 hover:text-cyan-200">
-                      View report <ArrowUpRight className="h-3.5 w-3.5" />
-                    </button>
+                    <Link
+                      to="/analytics"
+                      className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-cyan-300 hover:text-cyan-200"
+                    >
+                      Analitikaya keç <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>
                   </div>
                 </div>
               </div>

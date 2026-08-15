@@ -17,7 +17,7 @@ import {
   Menu,
   X,
   Plus,
-  Upload,
+  Download,
   Sparkles,
   TrendingUp,
   Target,
@@ -39,6 +39,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { downloadCsv, timestampSlug } from "@/lib/download";
 import { useRealtimeInvalidate } from "@/lib/realtime";
 import {
   LEAD_STATUSES,
@@ -60,9 +61,9 @@ export const Route = createFileRoute("/_authenticated/crm")({
   head: () => ({
     meta: [
       { title: "CRM — Agentix" },
-      { name: "description", content: "Manage leads, customers and sales pipeline." },
+      { name: "description", content: "Müştəri namizədlərini və satış boru kəmərini Agentix CRM ilə idarə edin." },
       { property: "og:title", content: "CRM — Agentix" },
-      { property: "og:description", content: "Manage leads, customers and sales pipeline." },
+      { property: "og:description", content: "Müştəri namizədlərini və satış boru kəmərini Agentix CRM ilə idarə edin." },
     ],
   }),
   component: CRMPage,
@@ -143,6 +144,23 @@ function CRMPage() {
       { label: "Konversiya nisbəti", value: `${rate}%`, growth: `${wonLeads.length}/${total}`, icon: Percent },
     ];
   }, [leads]);
+
+  const exportLeads = () => {
+    downloadCsv(
+      `agentix-namizedler-${timestampSlug()}.csv`,
+      ["Ad", "Şirkət", "E-poçt", "Telefon", "Status", "Dəyər", "Etiketlər", "Son fəaliyyət"],
+      filteredLeads.map((l) => [
+        l.name,
+        l.company ?? "",
+        l.email ?? "",
+        l.phone ?? "",
+        l.status,
+        l.value,
+        (l.tags ?? []).join(" | "),
+        l.last_activity_at,
+      ]),
+    );
+  };
 
   const filteredLeads = useMemo(() => {
     const now = Date.now();
@@ -367,7 +385,7 @@ function CRMPage() {
                   </div>
                   <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">CRM</h1>
                   <p className="mt-1 text-white/60 max-w-xl">
-                    Manage leads, customers and sales pipeline.
+                    Müştəri namizədlərini, müştəriləri və satış boru kəmərini idarə edin.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -375,10 +393,15 @@ function CRMPage() {
                     onClick={() => setNewLeadOpen(true)}
                     className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <Plus className="h-4 w-4" /> New Lead
+                    <Plus className="h-4 w-4" /> Yeni namizəd
                   </button>
-                  <button className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/[0.06] hover:border-white/20 transition">
-                    <Upload className="h-4 w-4" /> Import CSV
+                  <button
+                    onClick={exportLeads}
+                    disabled={filteredLeads.length === 0}
+                    title={filteredLeads.length === 0 ? "İxrac edilə bilən namizəd yoxdur" : "CSV kimi ixrac et"}
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/[0.06] hover:border-white/20 transition disabled:cursor-not-allowed disabled:text-white/40 disabled:hover:bg-white/[0.03]"
+                  >
+                    <Download className="h-4 w-4" /> CSV ixrac et
                   </button>
                 </div>
               </motion.section>

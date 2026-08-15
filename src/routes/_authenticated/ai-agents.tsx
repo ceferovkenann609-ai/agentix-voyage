@@ -17,7 +17,6 @@ import {
   Menu,
   X,
   Plus,
-  Upload,
   Sparkles,
   Zap,
   Clock,
@@ -383,7 +382,7 @@ function AIAgentsPage() {
                   </div>
                   <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">AI Agentləri</h1>
                   <p className="mt-1 text-white/60 max-w-xl">
-                    Create, manage and monitor your AI workforce.
+                    AI komandanızı yaradın, idarə edin və izləyin.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -393,9 +392,7 @@ function AIAgentsPage() {
                   >
                     <Plus className="h-4 w-4" /> Agent Yarat
                   </button>
-                  <button className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/[0.06] hover:border-white/20 transition">
-                    <Upload className="h-4 w-4" /> Agent İdxal Et
-                  </button>
+
                 </div>
               </motion.section>
 
