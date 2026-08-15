@@ -302,21 +302,43 @@ function BillingPage() {
               <div className="relative flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-3 py-1 text-[11px] font-medium text-cyan-300">
-                    <CreditCard className="h-3 w-3" /> Billing & Subscription
+                    <CreditCard className="h-3 w-3" /> Ödənişlər və abunəlik
                   </div>
                   <h1 className="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">
-                    <span className="bg-gradient-to-r from-white via-cyan-100 to-blue-300 bg-clip-text text-transparent">Billing</span>
+                    <span className="bg-gradient-to-r from-white via-cyan-100 to-blue-300 bg-clip-text text-transparent">Ödənişlər</span>
                   </h1>
                   <p className="mt-2 text-white/60 max-w-xl">
-                    Manage your subscription, usage, credits and invoices.
+                    Abunəliyinizi, istifadə həcmini və qaimələrinizi idarə edin.
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <button className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-white hover:bg-white/[0.06] hover:border-white/20 transition">
-                    <Download className="h-4 w-4" /> Download all invoices
+                  <button
+                    onClick={() =>
+                      downloadCsv(
+                        `agentix-qaimeler-${timestampSlug()}.csv`,
+                        ["Nömrə", "Status", "Məbləğ", "Valyuta", "Tarix", "Ödənildi", "PDF"],
+                        invoices.map((inv) => [
+                          inv.number ?? inv.id,
+                          inv.status,
+                          inv.amount,
+                          inv.currency,
+                          inv.issued_at ?? inv.created_at,
+                          inv.paid_at ?? "",
+                          inv.pdf_url ?? "",
+                        ]),
+                      )
+                    }
+                    disabled={invoices.length === 0}
+                    title={invoices.length === 0 ? "Hələ qaimə yoxdur" : "Qaimələri CSV kimi ixrac et"}
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-white hover:bg-white/[0.06] hover:border-white/20 transition disabled:cursor-not-allowed disabled:text-white/40 disabled:hover:bg-white/[0.03]"
+                  >
+                    <Download className="h-4 w-4" /> Qaimələri ixrac et
                   </button>
-                  <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition hover:scale-[1.02] active:scale-[0.98]">
-                    <TrendingUp className="h-4 w-4" /> Upgrade Plan
+                  <button
+                    onClick={() => openRequest("Plan yüksəltmə sorğusu")}
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <TrendingUp className="h-4 w-4" /> Plan sorğusu göndər
                   </button>
                 </div>
               </div>
@@ -456,8 +478,8 @@ function BillingPage() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-bold">Upgrade Plan</h2>
-                  <p className="text-xs text-white/50 mt-0.5">Scale your AI workforce as you grow.</p>
+                  <h2 className="text-lg font-bold">Planlar</h2>
+                  <p className="text-xs text-white/50 mt-0.5">Böyüdükcə AI komandanızı genişləndirin.</p>
                 </div>
               </div>
               <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -477,7 +499,7 @@ function BillingPage() {
                     >
                       {isCurrent && (
                         <span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
-                          Current
+                          Aktiv
                         </span>
                       )}
                       <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/[0.05] border border-white/10">
@@ -486,7 +508,7 @@ function BillingPage() {
                       <div className="mt-4 text-lg font-bold">{p.name}</div>
                       <div className="mt-1 flex items-baseline gap-1">
                         <span className="text-3xl font-bold">${p.price}</span>
-                        <span className="text-xs text-white/50">/month</span>
+                        <span className="text-xs text-white/50">/ay</span>
                       </div>
                       <ul className="mt-4 space-y-2 text-sm text-white/70">
                         {p.features.map((f) => (
@@ -496,6 +518,7 @@ function BillingPage() {
                         ))}
                       </ul>
                       <button
+                        onClick={() => openRequest(`Plan sorğusu — ${p.name}`)}
                         disabled={p.current}
                         className={`mt-5 w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                           p.current
@@ -503,7 +526,7 @@ function BillingPage() {
                             : "bg-gradient-to-r from-cyan-400 to-blue-500 text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:scale-[1.02] active:scale-[0.98]"
                         }`}
                       >
-                        {p.current ? "Active" : `Upgrade to ${p.name}`}
+                        {p.current ? "Aktiv plan" : `${p.name} planını istə`}
                       </button>
                     </motion.div>
                   );
@@ -521,13 +544,13 @@ function BillingPage() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm font-semibold">
-                  <CreditCard className="h-4 w-4 text-cyan-300" /> Payment Method
+                  <CreditCard className="h-4 w-4 text-cyan-300" /> Ödəniş metodu
                 </div>
                 <button
-                  onClick={() => setAddCardOpen(true)}
+                  onClick={() => openRequest("Ödəniş metodu sorğusu")}
                   className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold hover:bg-white/[0.06] hover:border-cyan-400/30 transition"
                 >
-                  <Plus className="h-3.5 w-3.5" /> Add card
+                  <Plus className="h-3.5 w-3.5" /> Ödəniş metodu istə
                 </button>
               </div>
               <div className="mt-5">
@@ -536,7 +559,7 @@ function BillingPage() {
                   <div className="relative mx-auto grid h-12 w-12 place-items-center rounded-xl bg-white/[0.05] border border-white/10">
                     <CreditCard className="h-5 w-5 text-white/40" />
                   </div>
-                  <div className="relative mt-4 text-sm text-white/60">Ödəniş metodu əlavə edilməyib</div>
+                  <div className="relative mt-4 text-sm text-white/60">Ödəniş metodu əlavə edilməyib. Komanda sorğunuzdan sonra təhlükəsiz ödəniş linki göndərir.</div>
                 </div>
               </div>
             </motion.section>
