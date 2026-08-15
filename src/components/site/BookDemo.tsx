@@ -156,7 +156,7 @@ export default function BookDemo() {
             <textarea rows={6} placeholder={t.message} value={form.message} onChange={update("message")} maxLength={1000} className="mt-6 w-full bg-black border border-zinc-700 rounded-xl p-4 outline-none focus:border-cyan-400" />
             {errors.message && <p className="mt-1 text-sm text-red-400">{errors.message}</p>}
 
-            <button type="submit" onClick={handleSubmit} disabled={loading} className="mt-8 w-full rounded-xl bg-brand-gradient p-4 text-lg font-bold text-white hover:opacity-90 transition disabled:opacity-50">
+            <button type="submit" disabled={loading} className="mt-8 w-full rounded-xl bg-brand-gradient p-4 text-lg font-bold text-white hover:opacity-90 transition disabled:opacity-50">
               {loading ? t.sending : t.button}
             </button>
 
