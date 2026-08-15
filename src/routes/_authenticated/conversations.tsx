@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useConversations, useSendOperatorReply } from "@/lib/platform/hooks";
+import { downloadCsv, downloadText, timestampSlug } from "@/lib/download";
 import { useRealtimeInvalidate } from "@/lib/realtime";
 import { queryKeys } from "@/lib/api/keys";
 import { toast } from "sonner";
@@ -109,6 +110,43 @@ function ConversationsPage() {
   }, [conversations, query, date]);
 
   const active = filtered.find((c) => c.id === activeId) ?? filtered[0] ?? null;
+
+  /** Exports the currently filtered, already-loaded conversations as CSV. */
+  const exportConversations = () => {
+    downloadCsv(
+      `agentix-sohbetler-${timestampSlug()}.csv`,
+      ["Sessiya", "Başlıq", "Dil", "Mesaj sayı", "İlk əlaqə", "Son fəaliyyət"],
+      filtered.map((c) => [
+        c.id,
+        c.title,
+        c.locale,
+        c.messageCount,
+        c.firstContact.toISOString(),
+        c.lastActivity.toISOString(),
+      ]),
+    );
+  };
+
+  /** Exports the open thread as a plain-text transcript. */
+  const exportTranscript = () => {
+    if (!active) return;
+    const header = [
+      `Agentix söhbət transkripti`,
+      `Sessiya: ${active.id}`,
+      `Mesaj sayı: ${active.messageCount}`,
+      `İlk əlaqə: ${active.firstContact.toLocaleString("az-AZ")}`,
+      "",
+    ].join("\n");
+    const body = active.messages
+      .map(
+        (m) =>
+          `[${m.createdAt.toLocaleString("az-AZ")}] ${
+            m.from === "user" ? "Müştəri" : m.from === "agent" ? "Operator" : "AI"
+          }: ${m.text}`,
+      )
+      .join("\n");
+    downloadText(`agentix-transkript-${active.id.slice(0, 8)}.txt`, `${header}${body}\n`);
+  };
 
   const handleSend = async () => {
     const text = draft.trim();
@@ -271,9 +309,10 @@ function ConversationsPage() {
               </div>
               <div className="flex flex-wrap gap-3">
                 <button
-                  disabled
-                  title="Hələ mövcud deyil"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white/40 cursor-not-allowed"
+                  onClick={exportConversations}
+                  disabled={filtered.length === 0}
+                  title={filtered.length === 0 ? "İxrac edilə bilən söhbət yoxdur" : "CSV kimi ixrac et"}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/[0.06] hover:border-white/20 disabled:cursor-not-allowed disabled:text-white/40 disabled:hover:bg-white/[0.03]"
                 >
                   <Download className="h-4 w-4" /> İxrac et
                 </button>
@@ -502,24 +541,20 @@ function ConversationsPage() {
                   <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                     <div className="text-[11px] uppercase tracking-[0.2em] text-white/40 mb-3">Sürətli Əməliyyatlar</div>
                     <div className="space-y-2">
-                      {[
-                        { label: "Komanda yoldaşına təyin et", icon: Users },
-                        { label: "Qeyd əlavə et", icon: MessageSquare },
-                        { label: "Transkripti ixrac et", icon: Download },
-                      ].map((a) => {
-                        const Icon = a.icon;
-                        return (
-                          <button
-                            key={a.label}
-                            disabled
-                            title="Hələ mövcud deyil"
-                            className="flex w-full items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] px-3 py-2.5 text-xs text-white/40 cursor-not-allowed"
-                          >
-                            <Icon className="h-4 w-4 text-cyan-300/50" />
-                            {a.label}
-                          </button>
-                        );
-                      })}
+                      <button
+                        onClick={exportTranscript}
+                        className="flex w-full items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] px-3 py-2.5 text-xs text-white transition hover:bg-white/[0.05] hover:border-cyan-400/30"
+                      >
+                        <Download className="h-4 w-4 text-cyan-300" />
+                        Transkripti ixrac et
+                      </button>
+                      <Link
+                        to="/crm"
+                        className="flex w-full items-center gap-3 rounded-xl border border-white/8 bg-white/[0.02] px-3 py-2.5 text-xs text-white transition hover:bg-white/[0.05] hover:border-cyan-400/30"
+                      >
+                        <Users className="h-4 w-4 text-cyan-300" />
+                        CRM-də izlə
+                      </Link>
                     </div>
                   </div>
                 </div>
