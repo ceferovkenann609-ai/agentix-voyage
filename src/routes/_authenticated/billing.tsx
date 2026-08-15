@@ -738,14 +738,3 @@ function BillingPage() {
   );
 }
 
-function Field({ label, placeholder }: { label: string; placeholder: string }) {
-  return (
-    <label className="block">
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50">{label}</span>
-      <input
-        placeholder={placeholder}
-        className="mt-1.5 h-10 w-full rounded-xl border border-white/8 bg-white/[0.03] px-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 focus:bg-white/[0.05] transition"
-      />
-    </label>
-  );
-}
