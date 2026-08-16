@@ -84,13 +84,59 @@ function ConversationsPage() {
   const [date, setDate] = useState<(typeof dateFilters)[number]>("İstənilən vaxt");
   const [activeId, setActiveId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
+  const [pendingSession, setPendingSession] = useState<string | null>(null);
+  const [agentId, setAgentId] = useState<string>("");
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
 
-  const { data: conversations = [], isLoading } = useConversations();
+  const { data: rawConversations = [], isLoading, isError, error, refetch } = useConversations();
   const sendReply = useSendOperatorReply();
+  const agentsQuery = useAgents();
+  const agentChat = useAgentChat();
 
-  useRealtimeInvalidate(["ai_chat_messages"], [queryKeys.conversations.all]);
+  /** Only live agents can answer; archived/paused ones are filtered out. */
+  const liveAgents = useMemo(
+    () => (agentsQuery.data ?? []).filter((a) => !a.archived && a.status !== "paused"),
+    [agentsQuery.data],
+  );
+  const selectedAgent = liveAgents.find((a) => a.id === agentId) ?? liveAgents[0] ?? null;
+
+  useRealtimeInvalidate(
+    ["ai_chat_messages", "ai_agents", "notifications"],
+    [queryKeys.conversations.all, queryKeys.agents.all, queryKeys.notifications.all],
+  );
+
+  /** A freshly started AI session is shown before its first row exists. */
+  const conversations = useMemo(() => {
+    if (!pendingSession || rawConversations.some((c) => c.id === pendingSession)) return rawConversations;
+    const now = new Date();
+    return [
+      {
+        id: pendingSession,
+        title: "Yeni AI söhbəti",
+        preview: "",
+        locale: "az",
+        messageCount: 0,
+        firstContact: now,
+        lastActivity: now,
+        messages: [],
+      },
+      ...rawConversations,
+    ];
+  }, [rawConversations, pendingSession]);
+
+  const startNewSession = () => {
+    if (!selectedAgent) {
+      toast.error("Əvvəlcə AI Agentləri səhifəsində aktiv agent yaradın.");
+      return;
+    }
+    const id =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    setPendingSession(id);
+    setActiveId(id);
+  };
 
   const filtered = useMemo(() => {
     const now = Date.now();
@@ -108,6 +154,7 @@ function ConversationsPage() {
       return true;
     });
   }, [conversations, query, date]);
+
 
   const active = filtered.find((c) => c.id === activeId) ?? filtered[0] ?? null;
 
