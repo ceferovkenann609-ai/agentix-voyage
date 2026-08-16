@@ -86,6 +86,8 @@ function ConversationsPage() {
   const [draft, setDraft] = useState("");
   const [pendingSession, setPendingSession] = useState<string | null>(null);
   const [agentId, setAgentId] = useState<string>("");
+  const [aiMode, setAiMode] = useState(true);
+
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
 
