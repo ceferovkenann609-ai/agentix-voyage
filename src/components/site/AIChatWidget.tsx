@@ -48,28 +48,40 @@ export default function AIChatWidget() {
       });
   };
 
-  const sendMessage = () => {
+  const askAssistant = useServerFn(runSiteAssistantChat);
+
+  /** Real AI turn: the key stays server-side inside the server function. */
+  const sendMessage = async () => {
     const text = message.trim();
-    if (!text) return;
+    if (!text || typing) return;
 
     setMessages((prev) => [...prev, { sender: "user", text }]);
     setMessage("");
     setTyping(true);
     persist("user", text);
 
-    const rules = isAz ? REPLIES.az : REPLIES.en;
-    const match = rules.find((r) => r.match.test(text));
-    const fallback = isAz
-      ? "Bunun üçün pulsuz demo təşkil etməyi tövsiyə edirəm — sizə uyğun AI həllini birlikdə quraq."
-      : "I recommend booking a free demo so we can design the right AI solution for you.";
-    const reply = match ? match.reply : fallback;
-
-    window.setTimeout(() => {
+    try {
+      const { reply } = await askAssistant({
+        data: { sessionId, message: text, locale: i18n.resolvedLanguage ?? null },
+      });
       setMessages((prev) => [...prev, { sender: "ai", text: reply }]);
-      setTyping(false);
       persist("ai", reply);
-    }, 700 + Math.random() * 500);
+    } catch (error) {
+      console.error("[chat] ai request failed", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "ai",
+          text: isAz
+            ? "Bağışlayın, cavab hazırlanarkən xəta baş verdi. Bir az sonra yenidən yazın və ya demo sifariş edin."
+            : "Sorry, something went wrong while generating a reply. Please try again shortly or book a demo.",
+        },
+      ]);
+    } finally {
+      setTyping(false);
+    }
   };
+
 
   return (
     <>
