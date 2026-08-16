@@ -425,12 +425,31 @@ function ConversationsPage() {
               <div className="flex justify-center py-24">
                 <Loader2 className="h-8 w-8 animate-spin text-cyan-400" />
               </div>
+            ) : isError ? (
+              <div className="rounded-2xl border border-rose-400/20 bg-rose-500/5 p-12 text-center">
+                <p className="text-sm text-rose-200">
+                  Söhbətlər yüklənmədi: {error instanceof Error ? error.message : "naməlum xəta"}
+                </p>
+                <button
+                  onClick={() => void refetch()}
+                  className="mt-4 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-xs text-white hover:bg-white/[0.08]"
+                >
+                  Yenidən yükləyin
+                </button>
+              </div>
             ) : conversations.length === 0 ? (
               <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-16 text-center">
                 <MessageSquare className="mx-auto h-10 w-10 text-white/20" />
                 <p className="mt-4 text-white/60">Hələ məlumat yoxdur</p>
+                <button
+                  onClick={startNewSession}
+                  className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C]"
+                >
+                  <Sparkles className="h-4 w-4" /> Yeni AI söhbəti başlat
+                </button>
               </div>
             ) : (
+
               /* 3-column workspace */
               <section className="grid gap-4 xl:grid-cols-[340px_1fr_320px]">
                 {/* Conversation list */}
