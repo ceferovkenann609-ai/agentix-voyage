@@ -375,7 +375,29 @@ function ConversationsPage() {
                   Veb saytı AI çatı ilə bütün qarşılıqlı əlaqələrinizi nəzərdən keçirin.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap items-center gap-3">
+                {liveAgents.length > 0 && (
+                  <label className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] pl-3 pr-1.5 py-2 text-xs">
+                    <Bot className="h-3.5 w-3.5 text-cyan-300" />
+                    <select
+                      value={selectedAgent?.id ?? ""}
+                      onChange={(e) => setAgentId(e.target.value)}
+                      className="appearance-none bg-transparent pr-4 py-1 text-white focus:outline-none cursor-pointer"
+                    >
+                      {liveAgents.map((a) => (
+                        <option key={a.id} value={a.id} className="bg-[#0B0F14]">
+                          {a.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+                <button
+                  onClick={startNewSession}
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] transition hover:shadow-[0_0_30px_-8px_rgba(34,211,238,0.7)]"
+                >
+                  <Sparkles className="h-4 w-4" /> Yeni AI söhbəti
+                </button>
                 <button
                   onClick={exportConversations}
                   disabled={filtered.length === 0}
@@ -385,6 +407,7 @@ function ConversationsPage() {
                   <Download className="h-4 w-4" /> İxrac et
                 </button>
               </div>
+
             </motion.section>
 
             {/* Filter bar */}
