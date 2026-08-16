@@ -195,19 +195,38 @@ function ConversationsPage() {
     downloadText(`agentix-transkript-${active.id.slice(0, 8)}.txt`, `${header}${body}\n`);
   };
 
+  const busy = sendReply.isPending || agentChat.isPending;
+
+  /**
+   * Sends the composer text. With "AI cavabı" mode on, the message goes through
+   * the real agent execution server function (user turn + AI reply are both
+   * persisted). Otherwise it is stored as a manual operator reply.
+   */
   const handleSend = async () => {
     const text = draft.trim();
-    if (!text || !active || sendReply.isPending) return;
+    if (!text || !active || busy) return;
+    const locale = active.locale !== "—" ? active.locale : null;
     try {
-      await sendReply.mutateAsync({
-        sessionId: active.id,
-        message: text,
-        locale: active.locale !== "—" ? active.locale : null,
-      });
-      setDraft("");
+      if (aiMode) {
+        if (!selectedAgent) {
+          toast.error("Aktiv AI agent seçilməyib.");
+          return;
+        }
+        setDraft("");
+        await agentChat.mutateAsync({
+          agentId: selectedAgent.id,
+          sessionId: active.id,
+          message: text,
+          locale,
+        });
+      } else {
+        await sendReply.mutateAsync({ sessionId: active.id, message: text, locale });
+        setDraft("");
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Mesaj göndərilə bilmədi.");
     }
+
   };
 
   const handleLogout = async () => {
