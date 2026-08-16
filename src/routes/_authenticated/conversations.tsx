@@ -560,9 +560,46 @@ function ConversationsPage() {
                             </motion.div>
                           ))}
                         </AnimatePresence>
+                        {agentChat.isPending && (
+                          <div className="flex justify-end">
+                            <div className="inline-flex items-center gap-2 rounded-2xl bg-white/[0.05] px-4 py-2.5 text-xs text-white/60">
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-cyan-300" />
+                              {selectedAgent?.name ?? "AI"} cavab yazır…
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       <div className="border-t border-white/5 px-4 py-3">
+                        <div className="mb-2 flex items-center gap-2 text-[11px]">
+                          <button
+                            type="button"
+                            onClick={() => setAiMode(true)}
+                            className={`rounded-full px-3 py-1 transition ${
+                              aiMode
+                                ? "bg-cyan-400/15 text-cyan-200 border border-cyan-400/30"
+                                : "border border-white/10 text-white/50 hover:text-white"
+                            }`}
+                          >
+                            AI cavabı{selectedAgent ? ` · ${selectedAgent.name}` : ""}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setAiMode(false)}
+                            className={`rounded-full px-3 py-1 transition ${
+                              !aiMode
+                                ? "bg-white/10 text-white border border-white/20"
+                                : "border border-white/10 text-white/50 hover:text-white"
+                            }`}
+                          >
+                            Operator cavabı
+                          </button>
+                          {aiMode && !selectedAgent && (
+                            <Link to="/ai-agents" className="text-cyan-300 hover:underline">
+                              Aktiv agent yaradın
+                            </Link>
+                          )}
+                        </div>
                         <form
                           onSubmit={(e) => {
                             e.preventDefault();
@@ -576,7 +613,7 @@ function ConversationsPage() {
                           <input
                             value={draft}
                             onChange={(e) => setDraft(e.target.value)}
-                            placeholder="Cavabınızı yazın…"
+                            placeholder={aiMode ? "AI agentə mesaj yazın…" : "Cavabınızı yazın…"}
                             maxLength={2000}
                             className="flex-1 bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none"
                           />
@@ -585,10 +622,10 @@ function ConversationsPage() {
                           </button>
                           <button
                             type="submit"
-                            disabled={sendReply.isPending || !draft.trim()}
+                            disabled={busy || !draft.trim() || (aiMode && !selectedAgent)}
                             className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 px-3 py-1.5 text-xs font-semibold text-[#07090C] transition disabled:opacity-50"
                           >
-                            {sendReply.isPending ? (
+                            {busy ? (
                               <Loader2 className="h-3.5 w-3.5 animate-spin" />
                             ) : (
                               <Send className="h-3.5 w-3.5" />
@@ -597,6 +634,7 @@ function ConversationsPage() {
                           </button>
                         </form>
                       </div>
+
                     </>
                   ) : (
                     <div className="flex-1 grid place-items-center text-white/40 text-sm">Söhbət seçilməyib</div>
