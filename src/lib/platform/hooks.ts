@@ -343,3 +343,27 @@ export function useSendOperatorReply() {
     },
   });
 }
+
+/* ------------------------------- AI execution ----------------------------- */
+
+/**
+ * Runs a real AI turn through a company agent. The server function persists both
+ * the user message and the AI reply into ai_chat_messages under RLS, so the
+ * conversation survives a page refresh.
+ */
+export function useAgentChat() {
+  const qc = useQueryClient();
+  const call = useServerFn(runAgentChat);
+  return useMutation({
+    mutationFn: (input: {
+      agentId: string;
+      sessionId: string;
+      message: string;
+      locale?: string | null;
+    }) => call({ data: input }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.conversations.all });
+      void qc.invalidateQueries({ queryKey: queryKeys.billing.all });
+    },
+  });
+}
