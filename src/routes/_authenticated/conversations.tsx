@@ -33,7 +33,7 @@ import {
   Hash,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useConversations, useSendOperatorReply } from "@/lib/platform/hooks";
+import { useConversations, useSendOperatorReply, useAgents, useAgentChat } from "@/lib/platform/hooks";
 import { downloadCsv, downloadText, timestampSlug } from "@/lib/download";
 import { useRealtimeInvalidate } from "@/lib/realtime";
 import { queryKeys } from "@/lib/api/keys";
