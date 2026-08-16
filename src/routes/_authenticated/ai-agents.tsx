@@ -94,7 +94,7 @@ const LANGUAGES: { value: string; label: string }[] = [
   { value: "ar", label: "العربية" },
 ];
 
-const MODELS = ["google/gemini-2.5-flash", "google/gemini-2.5-pro", "openai/gpt-5-mini", "openai/gpt-5"];
+const MODELS = ["google/gemini-3.6-flash", "google/gemini-2.5-flash", "google/gemini-2.5-pro"];
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "Qaralama",

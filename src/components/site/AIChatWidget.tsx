@@ -1,31 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Bot, X, Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { AGENTIX_CHAT_OPEN_EVENT } from "@/lib/support-chat";
+import { runSiteAssistantChat } from "@/lib/ai.functions";
 
 
 type Msg = { sender: "ai" | "user"; text: string };
 
-const REPLIES: { az: { match: RegExp; reply: string }[]; en: { match: RegExp; reply: string }[] } = {
-  az: [
-    { match: /restoran|kafe|yemək/i, reply: "🍽️ Restoran üçün AI rezervasiya, WhatsApp sifariş və AI ofisiant tövsiyə edirəm." },
-    { match: /klinik|həkim|tibb/i, reply: "🏥 Klinika üçün onlayn qeydiyyat, səsli resepşn və pasient dəstəyi AI həllərimiz var." },
-    { match: /mağaza|shop|onlayn satış|e-commerce/i, reply: "🛒 Mağaza üçün AI satış köməkçisi, məhsul tövsiyələri və sifariş izləmə uyğundur." },
-    { match: /qiymət|price|neçəyə/i, reply: "💎 Paketlərimiz Starter-dən Enterprise-a qədərdir. Qiymət səhifəsinə baxa və ya demo sifariş edə bilərsiniz." },
-    { match: /demo|nümayiş/i, reply: "🎬 30 dəqiqəlik canlı demo təşkil edə bilərik. 'Book a Demo' düyməsinə klikləyin." },
-    { match: /salam|hi|hello|necəsən/i, reply: "👋 Salam! Bizneslə bağlı sualınızı yazın — sizə uyğun AI həllini təklif edim." },
-  ],
-  en: [
-    { match: /restaurant|cafe|food/i, reply: "🍽️ For a restaurant I recommend AI Reservations, WhatsApp Orders and an AI Waiter." },
-    { match: /clinic|doctor|medical|health/i, reply: "🏥 For a clinic: online booking, voice receptionist and patient support AI." },
-    { match: /shop|store|ecommerce|e-commerce/i, reply: "🛒 For a shop: AI sales assistant, product recommendations and order tracking." },
-    { match: /price|pricing|cost/i, reply: "💎 Our plans range from Starter to Enterprise. Check the Pricing page or book a demo." },
-    { match: /demo/i, reply: "🎬 We can run a live 30-minute demo — just tap the 'Book a Demo' button." },
-    { match: /hi|hello|hey/i, reply: "👋 Hi! Tell me about your business and I'll suggest the right AI setup." },
-  ],
-};
 
 export default function AIChatWidget() {
   const { i18n } = useTranslation();
@@ -64,28 +48,40 @@ export default function AIChatWidget() {
       });
   };
 
-  const sendMessage = () => {
+  const askAssistant = useServerFn(runSiteAssistantChat);
+
+  /** Real AI turn: the key stays server-side inside the server function. */
+  const sendMessage = async () => {
     const text = message.trim();
-    if (!text) return;
+    if (!text || typing) return;
 
     setMessages((prev) => [...prev, { sender: "user", text }]);
     setMessage("");
     setTyping(true);
     persist("user", text);
 
-    const rules = isAz ? REPLIES.az : REPLIES.en;
-    const match = rules.find((r) => r.match.test(text));
-    const fallback = isAz
-      ? "Bunun üçün pulsuz demo təşkil etməyi tövsiyə edirəm — sizə uyğun AI həllini birlikdə quraq."
-      : "I recommend booking a free demo so we can design the right AI solution for you.";
-    const reply = match ? match.reply : fallback;
-
-    window.setTimeout(() => {
+    try {
+      const { reply } = await askAssistant({
+        data: { sessionId, message: text, locale: i18n.resolvedLanguage ?? null },
+      });
       setMessages((prev) => [...prev, { sender: "ai", text: reply }]);
-      setTyping(false);
       persist("ai", reply);
-    }, 700 + Math.random() * 500);
+    } catch (error) {
+      console.error("[chat] ai request failed", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "ai",
+          text: isAz
+            ? "Bağışlayın, cavab hazırlanarkən xəta baş verdi. Bir az sonra yenidən yazın və ya demo sifariş edin."
+            : "Sorry, something went wrong while generating a reply. Please try again shortly or book a demo.",
+        },
+      ]);
+    } finally {
+      setTyping(false);
+    }
   };
+
 
   return (
     <>
