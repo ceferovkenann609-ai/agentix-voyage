@@ -692,29 +692,82 @@ function PasswordSection() {
   );
 }
 
+const NOTIFICATION_ROWS = [
+  { key: "new_conversations", label: "Yeni söhbətlər", desc: "Yeni söhbət başlayanda məlumat ver.", on: true },
+  { key: "weekly_report", label: "Həftəlik performans hesabatı", desc: "Hər bazar ertəsi saat 09:00.", on: true },
+  { key: "lead_alerts", label: "Namizəd bildirişləri", desc: "Yüksək maraqlı namizəd əlavə olunanda xəbər ver.", on: true },
+  { key: "billing", label: "Ödəniş və qaimələr", desc: "Qaimə və ödəniş yeniliklərini al.", on: true },
+  { key: "product_updates", label: "Məhsul yenilikləri", desc: "Yeni funksiyalar və buraxılışlar.", on: false },
+  { key: "security", label: "Təhlükəsizlik bildirişləri", desc: "Yeni cihaz və ya məkandan girişlər.", on: true },
+] as const;
+
+type NotificationPrefs = Record<string, boolean>;
+
+function defaultNotificationPrefs(): NotificationPrefs {
+  return Object.fromEntries(NOTIFICATION_ROWS.map((r) => [r.key, r.on]));
+}
+
+/**
+ * Notification preferences are stored on the Supabase auth user metadata, which
+ * is per-user, RLS-safe and requires no extra table.
+ */
 function NotificationsSection() {
-  const rows = [
-    { label: "New conversations", desc: "Email me when a new conversation begins.", on: true },
-    { label: "Weekly performance report", desc: "Every Monday at 09:00.", on: true },
-    { label: "Lead alerts", desc: "Notify me when a high-intent lead is captured.", on: true },
-    { label: "Billing & invoices", desc: "Receive invoices and payment updates.", on: true },
-    { label: "Product updates", desc: "New features and releases.", on: false },
-    { label: "Security alerts", desc: "Sign-ins from new devices or locations.", on: true },
-  ];
+  const { user } = useAuth();
+  const [prefs, setPrefs] = useState<NotificationPrefs>(defaultNotificationPrefs);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
+
+  const stored = user?.user_metadata?.["notification_preferences"] as NotificationPrefs | undefined;
+
+  useEffect(() => {
+    setPrefs({ ...defaultNotificationPrefs(), ...(stored ?? {}) });
+  }, [stored]);
+
+  const save = async () => {
+    setSaving(true);
+    setMessage(null);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: { notification_preferences: prefs },
+      });
+      if (error) throw error;
+      setMessage({ tone: "ok", text: "Bildiriş tənzimləmələri yadda saxlanıldı." });
+    } catch (error) {
+      console.error("[settings] notification prefs save failed", error);
+      setMessage({ tone: "error", text: "Yadda saxlanmadı. Yenidən cəhd edin." });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <Card
       title="Bildirişlər"
-      desc="Choose how you want to hear from Agentix."
-      footer={<SaveButton />}
+      desc="Agentix-dən hansı bildirişləri almaq istədiyinizi seçin."
+      footer={
+        <SaveButton
+          onSave={() => void save()}
+          onCancel={() => {
+            setPrefs({ ...defaultNotificationPrefs(), ...(stored ?? {}) });
+            setMessage(null);
+          }}
+          saving={saving}
+          message={message}
+        />
+      }
     >
       <ul className="divide-y divide-white/5">
-        {rows.map((r) => (
-          <li key={r.label} className="flex items-center gap-4 py-3">
+        {NOTIFICATION_ROWS.map((r) => (
+          <li key={r.key} className="flex items-center gap-4 py-3">
             <div className="flex-1 min-w-0">
               <div className="text-sm font-semibold">{r.label}</div>
               <div className="text-xs text-white/50">{r.desc}</div>
             </div>
-            <Toggle defaultOn={r.on} />
+            <Toggle
+              on={prefs[r.key] ?? r.on}
+              disabled={saving}
+              onChange={(next) => setPrefs((p) => ({ ...p, [r.key]: next }))}
+            />
           </li>
         ))}
       </ul>
