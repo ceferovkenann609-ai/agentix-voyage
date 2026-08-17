@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -140,6 +140,17 @@ function AIAgentsPage() {
     queryKeys.agents.all,
     queryKeys.metrics.all,
   ]);
+
+  /** ?create=true (e.g. from the dashboard hero action) opens the create modal. */
+  const { create: createParam } = Route.useSearch();
+  useEffect(() => {
+    if (!createParam) return;
+    setEditing(null);
+    setForm(emptyForm);
+    setFormError(null);
+    setCreateOpen(true);
+    void navigate({ to: "/ai-agents", search: {}, replace: true });
+  }, [createParam, navigate]);
 
   const activeAgents = agents.filter((a) => a.status === "active").length;
   const automations = agents.filter((a) => a.kind !== "chat").length;
