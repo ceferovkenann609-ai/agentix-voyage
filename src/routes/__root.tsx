@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import AIChatWidget from "../components/site/AIChatWidget";
+import { Toaster } from "../components/ui/sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "../components/site/Navbar";
@@ -136,6 +137,7 @@ function RootComponent() {
         <div className="bg-[#07090C]">
           <Footer />
         </div>
+        <Toaster />
       </AuthProvider>
     </QueryClientProvider>
   );
