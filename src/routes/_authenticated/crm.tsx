@@ -96,6 +96,16 @@ function CRMPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", company: "", email: "", phone: "", agent: "", value: "" });
+  const [editOpen, setEditOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    company: "",
+    email: "",
+    phone: "",
+    agent: "",
+    value: "",
+    notes: "",
+  });
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
 
