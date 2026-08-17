@@ -444,12 +444,22 @@ function SaveButton({
   );
 }
 
-function Toggle({ defaultOn = false }: { defaultOn?: boolean }) {
-  const [on, setOn] = useState(defaultOn);
+function Toggle({
+  on,
+  onChange,
+  disabled,
+}: {
+  on: boolean;
+  onChange: (next: boolean) => void;
+  disabled?: boolean;
+}) {
   return (
     <button
-      onClick={() => setOn(!on)}
-      className={`relative h-6 w-11 rounded-full border transition ${
+      type="button"
+      disabled={disabled}
+      aria-pressed={on}
+      onClick={() => onChange(!on)}
+      className={`relative h-6 w-11 rounded-full border transition disabled:opacity-60 ${
         on
           ? "bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-400/40 shadow-[0_0_15px_-3px_rgba(34,211,238,0.6)]"
           : "bg-white/5 border-white/10"
