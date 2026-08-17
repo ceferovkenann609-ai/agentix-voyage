@@ -859,6 +859,13 @@ function CRMPage() {
                     <Archive className="h-4 w-4" /> Arxivləşdir
                   </button>
                 </div>
+                <button
+                  onClick={openEditLead}
+                  disabled={updateLead.isPending}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-semibold text-cyan-200 hover:bg-cyan-400/15 transition disabled:opacity-60"
+                >
+                  <Pencil className="h-4 w-4" /> Namizədi redaktə et
+                </button>
                 {formError && (
                   <p className="rounded-xl border border-rose-400/30 bg-rose-400/10 p-3 text-xs text-rose-200">{formError}</p>
                 )}
