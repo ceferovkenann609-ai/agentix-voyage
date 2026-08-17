@@ -221,6 +221,50 @@ function CRMPage() {
     }
   };
 
+  /** Opens the edit modal prefilled with the selected lead's real values. */
+  const openEditLead = () => {
+    if (!selected) return;
+    setEditForm({
+      name: selected.name,
+      company: selected.company ?? "",
+      email: selected.email ?? "",
+      phone: selected.phone ?? "",
+      agent: selected.agent ?? "",
+      value: String(selected.value ?? 0),
+      notes: selected.notes ?? "",
+    });
+    setFormError(null);
+    setEditOpen(true);
+  };
+
+  const handleUpdateLead = async () => {
+    if (!selected) return;
+    setFormError(null);
+    if (!editForm.name.trim()) {
+      setFormError("Ad və soyad zəruridir.");
+      return;
+    }
+    try {
+      await updateLead.mutateAsync({
+        id: selected.id,
+        patch: {
+          name: editForm.name.trim(),
+          company: editForm.company.trim() || null,
+          email: editForm.email.trim() || null,
+          phone: editForm.phone.trim() || null,
+          agent: editForm.agent.trim() || null,
+          value: Number(editForm.value.replace(/[^\d.]/g, "")) || 0,
+          notes: editForm.notes.trim() || null,
+        },
+        activity: "Namizəd məlumatları yeniləndi",
+      });
+      setEditOpen(false);
+    } catch (error) {
+      setFormError(describeError(error, "crm:update-lead"));
+    }
+  };
+
+
   const handleStatusChange = async (next: LeadStatus) => {
     if (!selected) return;
     try {
