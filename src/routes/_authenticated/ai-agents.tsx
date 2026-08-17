@@ -45,6 +45,9 @@ import type { AgentKind, AgentRow } from "@/lib/api/agents";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/ai-agents")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    create: search["create"] === true || search["create"] === "true" ? true : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "AI Agentləri — Agentix" },
