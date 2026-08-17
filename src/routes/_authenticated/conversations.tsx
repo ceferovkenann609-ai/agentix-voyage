@@ -128,16 +128,24 @@ function ConversationsPage() {
   }, [rawConversations, pendingSession]);
 
   const startNewSession = () => {
-    if (!selectedAgent) {
-      toast.error("Əvvəlcə AI Agentləri səhifəsində aktiv agent yaradın.");
-      return;
-    }
     const id =
       typeof crypto !== "undefined" && "randomUUID" in crypto
         ? crypto.randomUUID()
         : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     setPendingSession(id);
     setActiveId(id);
+    setDraft("");
+    if (selectedAgent) {
+      setAgentId(selectedAgent.id);
+      setAiMode(true);
+      toast.success(`Yeni söhbət başladıldı · ${selectedAgent.name}`);
+    } else {
+      // No live agent yet: the thread still opens, but only operator replies work.
+      setAiMode(false);
+      toast.message("Aktiv AI agent yoxdur — operator rejimində söhbət açıldı.", {
+        description: "AI cavabları üçün AI Agentləri səhifəsində aktiv agent yaradın.",
+      });
+    }
   };
 
   const filtered = useMemo(() => {

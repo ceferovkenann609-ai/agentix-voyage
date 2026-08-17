@@ -96,6 +96,16 @@ function CRMPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", company: "", email: "", phone: "", agent: "", value: "" });
+  const [editOpen, setEditOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    company: "",
+    email: "",
+    phone: "",
+    agent: "",
+    value: "",
+    notes: "",
+  });
 
   const name = user?.email?.split("@")[0] || "İstifadəçi";
 
@@ -210,6 +220,50 @@ function CRMPage() {
       setFormError(describeError(error, "crm:create-lead"));
     }
   };
+
+  /** Opens the edit modal prefilled with the selected lead's real values. */
+  const openEditLead = () => {
+    if (!selected) return;
+    setEditForm({
+      name: selected.name,
+      company: selected.company ?? "",
+      email: selected.email ?? "",
+      phone: selected.phone ?? "",
+      agent: selected.agent ?? "",
+      value: String(selected.value ?? 0),
+      notes: selected.notes ?? "",
+    });
+    setFormError(null);
+    setEditOpen(true);
+  };
+
+  const handleUpdateLead = async () => {
+    if (!selected) return;
+    setFormError(null);
+    if (!editForm.name.trim()) {
+      setFormError("Ad və soyad zəruridir.");
+      return;
+    }
+    try {
+      await updateLead.mutateAsync({
+        id: selected.id,
+        patch: {
+          name: editForm.name.trim(),
+          company: editForm.company.trim() || null,
+          email: editForm.email.trim() || null,
+          phone: editForm.phone.trim() || null,
+          agent: editForm.agent.trim() || null,
+          value: Number(editForm.value.replace(/[^\d.]/g, "")) || 0,
+          notes: editForm.notes.trim() || null,
+        },
+        activity: "Namizəd məlumatları yeniləndi",
+      });
+      setEditOpen(false);
+    } catch (error) {
+      setFormError(describeError(error, "crm:update-lead"));
+    }
+  };
+
 
   const handleStatusChange = async (next: LeadStatus) => {
     if (!selected) return;
@@ -805,6 +859,13 @@ function CRMPage() {
                     <Archive className="h-4 w-4" /> Arxivləşdir
                   </button>
                 </div>
+                <button
+                  onClick={openEditLead}
+                  disabled={updateLead.isPending}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-semibold text-cyan-200 hover:bg-cyan-400/15 transition disabled:opacity-60"
+                >
+                  <Pencil className="h-4 w-4" /> Namizədi redaktə et
+                </button>
                 {formError && (
                   <p className="rounded-xl border border-rose-400/30 bg-rose-400/10 p-3 text-xs text-rose-200">{formError}</p>
                 )}
@@ -869,6 +930,77 @@ function CRMPage() {
                   </button>
                 </div>
 
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Edit lead modal */}
+      <AnimatePresence>
+        {editOpen && selected && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setEditOpen(false)}
+              className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.98 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 z-[60] grid place-items-center p-4"
+            >
+              <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0B0F14]/95 backdrop-blur-2xl shadow-[0_20px_80px_-20px_rgba(34,211,238,0.35)]">
+                <div className="flex items-center justify-between border-b border-white/5 px-5 py-4">
+                  <h3 className="text-sm font-bold tracking-tight">Namizədi redaktə et</h3>
+                  <button
+                    onClick={() => setEditOpen(false)}
+                    className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white"
+                    aria-label="Bağla"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="p-5 grid gap-3 sm:grid-cols-2">
+                  <Field label="Ad Soyad" placeholder="Aylin Mehdiyeva" value={editForm.name} onChange={(v) => setEditForm((f) => ({ ...f, name: v }))} />
+                  <Field label="Şirkət" placeholder="Nova Logistics" value={editForm.company} onChange={(v) => setEditForm((f) => ({ ...f, company: v }))} />
+                  <Field label="E-poçt" placeholder="lead@company.com" value={editForm.email} onChange={(v) => setEditForm((f) => ({ ...f, email: v }))} />
+                  <Field label="Telefon" placeholder="+994 …" value={editForm.phone} onChange={(v) => setEditForm((f) => ({ ...f, phone: v }))} />
+                  <Field label="Təyin olunmuş AI" placeholder="Sales Assistant" value={editForm.agent} onChange={(v) => setEditForm((f) => ({ ...f, agent: v }))} />
+                  <Field label="Sövdələşmə dəyəri" placeholder="18400" value={editForm.value} onChange={(v) => setEditForm((f) => ({ ...f, value: v }))} />
+                  <label className="sm:col-span-2 block">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-white/40 mb-1.5">Qeydlər</div>
+                    <textarea
+                      rows={3}
+                      value={editForm.notes}
+                      onChange={(e) => setEditForm((f) => ({ ...f, notes: e.target.value }))}
+                      placeholder="Danışıqların qısa xülasəsi…"
+                      className="w-full rounded-xl border border-white/8 bg-white/[0.03] p-3 text-sm placeholder:text-white/40 focus:outline-none focus:border-cyan-400/40 transition"
+                    />
+                  </label>
+                  {formError && (
+                    <p className="sm:col-span-2 rounded-xl border border-rose-400/30 bg-rose-400/10 p-3 text-xs text-rose-200">{formError}</p>
+                  )}
+                </div>
+                <div className="flex items-center justify-end gap-3 border-t border-white/5 px-5 py-4">
+                  <button
+                    onClick={() => setEditOpen(false)}
+                    className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-white/80 hover:bg-white/[0.06]"
+                  >
+                    Ləğv et
+                  </button>
+                  <button
+                    onClick={() => void handleUpdateLead()}
+                    disabled={updateLead.isPending}
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-[#07090C] shadow-[0_0_25px_-6px_rgba(34,211,238,0.7)] transition disabled:opacity-60"
+                  >
+                    <Pencil className="h-4 w-4" /> {updateLead.isPending ? "Yadda saxlanılır…" : "Yadda saxla"}
+                  </button>
+                </div>
               </div>
             </motion.div>
           </>

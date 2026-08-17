@@ -256,9 +256,13 @@ function DashboardPage() {
                     Manage all your AI operations from one intelligent workspace.
                   </p>
                   <div className="mt-6 flex flex-wrap gap-3">
-                    <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]">
+                    <Link
+                      to="/ai-agents"
+                      search={{ create: true }}
+                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2.5 text-sm font-semibold text-[#07090C] shadow-[0_0_30px_-5px_rgba(34,211,238,0.6)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.8)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    >
                       <Plus className="h-4 w-4" /> AI Agent Yarat
-                    </button>
+                    </Link>
                     <Link
                       to="/book-demo"
                       className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/[0.06] hover:border-white/20 transition"
