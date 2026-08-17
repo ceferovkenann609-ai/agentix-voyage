@@ -776,19 +776,58 @@ function NotificationsSection() {
 }
 
 function AppearanceSection() {
+  const { user } = useAuth();
   const [theme, setTheme] = useState<"dark" | "system" | "light">("dark");
   const [density, setDensity] = useState<"cozy" | "compact">("cozy");
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
   const themes = [
     { key: "dark", label: "Dark", icon: Moon },
     { key: "system", label: "System", icon: Monitor },
     { key: "light", label: "Light", icon: Sun },
   ] as const;
   const accents = ["#22d3ee", "#60a5fa", "#34d399", "#a78bfa", "#f472b6"];
+
+  const stored = user?.user_metadata?.["appearance"] as
+    | { theme?: typeof theme; density?: typeof density }
+    | undefined;
+
+  useEffect(() => {
+    if (stored?.theme) setTheme(stored.theme);
+    if (stored?.density) setDensity(stored.density);
+  }, [stored]);
+
+  const save = async () => {
+    setSaving(true);
+    setMessage(null);
+    try {
+      const { error } = await supabase.auth.updateUser({ data: { appearance: { theme, density } } });
+      if (error) throw error;
+      setMessage({ tone: "ok", text: "Görünüş tənzimləmələri yadda saxlanıldı." });
+    } catch (error) {
+      console.error("[settings] appearance save failed", error);
+      setMessage({ tone: "error", text: "Yadda saxlanmadı. Yenidən cəhd edin." });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <Card
       title="Appearance"
       desc="Customize the look and feel of your workspace."
-      footer={<SaveButton />}
+      footer={
+        <SaveButton
+          onSave={() => void save()}
+          onCancel={() => {
+            setTheme(stored?.theme ?? "dark");
+            setDensity(stored?.density ?? "cozy");
+            setMessage(null);
+          }}
+          saving={saving}
+          message={message}
+        />
+      }
     >
       <div className="space-y-6">
         <div>
