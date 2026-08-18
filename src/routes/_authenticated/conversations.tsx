@@ -199,7 +199,7 @@ function ConversationsPage() {
         (m) =>
           `[${m.createdAt.toLocaleString("az-AZ")}] ${
             m.from === "user" ? "Müştəri" : m.from === "agent" ? "Operator" : "AI"
-          }: ${m.text}`,
+          }: ${m.text.replace(/\*\*(.+?)\*\*/g, "$1")}`,
       )
       .join("\n");
     downloadText(`agentix-transkript-${active.id.slice(0, 8)}.txt`, `${header}${body}\n`);
@@ -459,7 +459,7 @@ function ConversationsPage() {
             ) : (
 
               /* 3-column workspace */
-              <section className="grid gap-4 xl:grid-cols-[340px_1fr_320px]">
+              <section className="grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)] 2xl:grid-cols-[320px_minmax(0,1fr)_320px]">
                 {/* Conversation list */}
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden">
                   <div className="border-b border-white/5 px-4 py-3 text-[11px] uppercase tracking-[0.2em] text-white/40">
@@ -511,7 +511,7 @@ function ConversationsPage() {
                 </div>
 
                 {/* Chat thread */}
-                <div className="rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden flex flex-col min-h-[720px]">
+                <div className="min-w-0 rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden flex flex-col min-h-[720px]">
                   {active ? (
                     <>
                       <div className="flex items-center justify-between border-b border-white/5 px-5 py-3.5">
@@ -544,17 +544,18 @@ function ConversationsPage() {
                               initial={{ opacity: 0, y: 8 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.25 }}
-                              className={`flex ${m.from === "user" ? "justify-start" : "justify-end"}`}
+                              className={`flex min-w-0 ${m.from === "user" ? "justify-start" : "justify-end"}`}
                             >
-                              <div className={`max-w-[75%] ${m.from === "user" ? "" : "text-right"}`}>
+                              <div className={`min-w-0 max-w-[85%] ${m.from === "user" ? "" : "text-right"}`}>
                                 <div
-                                  className={`inline-block rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                                  className={`inline-block rounded-2xl px-4 py-2.5 text-sm leading-relaxed text-left whitespace-pre-wrap break-words ${
                                     m.from === "user"
                                       ? "bg-white/[0.05] border border-white/8 text-white rounded-bl-md"
                                       : "bg-gradient-to-br from-cyan-400/90 to-blue-500/90 text-[#07090C] font-medium rounded-br-md shadow-[0_0_25px_-8px_rgba(34,211,238,0.6)]"
                                   }`}
                                 >
                                   {m.text}
+
                                 </div>
                                 <div className={`mt-1 flex items-center gap-1 text-[10px] text-white/40 ${m.from === "user" ? "" : "justify-end"}`}>
                                   <span>
@@ -650,7 +651,7 @@ function ConversationsPage() {
                 </div>
 
                 {/* Details panel */}
-                <div className="space-y-4">
+                <div className="space-y-4 lg:col-span-2 2xl:col-span-1">
                   <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                     <div className="text-[11px] uppercase tracking-[0.2em] text-white/40 mb-4">Söhbət Təfərrüatları</div>
                     {active ? (
@@ -666,7 +667,7 @@ function ConversationsPage() {
                         </div>
 
                         <div className="mt-5 space-y-3">
-                          <DetailRow icon={Bot} label="Təyin edilmiş agent" value="Təyin edilməyib" />
+                          <DetailRow icon={Bot} label="Təyin edilmiş agent" value={selectedAgent?.name ?? "Təyin edilməyib"} />
                           <DetailRow
                             icon={Activity}
                             label="Sentiment"

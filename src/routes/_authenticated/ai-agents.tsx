@@ -523,7 +523,7 @@ function AIAgentsPage() {
                           {agent.model ?? "Model təyin edilməyib"}
                         </div>
 
-                        <div className="mt-4 flex items-center gap-2">
+                        <div className="mt-4 flex flex-wrap items-center gap-2">
                           <button
                             onClick={() => void toggleStatus(agent)}
                             disabled={update.isPending}
