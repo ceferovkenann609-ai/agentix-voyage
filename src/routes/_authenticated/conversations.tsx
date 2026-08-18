@@ -511,7 +511,7 @@ function ConversationsPage() {
                 </div>
 
                 {/* Chat thread */}
-                <div className="rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden flex flex-col min-h-[720px]">
+                <div className="min-w-0 rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden flex flex-col min-h-[720px]">
                   {active ? (
                     <>
                       <div className="flex items-center justify-between border-b border-white/5 px-5 py-3.5">
@@ -651,7 +651,7 @@ function ConversationsPage() {
                 </div>
 
                 {/* Details panel */}
-                <div className="space-y-4">
+                <div className="space-y-4 lg:col-span-2 2xl:col-span-1">
                   <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
                     <div className="text-[11px] uppercase tracking-[0.2em] text-white/40 mb-4">Söhbət Təfərrüatları</div>
                     {active ? (
