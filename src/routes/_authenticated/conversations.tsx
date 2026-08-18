@@ -459,7 +459,7 @@ function ConversationsPage() {
             ) : (
 
               /* 3-column workspace */
-              <section className="grid gap-4 xl:grid-cols-[340px_1fr_320px]">
+              <section className="grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)] 2xl:grid-cols-[320px_minmax(0,1fr)_320px]">
                 {/* Conversation list */}
                 <div className="rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden">
                   <div className="border-b border-white/5 px-4 py-3 text-[11px] uppercase tracking-[0.2em] text-white/40">
