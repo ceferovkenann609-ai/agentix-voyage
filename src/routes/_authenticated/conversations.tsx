@@ -199,7 +199,7 @@ function ConversationsPage() {
         (m) =>
           `[${m.createdAt.toLocaleString("az-AZ")}] ${
             m.from === "user" ? "Müştəri" : m.from === "agent" ? "Operator" : "AI"
-          }: ${m.text}`,
+          }: ${m.text.replace(/\*\*(.+?)\*\*/g, "$1")}`,
       )
       .join("\n");
     downloadText(`agentix-transkript-${active.id.slice(0, 8)}.txt`, `${header}${body}\n`);
@@ -667,7 +667,7 @@ function ConversationsPage() {
                         </div>
 
                         <div className="mt-5 space-y-3">
-                          <DetailRow icon={Bot} label="Təyin edilmiş agent" value="Təyin edilməyib" />
+                          <DetailRow icon={Bot} label="Təyin edilmiş agent" value={selectedAgent?.name ?? "Təyin edilməyib"} />
                           <DetailRow
                             icon={Activity}
                             label="Sentiment"
