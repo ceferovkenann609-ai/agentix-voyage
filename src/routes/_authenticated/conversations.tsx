@@ -544,17 +544,18 @@ function ConversationsPage() {
                               initial={{ opacity: 0, y: 8 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.25 }}
-                              className={`flex ${m.from === "user" ? "justify-start" : "justify-end"}`}
+                              className={`flex min-w-0 ${m.from === "user" ? "justify-start" : "justify-end"}`}
                             >
-                              <div className={`max-w-[75%] ${m.from === "user" ? "" : "text-right"}`}>
+                              <div className={`min-w-0 max-w-[85%] ${m.from === "user" ? "" : "text-right"}`}>
                                 <div
-                                  className={`inline-block rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                                  className={`inline-block rounded-2xl px-4 py-2.5 text-sm leading-relaxed text-left whitespace-pre-wrap break-words ${
                                     m.from === "user"
                                       ? "bg-white/[0.05] border border-white/8 text-white rounded-bl-md"
                                       : "bg-gradient-to-br from-cyan-400/90 to-blue-500/90 text-[#07090C] font-medium rounded-br-md shadow-[0_0_25px_-8px_rgba(34,211,238,0.6)]"
                                   }`}
                                 >
                                   {m.text}
+
                                 </div>
                                 <div className={`mt-1 flex items-center gap-1 text-[10px] text-white/40 ${m.from === "user" ? "" : "justify-end"}`}>
                                   <span>
