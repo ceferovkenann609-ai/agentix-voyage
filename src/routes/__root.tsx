@@ -119,9 +119,13 @@ function RootComponent() {
 
   useEffect(() => {
     const stored = window.localStorage.getItem("agentix-lang");
-    if ((stored === "az" || stored === "en") && stored !== i18n.language) {
+    if ((stored !== "az" && stored !== "en") || stored === i18n.language) return;
+    // Deferred past the hydration flush: switching the locale during hydration
+    // makes nested (streamed) subtrees render EN against the SSR-ed AZ markup.
+    const id = window.setTimeout(() => {
       void i18n.changeLanguage(stored);
-    }
+    }, 0);
+    return () => window.clearTimeout(id);
   }, []);
 
   return (
